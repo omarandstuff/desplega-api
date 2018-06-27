@@ -15,6 +15,7 @@ import os from 'os'
  * host: IP or domain of the remote host
  * port[22]: port used by the ssh server on the remote host.
  * username[root]: remote host account username
+ * password: if needed to log in into host
  * privateKeyPath[~/.ssh]: path to the local private key file
  * keepaliveInterval(12000): how much time wait to check for connection status (ms)
  * keepaliveCountMax[5]: how many times check for alive signal before stop connection

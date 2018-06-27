@@ -1,0 +1,211 @@
+{
+  "title": "Pipeline Name",
+  "config": {
+    "verbosityLevel": "full",
+    "remotes": [
+      {
+        "id": "Remote1",
+        "host": "host.com",
+        "port": 45,
+        "username": "user",
+        "password": "somepassword",
+        "privateKeyPath": "/path/to/key",
+        "keepaliveInterval": 666,
+        "keepaliveCountMax": 777
+      },
+      {
+        "id": "Remote2",
+        "host": "host2.com",
+        "port": 33,
+        "username": "david",
+        "password": "somepassword2",
+        "privateKeyPath": "/path/to/key2",
+        "keepaliveInterval": 888,
+        "keepaliveCountMax": 2
+      }
+    ],
+    "remoteOptions": {
+      "maxRetries": 2,
+      "maxReconnectionRetries": 2,
+      "reconnectionInterval": 12,
+      "timeOut": 600
+    },
+    "localOptions": { "maxRetries": 2, "timeOut": 600 }
+  },
+  "children": [
+    {
+      "title": "Stage1",
+      "config": {
+        "verbosityLevel": "full",
+        "remotes": ["Remote1", "Remote2"],
+        "remoteOptions": {
+          "maxRetries": 3,
+          "maxReconnectionRetries": 1,
+          "reconnectionInterval": 40,
+          "timeOut": 6000
+        },
+        "localOptions": { "maxRetries": 1, "timeOut": 500 }
+      },
+      "children": [
+        {
+          "definition": {
+            "title": "Step1",
+            "path": "path/where/to/run",
+            "command": "sudo apt-get update",
+            "verbosityLevel": "full",
+            "remotes": ["Remote1"],
+            "onFailure": "on failure",
+            "recoverOnFailure": true,
+            "continueOnFailure": true,
+            "options": {
+              "maxRetries": 1,
+              "maxReconnectionRetries": 4,
+              "reconnectionInterval": 2,
+              "timeOut": 600
+            }
+          }
+        },
+        {
+          "definition": {
+            "title": "Step2",
+            "path": "path/where/to/run",
+            "command": "sudo apt-get update",
+            "verbosityLevel": "full",
+            "remotes": ["Remote2"],
+            "onFailure": "on failure2",
+            "recoverOnFailure": true,
+            "continueOnFailure": true,
+            "options": { "maxRetries": 5, "timeOut": 60 }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Stage2",
+      "config": {
+        "verbosityLevel": "partial",
+        "remotes": ["Remote2"],
+        "remoteOptions": {
+          "maxRetries": 1,
+          "maxReconnectionRetries": 2,
+          "reconnectionInterval": 89,
+          "timeOut": 6034
+        },
+        "localOptions": { "maxRetries": 12, "timeOut": 3400 }
+      },
+      "children": [
+        {
+          "definition": {
+            "title": "Step3",
+            "path": "npath",
+            "command": "sudo apt-get update",
+            "verbosityLevel": "full",
+            "remotes": ["Remote1"],
+            "onFailure": "on failure2",
+            "recoverOnFailure": false,
+            "continueOnFailure": false,
+            "options": {
+              "maxRetries": 3,
+              "maxReconnectionRetries": 2,
+              "reconnectionInterval": 1,
+              "timeOut": 300
+            }
+          }
+        },
+        {
+          "definition": {
+            "title": "Step4",
+            "path": "npath2",
+            "command": "sudo apt-get update",
+            "verbosityLevel": "full",
+            "remotes": ["Remote1"],
+            "onFailure": "on failure4",
+            "recoverOnFailure": false,
+            "continueOnFailure": true,
+            "options": { "maxRetries": 2, "timeOut": 90 }
+          }
+        }
+      ]
+    }
+  ],
+  "context": {
+    "archive": { "dictionary": {}, "history": [] },
+    "localOptions": { "maxRetries": 2, "timeOut": 600 },
+    "local": {
+      "local": {
+        "options": {
+          "maxRetries": 2,
+          "timeOut": 600
+        }
+      },
+      "options": { "maxRetries": 2, "timeOut": 600 }
+    },
+    "remoteOptions": {
+      "maxRetries": 2,
+      "maxReconnectionRetries": 2,
+      "reconnectionInterval": 12,
+      "timeOut": 600
+    },
+    "remotes": [
+      {
+        "id": "Remote1",
+        "status": "free",
+        "feedback": "idle",
+        "options": {
+          "maxRetries": 0,
+          "reconnectionInterval": 5000,
+          "timeOut": 0
+        },
+        "remote": {
+          "config": {
+            "port": 45,
+            "username": "user",
+            "privateKeyPath": "/path/to/key",
+            "keepaliveInterval": 666,
+            "keepaliveCountMax": 777,
+            "host": "host.com",
+            "password": "somepassword"
+          }
+        }
+      },
+      {
+        "id": "Remote2",
+        "options": {
+          "maxRetries": 0,
+          "reconnectionInterval": 5000,
+          "timeOut": 0
+        },
+        "remote": {
+          "config": {
+            "port": 33,
+            "username": "david",
+            "privateKeyPath": "/path/to/key2",
+            "keepaliveInterval": 888,
+            "keepaliveCountMax": 2,
+            "host": "host2.com",
+            "password": "somepassword2"
+          }
+        }
+      }
+    ],
+    "theme": {
+      "theme": {
+        "failureColor": "color1",
+        "failureContrastColor": "color2",
+        "backgroundColor": "color3",
+        "mainColor": "color4",
+        "pipelineHeaderColor": "color5",
+        "pipelineHeaderContrastColor": "color6",
+        "stageHeaderColor": "color7",
+        "stageHeaderContrastColor": "color8",
+        "stepHeaderColor": "color9",
+        "stepStatusColor": "color10",
+        "subStepHeaderColor": "color11",
+        "subStepStatusColor": "color12",
+        "successColor": "color13",
+        "successContrastColor": "color14"
+      }
+    },
+    "verbosityLevel": "full"
+  }
+}
