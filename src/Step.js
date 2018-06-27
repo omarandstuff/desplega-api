@@ -33,7 +33,7 @@ export default class Step {
   }
 
   _archiveResult(result) {
-    if(this.context.archive) {
+    if (this.context.archive) {
       if (this.definition.id) {
         this.context.archive.dictionary[this.definition.id] = result
       }
