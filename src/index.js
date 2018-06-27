@@ -1,37 +1,23 @@
-import _Pipeline from './Pipeline'
-import _Stage from './Stage'
+import _Loader from './Loader'
+import _Local from './Local'
+import _LocalManager from './LocalManager'
 import _LocalStep from './LocalStep'
+import _Parser from './Parser'
+import _Pipeline from './Pipeline'
+import _Printer from './Printer'
+import _Remote from './Remote'
+import _RemoteManager from './RemoteManager'
 import _RemoteStep from './RemoteStep'
-import Local from './Local'
-import LocalManager from './LocalManager'
-import Printer from './Printer'
-import Remote from './Remote'
-import RemoteManager from './RemoteManager'
+import _Stage from './Stage'
 
-export function Pipeline(title, config, theme) {
-  return new _Pipeline(title, config, theme)
-}
-
-export function Stage(title, config) {
-  return new _Stage(title, config)
-}
-
-export function LocalStep(definition) {
-  return new _LocalStep(definition)
-}
-
-export function RemoteStep(definition) {
-  return new _RemoteStep(definition)
-}
-
-export default {
-  Pipeline: _Pipeline,
-  Stage: _Stage,
-  LocalStep: _LocalStep,
-  RemoteStep: _RemoteStep,
-  Local: Local,
-  LocalManager: LocalManager,
-  Printer: Printer,
-  Remote: Remote,
-  RemoteManager: RemoteManager
-}
+export const Loader = _Loader
+export const Local = _Local
+export const LocalManager = _LocalManager
+export const LocalStep = _LocalStep
+export const Parser = _Parser
+export const Pipeline = _Pipeline
+export const Printer = _Printer
+export const Remote = _Remote
+export const RemoteManager = _RemoteManager
+export const RemoteStep = _RemoteStep
+export const Stage = _Stage

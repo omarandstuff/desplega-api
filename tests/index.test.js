@@ -1,34 +1,30 @@
-import _Pipeline from '../src/Pipeline'
-import _Stage from '../src/Stage'
+import _Loader from '../src/Loader'
+import _Local from '../src/Local'
+import _LocalManager from '../src/LocalManager'
 import _LocalStep from '../src/LocalStep'
+import _Parser from '../src/Parser'
+import _Pipeline from '../src/Pipeline'
+import _Printer from '../src/Printer'
+import _Remote from '../src/Remote'
+import _RemoteManager from '../src/RemoteManager'
 import _RemoteStep from '../src/RemoteStep'
-import Local from '../src/Local'
-import LocalManager from '../src/LocalManager'
-import Printer from '../src/Printer'
-import Remote from '../src/Remote'
-import RemoteManager from '../src/RemoteManager'
-import { Pipeline, Stage, LocalStep, RemoteStep } from '../src/index'
-import api from '../src/index'
+import _Stage from '../src/Stage'
+import * as api from '../src/index'
 
 describe('index', () => {
-  it('exports the object creator functions', () => {
-    expect(Pipeline('', {})).toBeInstanceOf(_Pipeline)
-    expect(Stage('', {})).toBeInstanceOf(_Stage)
-    expect(LocalStep()).toBeInstanceOf(_LocalStep)
-    expect(RemoteStep()).toBeInstanceOf(_RemoteStep)
-  })
-
-  it('exports api component as default', () => {
+  it('exports api components', () => {
     expect(api).toEqual({
-      Pipeline: _Pipeline,
-      Stage: _Stage,
+      Loader: _Loader,
+      Local: _Local,
+      LocalManager: _LocalManager,
       LocalStep: _LocalStep,
+      Parser: _Parser,
+      Pipeline: _Pipeline,
+      Printer: _Printer,
+      Remote: _Remote,
+      RemoteManager: _RemoteManager,
       RemoteStep: _RemoteStep,
-      Local: Local,
-      LocalManager: LocalManager,
-      Printer: Printer,
-      Remote: Remote,
-      RemoteManager: RemoteManager
+      Stage: _Stage
     })
   })
 })
