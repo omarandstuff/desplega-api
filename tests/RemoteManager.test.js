@@ -50,7 +50,7 @@ describe('Remote#exec', () => {
       connectionErrors: [],
       options: { maxRetries: 0, reconnectionInterval: 5000, timeOut: 0 },
       reconnectionAttempts: 0,
-      results: { '1': [{ code: 0, signal: 'signal', stdout: 'stdout' }] },
+      results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]],
       streamCallBack: undefined
     })
   })
@@ -102,7 +102,7 @@ describe('Remote#exec', () => {
       connectionErrors: [],
       options: { maxRetries: 0, reconnectionInterval: 5000, timeOut: 0 },
       reconnectionAttempts: 0,
-      results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] },
+      results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]],
       streamCallBack: undefined
     })
   })
@@ -121,7 +121,7 @@ describe('Remote#exec', () => {
       connectionErrors: [],
       options: { maxRetries: 0, reconnectionInterval: 5000, timeOut: 1 },
       reconnectionAttempts: 0,
-      results: { '1': [{ error: 'Execution time out' }] },
+      results: [[{ error: 'Execution time out' }]],
       streamCallBack: undefined
     })
   })
@@ -142,14 +142,14 @@ describe('Remote#exec', () => {
         connectionErrors: [],
         options: { maxRetries: 3, reconnectionInterval: 5000, timeOut: 1 },
         reconnectionAttempts: 0,
-        results: {
-          '1': [
+        results: [
+          [
             { code: 128, signal: 'signal', stderr: 'stderr' },
             { code: 128, signal: 'signal', stderr: 'stderr' },
             { error: 'Execution time out' },
             { error: 'Execution time out' }
           ]
-        },
+        ],
         streamCallBack: undefined
       })
     })
@@ -174,15 +174,15 @@ describe('Remote#exec', () => {
         connectionErrors: [],
         options: { maxRetries: 4, reconnectionInterval: 5000, timeOut: 1 },
         reconnectionAttempts: 0,
-        results: {
-          '1': [
+        results: [
+          [
             { code: 128, signal: 'signal', stderr: 'stderr' },
             { code: 128, signal: 'signal', stderr: 'stderr' },
             { error: 'Execution time out' },
             { error: 'Execution time out' },
             { code: 0, signal: 'signal', stdout: 'stdout' }
           ]
-        },
+        ],
         streamCallBack: undefined
       })
     })
@@ -212,29 +212,29 @@ describe('Remote#exec', () => {
         ],
         options: { maxReconnectionRetries: 2, maxRetries: 7, reconnectionInterval: 1, timeOut: 1 },
         reconnectionAttempts: 2,
-        results: {
-          '1': [
+        results: [
+          [
             { code: 128, signal: 'signal', stderr: 'stderr' },
             { code: 128, signal: 'signal', stderr: 'stderr' },
             { error: 'Exec error' },
             { error: 'Exec error' },
             { error: 'Execution time out' }
           ],
-          '2': [
+          [
             { code: 128, signal: 'signal', stderr: 'stderr' },
             { code: 128, signal: 'signal', stderr: 'stderr' },
             { error: 'Exec error' },
             { error: 'Exec error' },
             { error: 'Execution time out' }
           ],
-          '3': [
+          [
             { code: 128, signal: 'signal', stderr: 'stderr' },
             { code: 128, signal: 'signal', stderr: 'stderr' },
             { error: 'Exec error' },
             { error: 'Exec error' },
             { error: 'Execution time out' }
           ]
-        },
+        ],
         streamCallBack: undefined
       })
     })
@@ -261,7 +261,7 @@ describe('Remote#exec', () => {
         ],
         options: { maxReconnectionRetries: 3, maxRetries: 0, reconnectionInterval: 1, timeOut: 0 },
         reconnectionAttempts: 2,
-        results: { '1': [], '2': [], '3': [{ code: 0, signal: 'signal', stdout: 'stdout' }] },
+        results: [[], [], [{ code: 0, signal: 'signal', stdout: 'stdout' }]],
         streamCallBack: undefined
       })
     })

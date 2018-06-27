@@ -142,6 +142,10 @@ export default class RemoteStep extends Step {
       .join(' ')
   }
 
+  _inspectResult(result) {
+    return result
+  }
+
   _solveLoader(id) {
     const animationChars = this.loadChars[this.currentRun[id].remote.feedback]
     const currentLoadChar = animationChars[this.animationTick % animationChars.length]

@@ -84,22 +84,24 @@ export default class Printer {
 
     return elements
       .map(element => {
+        let rendered
+
         if (element.blank) {
           if (specialDynamic) {
             if (availableDynamixSpace) {
               availableDynamixSpace--
-              return this._applyFormat(element, ' ')
+              rendered = this._applyFormat(element, ' ')
             }
           } else {
             const extraSpace = uncalculateDynamicSpace-- > 0 ? 1 : 0
             const blank = (element.symbol || ' ').repeat(widthPerDynamicElement + extraSpace)
-            return this._applyFormat(element, blank, raw)
+            rendered = this._applyFormat(element, blank, raw)
           }
         } else if (element.fit) {
           if (specialDynamic) {
             if (availableDynamixSpace) {
               availableDynamixSpace--
-              return this._applyFormat(element, element.text[0], raw)
+              rendered = this._applyFormat(element, element.text[0], raw)
             }
           } else {
             const extraSpace = uncalculateDynamicSpace-- > 0 ? 1 : 0
@@ -112,20 +114,20 @@ export default class Printer {
               const extraCut = addDots ? 3 : 0
               const extraDots = addDots ? '...' : ''
               const cuttedText = element.text.substring(0, cutPosition - extraCut)
-              const rendered = this._applyFormat(element, `${cuttedText}${extraDots}`, raw)
 
-              return `${rendered}`
+              rendered = this._applyFormat(element, `${cuttedText}${extraDots}`, raw)
             } else {
               const lack = finalWith - element.text.length
               const amplifiedText = `${element.text}${' '.repeat(lack)}`
-              const rendered = this._applyFormat(element, amplifiedText, raw)
 
-              return `${rendered}`
+              rendered = this._applyFormat(element, amplifiedText, raw)
             }
           }
         } else {
-          return this._applyFormat(element)
+          rendered = this._applyFormat(element)
         }
+
+        return rendered
       })
       .join('')
   }

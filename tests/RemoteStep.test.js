@@ -27,10 +27,12 @@ afterEach(() => {
 describe('RemoteStep#run', () => {
   it('Executes a remote command and return its result', async () => {
     const remoteManager = new RemoteManager({}, '#ID')
-    const remoteStep = new RemoteStep({ title: 'title', command: 'command', verbosityLevel: 'full' })
+    const remoteStep = new RemoteStep({ id: 'step1', title: 'title', command: 'command', verbosityLevel: 'full' })
     const thenFunc = jest.fn()
 
-    await remoteStep.run({ remotes: [remoteManager], childIndex: 5, theme: new Theme() }).then(thenFunc)
+    await remoteStep
+      .run({ archive: { dictionary: {}, history: [] }, remotes: [remoteManager], childIndex: 5, theme: new Theme() })
+      .then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
     expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -41,7 +43,7 @@ describe('RemoteStep#run', () => {
           command: 'command',
           connectionErrors: [],
           reconnectionAttempts: 0,
-          results: { '1': [{ code: 0, signal: 'signal', stdout: 'stdout' }] }
+          results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]]
         },
         status: 'done'
       }
@@ -79,7 +81,7 @@ describe('RemoteStep#run', () => {
           command: 'command',
           connectionErrors: [],
           reconnectionAttempts: 0,
-          results: { '1': [{ code: 0, signal: 'signal', stdout: 'stdout' }] }
+          results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]]
         },
         status: 'done'
       }
@@ -107,7 +109,7 @@ describe('RemoteStep#run', () => {
           command: 'cd some/path && command',
           connectionErrors: [],
           reconnectionAttempts: 0,
-          results: { '1': [{ code: 0, signal: 'signal', stdout: 'stdout' }] }
+          results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]]
         },
         status: 'done'
       }
@@ -135,7 +137,7 @@ describe('RemoteStep#run', () => {
           command: 'command',
           connectionErrors: [],
           reconnectionAttempts: 0,
-          results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+          results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
         },
         status: 'fail'
       },
@@ -146,7 +148,7 @@ describe('RemoteStep#run', () => {
           command: 'command',
           connectionErrors: [],
           reconnectionAttempts: 0,
-          results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+          results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
         },
         status: 'fail'
       },
@@ -157,7 +159,7 @@ describe('RemoteStep#run', () => {
           command: 'command',
           connectionErrors: [],
           reconnectionAttempts: 0,
-          results: { '1': [{ code: 0, signal: 'signal', stdout: 'stdout' }] }
+          results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]]
         },
         status: 'done'
       }
@@ -181,7 +183,7 @@ describe('RemoteStep#run', () => {
           command: 'dynamic command',
           connectionErrors: [],
           reconnectionAttempts: 0,
-          results: { '1': [{ code: 0, signal: 'signal', stdout: 'stdout' }] }
+          results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]]
         },
         status: 'done'
       }
@@ -228,7 +230,7 @@ describe('RemoteStep#run', () => {
             command: 'command',
             connectionErrors: [],
             reconnectionAttempts: 0,
-            results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+            results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
           },
           status: 'fail'
         }
@@ -259,7 +261,7 @@ describe('RemoteStep#run', () => {
               command: 'command',
               connectionErrors: [],
               reconnectionAttempts: 0,
-              results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+              results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
             },
             status: 'fail'
           }
@@ -272,7 +274,7 @@ describe('RemoteStep#run', () => {
               command: 'command',
               connectionErrors: [],
               reconnectionAttempts: 0,
-              results: { '1': [{ code: 0, signal: 'signal', stdout: 'stdout' }] }
+              results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]]
             },
             status: 'done'
           }
@@ -304,7 +306,7 @@ describe('RemoteStep#run', () => {
               command: 'command',
               connectionErrors: [],
               reconnectionAttempts: 0,
-              results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+              results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
             },
             status: 'fail'
           }
@@ -317,7 +319,7 @@ describe('RemoteStep#run', () => {
               command: 'command',
               connectionErrors: [],
               reconnectionAttempts: 0,
-              results: { '1': [{ code: 0, signal: 'signal', stdout: 'stdout' }] }
+              results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]]
             },
             status: 'done'
           }
@@ -354,7 +356,7 @@ describe('RemoteStep#run', () => {
               command: 'command',
               connectionErrors: [],
               reconnectionAttempts: 0,
-              results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+              results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
             },
             status: 'fail'
           }
@@ -367,7 +369,7 @@ describe('RemoteStep#run', () => {
               command: 'command',
               connectionErrors: [],
               reconnectionAttempts: 0,
-              results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+              results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
             },
             status: 'fail'
           }
@@ -394,7 +396,7 @@ describe('RemoteStep#run', () => {
             command: 'command',
             connectionErrors: [],
             reconnectionAttempts: 0,
-            results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+            results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
           },
           status: 'fail'
         }
@@ -425,7 +427,7 @@ describe('RemoteStep#run', () => {
               command: 'command',
               connectionErrors: [],
               reconnectionAttempts: 0,
-              results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+              results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
             },
             status: 'fail'
           }
@@ -438,7 +440,7 @@ describe('RemoteStep#run', () => {
               command: 'command',
               connectionErrors: [],
               reconnectionAttempts: 0,
-              results: { '1': [{ code: 0, signal: 'signal', stdout: 'stdout' }] }
+              results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]]
             },
             status: 'done'
           }
@@ -471,7 +473,7 @@ describe('RemoteStep#run', () => {
               command: 'command',
               connectionErrors: [],
               reconnectionAttempts: 0,
-              results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+              results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
             },
             status: 'fail'
           }
@@ -484,7 +486,7 @@ describe('RemoteStep#run', () => {
               command: 'command',
               connectionErrors: [],
               reconnectionAttempts: 0,
-              results: { '1': [{ code: 128, signal: 'signal', stderr: 'stderr' }] }
+              results: [[{ code: 128, signal: 'signal', stderr: 'stderr' }]]
             },
             status: 'fail'
           }

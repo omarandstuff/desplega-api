@@ -32,6 +32,15 @@ export default class Step {
     throw new Error('You need to implement run method')
   }
 
+  _archiveResult(result) {
+    if(this.context.archive) {
+      if (this.definition.id) {
+        this.context.archive.dictionary[this.definition.id] = result
+      }
+      this.context.archive.history.push(result)
+    }
+  }
+
   _buildPathCommand() {
     if (this.definition.path) {
       return `cd ${this.definition.path} && `
@@ -41,6 +50,8 @@ export default class Step {
 
   _finish(success, resultData) {
     this.status = 'idle'
+
+    this._archiveResult(resultData)
 
     if (success || this.definition.continueOnFailure) {
       this._printResult()

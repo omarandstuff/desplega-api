@@ -20,7 +20,6 @@ export default class LocalManager {
     this.status = 'free'
     this.feedback = 'idle'
     this.options = { maxRetries: 0, timeOut: 0, ...options }
-    this.runs = []
   }
 
   /**
@@ -71,7 +70,6 @@ export default class LocalManager {
       .then(result => {
         const runData = this.currentRun
         this.currentRun.results.push(result)
-        this.runs.push(this.currentRun)
         this.currentRun = undefined
         this.status = 'free'
         this.feedback = 'idle'
@@ -91,7 +89,6 @@ export default class LocalManager {
       this._run()
     } else {
       const runData = this.currentRun
-      this.runs.push(this.currentRun)
       this.currentRun = undefined
       this.status = 'free'
       this.feedback = 'idle'

@@ -29,7 +29,6 @@ export default class RemoteManager {
     this.status = 'free'
     this.feedback = 'idle'
     this.options = { maxRetries: 0, reconnectionInterval: 5000, timeOut: 0, ...options }
-    this.runs = []
 
     this.remote.on('ready', this._onRemoteReady.bind(this))
     this.remote.on('error', this._onRemoteError.bind(this))
@@ -76,7 +75,7 @@ export default class RemoteManager {
           connectionErrors: [],
           options: { ...this.options, ...options },
           reconnectionAttempts: 0,
-          results: { 1: [] },
+          results: [[]],
           streamCallBack: streamCallBack
         }
 
@@ -139,8 +138,7 @@ export default class RemoteManager {
       .then(result => {
         clearTimeout(this.timeOutInterval)
         const runData = this.currentRun
-        this.currentRun.results[this.currentRun.reconnectionAttempts + 1].push(result)
-        this.runs.push(this.currentRun)
+        this.currentRun.results[this.currentRun.reconnectionAttempts].push(result)
         this.currentRun = undefined
         this.status = 'free'
         this.feedback = 'idle'
@@ -163,14 +161,13 @@ export default class RemoteManager {
       this.feedback = 'waiting'
 
       await setTimeout(() => {
-        this.currentRun.results[this.currentRun.reconnectionAttempts + 1] = []
+        this.currentRun.results.push([])
         this.feedback = 'connecting'
 
         this.remote.connect()
       }, this.currentRun.options.reconnectionInterval)
     } else {
       const runData = this.currentRun
-      this.runs.push(this.currentRun)
       this.currentRun = undefined
       this.status = 'free'
       this.feedback = 'idle'
@@ -180,14 +177,13 @@ export default class RemoteManager {
   }
 
   _resolveError(error) {
-    this.currentRun.results[this.currentRun.reconnectionAttempts + 1].push(error)
+    this.currentRun.results[this.currentRun.reconnectionAttempts].push(error)
 
     if (this.currentRun.options.maxRetries >= this.currentRun.attempts) {
       this.feedback = 'running'
       this._run()
     } else {
       const runData = this.currentRun
-      this.runs.push(this.currentRun)
       this.currentRun = undefined
       this.status = 'free'
       this.feedback = 'idle'
@@ -197,13 +193,12 @@ export default class RemoteManager {
   }
 
   _resolveTimeOut() {
-    this.currentRun.results[this.currentRun.reconnectionAttempts + 1].push({ error: 'Execution time out' })
+    this.currentRun.results[this.currentRun.reconnectionAttempts].push({ error: 'Execution time out' })
 
     if (this.currentRun.options.maxRetries >= this.currentRun.attempts) {
       this.connect()
     } else {
       const runData = this.currentRun
-      this.runs.push(this.currentRun)
       this.currentRun = undefined
       this.status = 'free'
       this.feedback = 'idle'
