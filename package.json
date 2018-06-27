@@ -1,18 +1,11 @@
 {
-  "name": "desplega",
-  "version": "2.0.5",
-  "description": "Automate with simplicity",
+  "name": "desplega-api",
+  "version": "2.0.6",
+  "description": "Desplega pipile api",
   "license": "MIT",
-  "homepage": "https://github.com/omarandstuff/desplega#readme",
-  "repository": "github:omarandstuff/desplega",
-  "bugs": "https://github.com/omarandstuff/desplega/issues",
-  "keywords": [
-    "simple",
-    "deployer",
-    "desplega",
-    "automate",
-    "ssh"
-  ],
+  "homepage": "https://github.com/omarandstuff/desplega-api#readme",
+  "repository": "github:omarandstuff/desplega-api",
+  "bugs": "https://github.com/omarandstuff/desplega-api/issues",
   "author": "David De Anda <omarandstuff@gmail.com> (https://github.com/omarandstuff)",
   "main": "dist/index.js",
   "scripts": {
@@ -20,8 +13,7 @@
     "build": "babel src --out-dir dist",
     "test": "jest --watch",
     "test:coverage": "jest --coverage --no-cache",
-    "test:examples": "babel-node examples",
-    "test:playground": "babel-node playground",
+    "playground": "babel-node playground",
     "format": "prettier --write \"{src,tests}/**/*.js\"",
     "format:check": "prettier --list-different \"{src,tests}/**/*.js\"",
     "prepare": "yarn clean && yarn format:check && yarn test:coverage && yarn build"
@@ -43,14 +35,25 @@
     "prettier": "^1.13.5",
     "rimraf": "^2.6.2"
   },
-  "files": [
-    "dist",
-    "src"
-  ],
-  "npmName": "desplega",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.js"
     ]
-  }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "simple",
+    "deployer",
+    "desplega",
+    "automate",
+    "ssh",
+    "api",
+    "pipeline",
+    "stage",
+    "step",
+    "remote"
+  ]
 }

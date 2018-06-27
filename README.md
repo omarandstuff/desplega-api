@@ -1,12 +1,12 @@
 <h1 align="center">
-  <img src="https://raw.githubusercontent.com/omarandstuff/desplega/master/media/desplega-logo.png" alt="Desplega" title="Desplega" width="512">
+  <img src="https://raw.githubusercontent.com/omarandstuff/desplega-api/master/media/desplega-logo.png" alt="Desplega-api" title="Desplega-api" width="512">
 </h1>
 
-[![npm version](https://badge.fury.io/js/desplega.svg)](https://www.npmjs.com/package/desplega)
-[![Build Status](https://travis-ci.org/omarandstuff/desplega.svg?branch=master)](https://travis-ci.org/omarandstuff/desplega)
-[![Maintainability](https://api.codeclimate.com/v1/badges/9af99621b2c02c5fdfe7/maintainability)](https://codeclimate.com/github/omarandstuff/desplega/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/9af99621b2c02c5fdfe7/test_coverage)](https://codeclimate.com/github/omarandstuff/desplega/test_coverage)
+[![npm version](https://badge.fury.io/js/desplega-api.svg)](https://www.npmjs.com/package/desplega-api)
+[![Build Status](https://travis-ci.org/omarandstuff/desplega-api.svg?branch=master)](https://travis-ci.org/omarandstuff/desplega-api)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c7a58bcf312d8c47c4fa/maintainability)](https://codeclimate.com/github/omarandstuff/desplega-api/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/c7a58bcf312d8c47c4fa/test_coverage)](https://codeclimate.com/github/omarandstuff/desplega-api/test_coverage)
 
-Desplega is a  general porpuse modularizable automatiation tool, you can automate virtualy any process than you would prefer not to do manually form your terminal.
+Desplega api is what Desplega uses internally to run pipelines.
 
-## Basics
+[In development]
