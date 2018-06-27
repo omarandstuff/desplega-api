@@ -1,5 +1,6 @@
 import moment from 'moment'
 import Step from './Step'
+import { filterRemotes } from './utils'
 
 /**
  * In takes some remote manager objects and print formated information about
@@ -116,16 +117,10 @@ export default class RemoteStep extends Step {
   _buildContext(context) {
     return {
       ...context,
-      remotes: this._filterRemotes(context.remotes),
+      remotes: filterRemotes(context.remotes, this.definition.remotes),
       options: { ...context.remoteOptions, ...this.definition.options },
       verbosityLevel: this.definition.verbosityLevel || context.verbosityLevel
     }
-  }
-
-  _filterRemotes(remotes) {
-    return remotes.filter(remote => {
-      return !this.definition.remotes || this.definition.remotes.includes(remote.id)
-    })
   }
 
   _generateLoaders(includeId) {

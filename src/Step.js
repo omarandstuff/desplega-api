@@ -1,8 +1,8 @@
-import chalk from 'chalk'
 import moment from 'moment'
 import numeral from 'numeral'
 import ansiRegex from 'ansi-regex'
 import Printer from './Printer'
+import { solveDuration } from './utils'
 
 /**
  * Base step class.
@@ -177,7 +177,7 @@ export default class Step {
           style: style
         },
         {
-          text: `${this._solveDuration(this.startTime)}`,
+          text: `${solveDuration(this.startTime)}`,
           style: this.context.theme.mainStyle
         },
         {
@@ -222,7 +222,7 @@ export default class Step {
       },
       successWordSlot,
       {
-        text: ` ${this._solveDuration(this.startTime)}`,
+        text: ` ${solveDuration(this.startTime)}`,
         style: this.context.theme.mainStyle
       },
       {
@@ -243,19 +243,6 @@ export default class Step {
       this.animationTick = parseInt(this.animationFraction)
       this._printStatus()
     }, 1)
-  }
-
-  _solveDuration(time) {
-    const diference = moment().diff(time)
-    const duration = moment.duration(diference)
-
-    if (duration.hours() > 0) {
-      return moment(diference).format('hh[:]mm[:]ss[.]SSS')
-    } else if (duration.minutes() > 0) {
-      return moment(diference).format('mm[:]ss[.]SSS')
-    } else {
-      return moment(diference).format('ss[.]SSS')
-    }
   }
 
   _solveSuperScript(number) {

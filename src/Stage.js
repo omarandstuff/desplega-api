@@ -1,5 +1,6 @@
 import moment from 'moment'
 import Runner from './Runner'
+import { filterRemotes } from './utils'
 
 /**
  * Simple runner to run a list of steps.
@@ -52,17 +53,11 @@ export default class Stage extends Runner {
     return {
       ...context,
       stackLevel: this.childStackLevel,
-      remotes: this._filterRemotes(context.remotes),
+      remotes: filterRemotes(context.remotes, this.config.remotes),
       localOptions: { ...context.localOptions, ...this.config.localOptions },
       remoteOptions: { ...context.remoteOptions, ...this.config.remoteOptions },
       verbosityLevel: this.config.verbosityLevel || context.verbosityLevel
     }
-  }
-
-  _filterRemotes(remotes) {
-    return remotes.filter(remote => {
-      return !this.config.remotes || this.config.remotes.includes(remote.id)
-    })
   }
 
   _onChildFailure(result) {

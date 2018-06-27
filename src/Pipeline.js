@@ -4,6 +4,7 @@ import LocalManager from './LocalManager'
 import RemoteManager from './RemoteManager'
 import Printer from './Printer'
 import Theme from './Theme'
+import { solveDuration } from './utils'
 
 /**
  * Simple runner to run a list of stages.
@@ -130,7 +131,7 @@ export default class Pipeline extends Runner {
         style: successContrastStyle.bold
       },
       {
-        text: ` ${this._solveDuration(this.context.globalStartTime)}`,
+        text: ` ${solveDuration(this.context.globalStartTime)}`,
         style: this.context.theme.mainStyle
       },
       {
@@ -138,18 +139,5 @@ export default class Pipeline extends Runner {
         style: this.context.theme.backgroundStyle
       }
     ])
-  }
-
-  _solveDuration(time) {
-    const diference = moment().diff(time)
-    const duration = moment.duration(diference)
-
-    if (duration.hours() > 0) {
-      return moment(diference).format('hh[:]mm[:]ss[.]SSS')
-    } else if (duration.minutes() > 0) {
-      return moment(diference).format('mm[:]ss[.]SSS')
-    } else {
-      return moment(diference).format('ss[.]SSS')
-    }
   }
 }
