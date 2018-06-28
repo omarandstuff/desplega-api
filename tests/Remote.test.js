@@ -101,4 +101,15 @@ describe('Remote#exec', () => {
       expect(result.signal).toBe('signal')
     })
   })
+
+  it('works with bad paramaters', async () => {
+    const remote = new Remote(123123213)
+    await remote.connect()
+
+    await remote.exec(213123213, 'sadasdsad', 3123213).then(result => {
+      expect(result.stdout).toBe('stdout')
+      expect(result.code).toBe(0)
+      expect(result.signal).toBe('signal')
+    })
+  })
 })

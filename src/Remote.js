@@ -73,8 +73,8 @@ export default class Remote extends EventEmitter {
    * @returns {Promise} Promise to be solved or rejected.
    */
   exec(command, streamCallBack) {
-    if (this.status === 'ready') {
-      return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
+      if (this.status === 'ready') {
         this.connection.exec(String(command), (error, stream) => {
           let stdout = ''
           let stderr = ''
@@ -93,14 +93,14 @@ export default class Remote extends EventEmitter {
 
             stream.on('data', data => {
               stdout += data.toString('utf8')
-              if (streamCallBack) {
+              if (streamCallBack && typeof streamCallBack === 'function') {
                 streamCallBack(data.toString('utf8'))
               }
             })
 
             stream.stderr.on('data', data => {
               stderr += data.toString('utf8')
-              if (streamCallBack) {
+              if (streamCallBack && typeof streamCallBack === 'function') {
                 streamCallBack(undefined, data.toString('utf8'))
               }
             })
@@ -109,8 +109,10 @@ export default class Remote extends EventEmitter {
             this.status = 'ready'
           }
         })
-      })
-    }
+      } else {
+        reject(new Error('Remote not ready'))
+      }
+    })
   }
 
   /**
