@@ -86,4 +86,18 @@ describe('Pipeline#run', () => {
       verbosityLevel: 'partial'
     })
   })
+
+  it('works with bad configuration', async () => {
+    const pipeline = new Pipeline(123123, 'sadasd')
+    const thenFunc = jest.fn()
+
+    pipeline.addStage(new GenericChild())
+    pipeline.addStage(new GenericChild())
+    pipeline.addStage(new GenericChild())
+
+    await pipeline.run().then(thenFunc)
+
+    expect(thenFunc.mock.calls.length).toBe(1)
+    expect(thenFunc.mock.calls[0][0]).toMatchObject(['Generic success', 'Generic success', 'Generic success'])
+  })
 })

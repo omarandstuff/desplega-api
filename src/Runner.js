@@ -54,17 +54,21 @@ export default class Runner {
       const currentChild = this.children[this.currentIndex++]
       const context = { ...this.context, childIndex: this.currentIndex }
 
-      currentChild
-        .run(context)
-        .then(result => {
-          this._onChildSuccess(result)
-          this._runNext()
-        })
-        .catch(result => {
-          this.status = 'idle'
-          this._onChildFailure(result)
-          this._printResult(false)
-        })
+      if (currentChild.run && typeof currentChild.run === 'function') {
+        currentChild
+          .run(context)
+          .then(result => {
+            this._onChildSuccess(result)
+            this._runNext()
+          })
+          .catch(result => {
+            this.status = 'idle'
+            this._onChildFailure(result)
+            this._printResult(false)
+          })
+      } else {
+        this._runNext()
+      }
     } else {
       this.status = 'idle'
       this._onSuccess()

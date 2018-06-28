@@ -89,4 +89,18 @@ describe('Stage#run', () => {
       stackLevel: 2
     })
   })
+
+  it('works with bad configuration', async () => {
+    const stage = new Stage({ asdsad: 2321321 }, ' sayduy')
+    const thenFunc = jest.fn()
+
+    stage.addStep(new GenericChild())
+    stage.addStep(new GenericChild())
+    stage.addStep(new GenericChild())
+
+    await stage.run(123123).then(thenFunc)
+
+    expect(thenFunc.mock.calls.length).toBe(1)
+    expect(thenFunc.mock.calls[0][0]).toMatchObject(['Generic success', 'Generic success', 'Generic success'])
+  })
 })

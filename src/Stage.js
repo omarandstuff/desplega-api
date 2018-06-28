@@ -30,13 +30,12 @@ export default class Stage extends Runner {
   /**
    * Runs the secuence of stages
    */
-  run(context) {
+  run(context = {}) {
     return new Promise((resolve, reject) => {
       if (this.status === 'idle') {
         this.currentIndex = 0
         this.startTime = moment()
         this.context = this._buildContext(context)
-        this.headerColor = context.theme.stageHeadercolor
         this.results = []
 
         this.resolve = resolve
@@ -56,7 +55,8 @@ export default class Stage extends Runner {
       remotes: filterRemotes(context.remotes, this.config.remotes),
       localOptions: { ...context.localOptions, ...this.config.localOptions },
       remoteOptions: { ...context.remoteOptions, ...this.config.remoteOptions },
-      verbosityLevel: this.config.verbosityLevel || context.verbosityLevel
+      verbosityLevel: this.config.verbosityLevel || context.verbosityLevel,
+      theme: { ...context.theme }
     }
   }
 
@@ -77,14 +77,14 @@ export default class Stage extends Runner {
     this.printer.drawRow([
       {
         text: ` ${this.title} `,
-        style: this.context.theme.stageHeaderContrastStyle.bold
+        style: this.context.theme.stageHeaderContrastStyle ? this.context.theme.stageHeaderContrastStyle.bold : undefined
       },
       {
         blank: true,
         style: this.context.theme.backgroundStyle
       },
       {
-        text: ` ${this.context.globalStartTime.format('hh[:]mma')} `,
+        text: ` ${moment(this.context.globalStartTime).format('hh[:]mma')} `,
         style: this.context.theme.stageHeaderStyle
       }
     ])
