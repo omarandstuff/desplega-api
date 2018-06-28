@@ -53,12 +53,12 @@ export default class RemoteStep extends Step {
    * (See RemoteManager exec method for more details)
    *
    */
-  run(context) {
+  run(context = {}) {
     return new Promise((resolve, reject) => {
       if (this.status === 'idle') {
         this.context = this._buildContext(context)
 
-        if (this.context.remotes.length === 0) {
+        if (!this.context.remotes || this.context.remotes.length === 0) {
           return resolve('Nothing to deploy')
         }
 
@@ -119,7 +119,8 @@ export default class RemoteStep extends Step {
       ...context,
       remotes: filterRemotes(context.remotes, this.definition.remotes),
       options: { ...context.remoteOptions, ...this.definition.options },
-      verbosityLevel: this.definition.verbosityLevel || context.verbosityLevel
+      verbosityLevel: this.definition.verbosityLevel || context.verbosityLevel,
+      theme: { ...context.theme }
     }
   }
 

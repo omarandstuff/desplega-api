@@ -54,7 +54,7 @@ describe('RemoteStep#run', () => {
     const remoteStep = new RemoteStep({ command: 'command' })
     const thenFunc = jest.fn()
 
-    await remoteStep.run({ remotes: [] }).then(thenFunc)
+    await remoteStep.run().then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
     expect(thenFunc.mock.calls[0][0]).toBe('Nothing to deploy')
@@ -205,6 +205,56 @@ describe('RemoteStep#run', () => {
     expect(thenFunc.mock.calls.length).toBe(0)
     expect(catchFunc.mock.calls.length).toBe(1)
     expect(catchFunc.mock.calls[0][0]).toBeInstanceOf(Error)
+  })
+
+  it('works with bad paramaters', async () => {
+    const remoteManager = new RemoteManager(213123123, undefined, 2324)
+    const remoteStep = new RemoteStep('qweqwewqe')
+    const thenFunc = jest.fn()
+
+    await remoteStep.run({ remotes: [remoteManager] }).then(thenFunc)
+
+    expect(thenFunc.mock.calls.length).toBe(1)
+    expect(thenFunc.mock.calls[0][0]).toMatchObject({
+      undefined: {
+        remote: {
+          currentRun: undefined,
+          feedback: 'idle',
+          id: undefined,
+          options: { maxRetries: 0, reconnectionInterval: 5000, timeOut: 0 },
+          remote: {
+            config: {
+              keepaliveCountMax: 5,
+              keepaliveInterval: 12000,
+              port: 22,
+              privateKeyPath: '/Users/david/.ssh/id_rsa',
+              username: 'root'
+            },
+            connection: {
+              config: {
+                keepaliveCountMax: 5,
+                keepaliveInterval: 12000,
+                port: 22,
+                privateKey: 'content',
+                privateKeyPath: '/Users/david/.ssh/id_rsa',
+                username: 'root'
+              }
+            },
+            status: 'ready'
+          },
+          status: 'free'
+        },
+        result: {
+          attempts: 1,
+          command: 'undefined',
+          connectionErrors: [],
+          options: { maxRetries: 0, reconnectionInterval: 5000, timeOut: 0 },
+          reconnectionAttempts: 0,
+          results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]]
+        },
+        status: 'done'
+      }
+    })
   })
 
   describe('when continueOnFailure is not set', () => {
