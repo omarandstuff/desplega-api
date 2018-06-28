@@ -1,7 +1,6 @@
 jest.mock('fs')
 import RemoteStep from '../src/RemoteStep'
 import RemoteManager from '../src/RemoteManager'
-import Theme from '../src/Theme'
 import ssh from 'ssh2'
 
 const realLog = console.log
@@ -25,13 +24,13 @@ afterEach(() => {
 })
 
 describe('RemoteStep#run', () => {
-  it('Executes a remote command and return its result', async () => {
+  it('executes a remote command and return its result', async () => {
     const remoteManager = new RemoteManager({}, '#ID')
     const remoteStep = new RemoteStep({ id: 'step1', title: 'title', command: 'command', verbosityLevel: 'full' })
     const thenFunc = jest.fn()
 
     await remoteStep
-      .run({ archive: { dictionary: {}, history: [] }, remotes: [remoteManager], childIndex: 5, theme: new Theme() })
+      .run({ archive: { dictionary: {}, history: [] }, remotes: [remoteManager], childIndex: 5 })
       .then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
@@ -46,6 +45,106 @@ describe('RemoteStep#run', () => {
           results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]]
         },
         status: 'done'
+      }
+    })
+  })
+
+  it('archives the result in context', async () => {
+    const remoteManager = new RemoteManager({}, '#ID1')
+    const remoteStep = new RemoteStep({
+      id: 'step1',
+      title: 'title',
+      command: 'command',
+      verbosityLevel: 'full',
+      options: { maxRetries: 4, maxReconnectionRetries: 2, reconnectionInterval: 1 }
+    })
+    const context = {
+      archive: { dictionary: {}, history: [] },
+      remotes: [remoteManager],
+      childIndex: 5
+    }
+
+    ssh.__mockExecErrorCode = 2
+    ssh.__mockConnectionInterruption = 2
+    await remoteStep.run(context)
+
+    expect(context).toMatchObject({
+      archive: {
+        dictionary: {
+          step1: [
+            { code: 128, signal: 'signal', stderr: 'stderr' },
+            { code: 128, signal: 'signal', stderr: 'stderr' },
+            [
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 0, signal: 'signal', stdout: 'stdout' }
+            ]
+          ]
+        },
+        history: [
+          [
+            { code: 128, signal: 'signal', stderr: 'stderr' },
+            { code: 128, signal: 'signal', stderr: 'stderr' },
+            [
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 0, signal: 'signal', stdout: 'stdout' }
+            ]
+          ]
+        ]
+      }
+    })
+  })
+
+  it('archives the result in context but keeps multiple remotes ids', async () => {
+    const remoteManager = new RemoteManager({}, '#ID1')
+    const remoteManager2 = new RemoteManager({}, '#ID2')
+    const remoteStep = new RemoteStep({
+      id: 'step1',
+      title: 'title',
+      command: 'command',
+      verbosityLevel: 'full',
+      options: { maxRetries: 2 }
+    })
+    const context = {
+      archive: { dictionary: {}, history: [] },
+      remotes: [remoteManager, remoteManager2],
+      childIndex: 5
+    }
+
+    ssh.__mockExecErrorCode = 4
+    await remoteStep.run(context)
+
+    expect(context).toMatchObject({
+      archive: {
+        dictionary: {
+          step1: {
+            '#ID1': [
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 0, signal: 'signal', stdout: 'stdout' }
+            ],
+            '#ID2': [
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 0, signal: 'signal', stdout: 'stdout' }
+            ]
+          }
+        },
+        history: [
+          {
+            '#ID1': [
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 0, signal: 'signal', stdout: 'stdout' }
+            ],
+            '#ID2': [
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 128, signal: 'signal', stderr: 'stderr' },
+              { code: 0, signal: 'signal', stdout: 'stdout' }
+            ]
+          }
+        ]
       }
     })
   })
@@ -67,9 +166,7 @@ describe('RemoteStep#run', () => {
     const remoteStep = new RemoteStep({ command: 'command', remotes: ['#ID3'] })
     const thenFunc = jest.fn()
 
-    await remoteStep
-      .run({ remotes: [remoteManager, remoteManager2, remoteManager3], theme: new Theme() })
-      .then(thenFunc)
+    await remoteStep.run({ remotes: [remoteManager, remoteManager2, remoteManager3] }).then(thenFunc)
 
     expect(remoteStep.remotesIds === ['#ID3'])
     expect(thenFunc.mock.calls.length).toBe(1)
@@ -98,7 +195,7 @@ describe('RemoteStep#run', () => {
     })
     const thenFunc = jest.fn()
 
-    await remoteStep.run({ remotes: [remoteManager], childIndex: 5, theme: new Theme() }).then(thenFunc)
+    await remoteStep.run({ remotes: [remoteManager], childIndex: 5 }).then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
     expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -124,9 +221,7 @@ describe('RemoteStep#run', () => {
     const thenFunc = jest.fn()
 
     ssh.__mockExecErrorCode = 2
-    await remoteStep
-      .run({ remotes: [remoteManager, remoteManager2, remoteManager3], childIndex: 5, theme: new Theme() })
-      .then(thenFunc)
+    await remoteStep.run({ remotes: [remoteManager, remoteManager2, remoteManager3], childIndex: 5 }).then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
     expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -172,7 +267,7 @@ describe('RemoteStep#run', () => {
     const remoteStep = new RemoteStep({ title: 'title', command: command, verbosityLevel: 'full' })
     const thenFunc = jest.fn()
 
-    await remoteStep.run({ remotes: [remoteManager], theme: new Theme() }).then(thenFunc)
+    await remoteStep.run({ remotes: [remoteManager] }).then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
     expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -198,7 +293,7 @@ describe('RemoteStep#run', () => {
 
     remoteStep.status = 'running'
     await remoteStep
-      .run({ remotes: [remoteManager], childIndex: 5, theme: new Theme() })
+      .run({ remotes: [remoteManager], childIndex: 5 })
       .then(thenFunc)
       .catch(catchFunc)
 
@@ -264,7 +359,7 @@ describe('RemoteStep#run', () => {
 
       ssh.__mockExecErrorCode = true
       await remoteStep
-        .run({ remotes: [remoteManager], childIndex: 5, theme: new Theme() })
+        .run({ remotes: [remoteManager], childIndex: 5 })
         .then(thenFunc)
         .catch(catchFunc)
 
@@ -294,7 +389,7 @@ describe('RemoteStep#run', () => {
 
       ssh.__mockExecErrorCode = true
       await remoteStep
-        .run({ remotes: [remoteManager], childIndex: 5, theme: new Theme() })
+        .run({ remotes: [remoteManager], childIndex: 5 })
         .then(thenFunc)
         .catch(catchFunc)
 
@@ -342,7 +437,7 @@ describe('RemoteStep#run', () => {
       const thenFunc = jest.fn()
 
       ssh.__mockExecErrorCode = true
-      await remoteStep.run({ remotes: [remoteManager], childIndex: 5, theme: new Theme() }).then(thenFunc)
+      await remoteStep.run({ remotes: [remoteManager], childIndex: 5 }).then(thenFunc)
 
       expect(thenFunc.mock.calls.length).toBe(1)
       expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -389,7 +484,7 @@ describe('RemoteStep#run', () => {
 
       ssh.__mockExecErrorCode = 2
       await remoteStep
-        .run({ remotes: [remoteManager], childIndex: 5, theme: new Theme() })
+        .run({ remotes: [remoteManager], childIndex: 5 })
         .then(thenFunc)
         .catch(catchFunc)
 
@@ -433,7 +528,7 @@ describe('RemoteStep#run', () => {
       const thenFunc = jest.fn()
 
       ssh.__mockExecErrorCode = true
-      await remoteStep.run({ remotes: [remoteManager], childIndex: 5, theme: new Theme() }).then(thenFunc)
+      await remoteStep.run({ remotes: [remoteManager], childIndex: 5 }).then(thenFunc)
 
       expect(thenFunc.mock.calls.length).toBe(1)
       expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -463,7 +558,7 @@ describe('RemoteStep#run', () => {
       const thenFunc = jest.fn()
 
       ssh.__mockExecErrorCode = true
-      await remoteStep.run({ remotes: [remoteManager], childIndex: 5, theme: new Theme() }).then(thenFunc)
+      await remoteStep.run({ remotes: [remoteManager], childIndex: 5 }).then(thenFunc)
 
       expect(thenFunc.mock.calls.length).toBe(1)
       expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -509,7 +604,7 @@ describe('RemoteStep#run', () => {
       const thenFunc = jest.fn()
 
       ssh.__mockExecErrorCode = 2
-      await remoteStep.run({ remotes: [remoteManager], childIndex: 5, theme: new Theme() }).then(thenFunc)
+      await remoteStep.run({ remotes: [remoteManager], childIndex: 5 }).then(thenFunc)
 
       expect(thenFunc.mock.calls.length).toBe(1)
       expect(thenFunc.mock.calls[0][0]).toMatchObject({

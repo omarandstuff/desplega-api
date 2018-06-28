@@ -23,12 +23,12 @@ afterEach(() => {
 })
 
 describe('LocalStep#run', () => {
-  it('Executes a local command and return its result', async () => {
+  it('executes a local command and return its result', async () => {
     const localManager = new LocalManager({})
     const localStep = new LocalStep({ title: 'title', command: 'command', verbosityLevel: 'full' })
     const thenFunc = jest.fn()
 
-    await localStep.run({ local: localManager, childIndex: 5, theme: new Theme() }).then(thenFunc)
+    await localStep.run({ local: localManager, childIndex: 5 }).then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
     expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -42,6 +42,71 @@ describe('LocalStep#run', () => {
     })
   })
 
+  it('archives the result in context', async () => {
+    const localManager = new LocalManager({})
+    const localStep = new LocalStep({
+      id: 'step1',
+      title: 'title',
+      command: 'command',
+      verbosityLevel: 'full',
+      options: { maxRetries: 2 }
+    })
+    const thenFunc = jest.fn()
+    const catchFunc = jest.fn()
+    const context = { archive: { dictionary: {}, history: [] }, local: localManager, childIndex: 5 }
+
+    child_process.__mockExecError = 2
+    await localStep
+      .run(context)
+      .then(thenFunc)
+      .catch(catchFunc)
+
+    expect(context).toMatchObject({
+      archive: {
+        dictionary: {
+          step1: [
+            { code: 127, signal: null, stderr: 'stderr' },
+            { code: 127, signal: null, stderr: 'stderr' },
+            { code: 0, signal: null, stdout: 'stdout' }
+          ]
+        },
+        history: [
+          [
+            { code: 127, signal: null, stderr: 'stderr' },
+            { code: 127, signal: null, stderr: 'stderr' },
+            { code: 0, signal: null, stdout: 'stdout' }
+          ]
+        ]
+      }
+    })
+  })
+
+  it('archives the result in context and avoid arrays on single results', async () => {
+    const localManager = new LocalManager({})
+    const localStep = new LocalStep({
+      id: 'step1',
+      title: 'title',
+      command: 'command',
+      verbosityLevel: 'full',
+      options: { maxRetries: 2 }
+    })
+    const thenFunc = jest.fn()
+    const catchFunc = jest.fn()
+    const context = { archive: { dictionary: {}, history: [] }, local: localManager, childIndex: 5 }
+
+    await localStep
+      .run(context)
+      .then(thenFunc)
+      .catch(catchFunc)
+
+    expect(context).toMatchObject({
+      archive: {
+        dictionary: { step1: { code: 0, signal: null, stdout: 'stdout' } },
+        history: [{ code: 0, signal: null, stdout: 'stdout' }]
+      }
+    })
+  })
+
   it('tansforms the path as a change dir command', async () => {
     const localManager = new LocalManager({})
     const localStep = new LocalStep({
@@ -52,7 +117,7 @@ describe('LocalStep#run', () => {
     })
     const thenFunc = jest.fn()
 
-    await localStep.run({ local: localManager, childIndex: 5, theme: new Theme() }).then(thenFunc)
+    await localStep.run({ local: localManager, childIndex: 5 }).then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
     expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -72,7 +137,7 @@ describe('LocalStep#run', () => {
     const localStep = new LocalStep({ title: 'title', command: command, verbosityLevel: 'full' })
     const thenFunc = jest.fn()
 
-    await localStep.run({ local: localManager, theme: new Theme() }).then(thenFunc)
+    await localStep.run({ local: localManager }).then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
     expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -94,7 +159,7 @@ describe('LocalStep#run', () => {
 
     localStep.status = 'running'
     await localStep
-      .run({ local: localManager, childIndex: 5, theme: new Theme() })
+      .run({ local: localManager, childIndex: 5 })
       .then(thenFunc)
       .catch(catchFunc)
 
@@ -112,7 +177,7 @@ describe('LocalStep#run', () => {
 
       child_process.__mockExecError = true
       await localStep
-        .run({ local: localManager, childIndex: 5, theme: new Theme() })
+        .run({ local: localManager, childIndex: 5 })
         .then(thenFunc)
         .catch(catchFunc)
 
@@ -138,7 +203,7 @@ describe('LocalStep#run', () => {
 
       child_process.__mockExecError = true
       await localStep
-        .run({ local: localManager, childIndex: 5, theme: new Theme() })
+        .run({ local: localManager, childIndex: 5 })
         .then(thenFunc)
         .catch(catchFunc)
 
@@ -178,7 +243,7 @@ describe('LocalStep#run', () => {
       const thenFunc = jest.fn()
 
       child_process.__mockExecError = true
-      await localStep.run({ local: localManager, childIndex: 5, theme: new Theme() }).then(thenFunc)
+      await localStep.run({ local: localManager, childIndex: 5 }).then(thenFunc)
 
       expect(thenFunc.mock.calls.length).toBe(1)
       expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -217,7 +282,7 @@ describe('LocalStep#run', () => {
 
       child_process.__mockExecError = 2
       await localStep
-        .run({ local: localManager, childIndex: 5, theme: new Theme() })
+        .run({ local: localManager, childIndex: 5 })
         .then(thenFunc)
         .catch(catchFunc)
 
@@ -282,7 +347,7 @@ describe('LocalStep#run', () => {
       const thenFunc = jest.fn()
 
       child_process.__mockExecError = true
-      await localStep.run({ local: localManager, childIndex: 5, theme: new Theme() }).then(thenFunc)
+      await localStep.run({ local: localManager, childIndex: 5 }).then(thenFunc)
 
       expect(thenFunc.mock.calls.length).toBe(1)
       expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -308,7 +373,7 @@ describe('LocalStep#run', () => {
       const thenFunc = jest.fn()
 
       child_process.__mockExecError = true
-      await localStep.run({ local: localManager, childIndex: 5, theme: new Theme() }).then(thenFunc)
+      await localStep.run({ local: localManager, childIndex: 5 }).then(thenFunc)
 
       expect(thenFunc.mock.calls.length).toBe(1)
       expect(thenFunc.mock.calls[0][0]).toMatchObject({
@@ -346,7 +411,7 @@ describe('LocalStep#run', () => {
       const thenFunc = jest.fn()
 
       child_process.__mockExecError = 2
-      await localStep.run({ local: localManager, childIndex: 5, theme: new Theme() }).then(thenFunc)
+      await localStep.run({ local: localManager, childIndex: 5 }).then(thenFunc)
 
       expect(thenFunc.mock.calls.length).toBe(1)
       expect(thenFunc.mock.calls[0][0]).toMatchObject({

@@ -63,6 +63,7 @@ export default class RemoteStep extends Step {
         this.status = 'running'
         this.startTime = moment()
         this.currentRun = {}
+        this.currentRecord = {}
 
         if (this.definition.command instanceof Function) {
           this.command = this.definition.command(this.context)
@@ -79,13 +80,15 @@ export default class RemoteStep extends Step {
           .then(result => {
             this.currentRun.status = 'done'
             this.currentRun.result = result
+            this.currentRecord = result.results
 
             clearTimeout(this.animation)
             this._onSuccess()
           })
-          .catch(error => {
+          .catch(result => {
             this.currentRun.status = 'fail'
-            this.currentRun.result = error
+            this.currentRun.result = result
+            this.currentRecord = result.results
 
             clearTimeout(this.animation)
             this._onFailure()

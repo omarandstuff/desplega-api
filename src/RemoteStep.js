@@ -65,6 +65,7 @@ export default class RemoteStep extends Step {
         this.startTime = moment()
         this.remotesIds = []
         this.currentRun = {}
+        this.currentRecord = {}
         this.remotesFinished = 0
         this.status = 'running'
 
@@ -92,15 +93,17 @@ export default class RemoteStep extends Step {
             .then(result => {
               this.currentRun[id].status = 'done'
               this.currentRun[id].result = result
+              this.currentRecord[id] = result.results
 
               if (++this.remotesFinished === this.remotesIds.length) {
                 clearTimeout(this.animation)
                 this._onSuccess()
               }
             })
-            .catch(error => {
+            .catch(result => {
               this.currentRun[id].status = 'fail'
-              this.currentRun[id].result = error
+              this.currentRun[id].result = result
+              this.currentRecord[id] = result.results
 
               if (++this.remotesFinished === this.remotesIds.length) {
                 clearTimeout(this.animation)

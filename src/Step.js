@@ -3,6 +3,7 @@ import numeral from 'numeral'
 import ansiRegex from 'ansi-regex'
 import Printer from './Printer'
 import { solveDuration } from './utils'
+import { O_NONBLOCK } from 'constants'
 
 /**
  * Base step class.
@@ -29,15 +30,16 @@ export default class Step {
   }
 
   run() {
-    throw new Error('You need to implement run method')
+    throw new Error('You need to implement the run method')
   }
 
-  _archiveResult(result) {
+  _archiveResult() {
     if (this.context.archive) {
+      const cleanRecord = this._cleanRecord(this.currentRecord)
       if (this.definition.id) {
-        this.context.archive.dictionary[this.definition.id] = result
+        this.context.archive.dictionary[this.definition.id] = cleanRecord
       }
-      this.context.archive.history.push(result)
+      this.context.archive.history.push(cleanRecord)
     }
   }
 
@@ -48,10 +50,25 @@ export default class Step {
     return ''
   }
 
+  _cleanRecord(record) {
+    if (record instanceof Object || record instanceof Array) {
+      const keys = Object.keys(record)
+      if (keys.length === 1) {
+        return this._cleanRecord(record[keys[0]])
+      } else {
+        keys.forEach(key => {
+          record[key] = this._cleanRecord(record[key])
+        })
+      }
+    }
+
+    return record
+  }
+
   _finish(success, resultData) {
     this.status = 'idle'
 
-    this._archiveResult(resultData)
+    this._archiveResult()
 
     if (success || this.definition.continueOnFailure) {
       this._printResult()
