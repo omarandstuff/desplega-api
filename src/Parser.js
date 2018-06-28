@@ -15,7 +15,16 @@ export default class Parser {
   static _buildFromDescriptor(descriptor) {
     const { pipeline } = descriptor
     const { title, verbosityLevel, remotes, remoteOptions, localOptions, theme, stages } = pipeline
-    const pipelineRunner = new Pipeline(title, { verbosityLevel, remotes, remoteOptions, localOptions }, theme)
+    const actualRemotes = Object.keys(remotes || []).map(remoteId => {
+      const { id, ...remoteConfig } = remotes[remoteId]
+      return { id: remoteId, ...remoteConfig }
+    })
+
+    const pipelineRunner = new Pipeline(
+      title,
+      { verbosityLevel, remotes: actualRemotes, remoteOptions, localOptions },
+      theme
+    )
 
     if (stages) {
       stages.forEach(({ title, verbosityLevel, remotes, remoteOptions, localOptions, steps }) => {

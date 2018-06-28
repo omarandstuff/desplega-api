@@ -2,9 +2,9 @@
   "pipeline": {
     "title": "Pipeline Name",
     "verbosityLevel": "full",
-    "remotes": [
-      {
-        "id": "Remote1",
+    "remotes": {
+      "Remote1": {
+        "id": "Poop",
         "host": "host.com",
         "port": 45,
         "username": "user",
@@ -13,8 +13,8 @@
         "keepaliveInterval": 666,
         "keepaliveCountMax": 777
       },
-      {
-        "id": "Remote2",
+      "Remote2": {
+        "id": "Poop2",
         "host": "host2.com",
         "port": 33,
         "username": "david",
@@ -23,7 +23,7 @@
         "keepaliveInterval": 888,
         "keepaliveCountMax": 2
       }
-    ],
+    },
     "remoteOptions": {
       "maxRetries": 2,
       "maxReconnectionRetries": 2,
