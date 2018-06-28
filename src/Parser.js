@@ -22,16 +22,14 @@ export default class Parser {
         const stageRunner = new Stage(title, { verbosityLevel, remotes, remoteOptions, localOptions })
 
         if (steps) {
-          steps.forEach(({ remote, ...stepDefinition }) => {
-            let stepRunner
+          steps.forEach(step => {
+            const { onFailure, ...stepDefinition } = step
 
-            if (remote) {
-              stepRunner = new RemoteStep(stepDefinition)
-            } else {
-              stepRunner = new LocalStep(stepDefinition)
+            if (onFailure) {
+              stepDefinition.onFailure = Parser.__generateStep(onFailure)
             }
 
-            stageRunner.addStep(stepRunner)
+            stageRunner.addStep(Parser.__generateStep(stepDefinition))
           })
         }
 
@@ -40,5 +38,15 @@ export default class Parser {
     }
 
     return pipelineRunner
+  }
+
+  static __generateStep(definition) {
+    const { remote, ...actualDefinition } = definition
+
+    if (remote) {
+      return new RemoteStep(actualDefinition)
+    } else {
+      return new LocalStep(actualDefinition)
+    }
   }
 }

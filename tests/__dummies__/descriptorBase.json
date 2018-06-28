@@ -73,7 +73,22 @@
             "command": "sudo apt-get update",
             "verbosityLevel": "full",
             "remotes": ["Remote1"],
-            "onFailure": "on failure",
+            "onFailure": {
+              "remote": true,
+              "title": "On failure",
+              "path": "path/where/to/run",
+              "command": "sudo apt-get update",
+              "verbosityLevel": "full",
+              "remotes": ["Remote1"],
+              "recoverOnFailure": true,
+              "continueOnFailure": true,
+              "options": {
+                "maxRetries": 1,
+                "maxReconnectionRetries": 4,
+                "reconnectionInterval": 2,
+                "timeOut": 600
+              }
+            },
             "recoverOnFailure": true,
             "continueOnFailure": true,
             "options": {
@@ -89,7 +104,6 @@
             "command": "sudo apt-get update",
             "verbosityLevel": "full",
             "remotes": ["Remote2"],
-            "onFailure": "on failure2",
             "recoverOnFailure": true,
             "continueOnFailure": true,
             "options": {
@@ -121,7 +135,22 @@
             "command": "sudo apt-get update",
             "verbosityLevel": "full",
             "remotes": ["Remote1"],
-            "onFailure": "on failure2",
+            "onFailure": {
+              "remote": true,
+              "title": "On failure",
+              "path": "path/where/to/run",
+              "command": "sudo apt-get update",
+              "verbosityLevel": "full",
+              "remotes": ["Remote1"],
+              "recoverOnFailure": true,
+              "continueOnFailure": true,
+              "options": {
+                "maxRetries": 1,
+                "maxReconnectionRetries": 4,
+                "reconnectionInterval": 2,
+                "timeOut": 600
+              }
+            },
             "recoverOnFailure": false,
             "continueOnFailure": false,
             "options": {
@@ -137,7 +166,6 @@
             "command": "sudo apt-get update",
             "verbosityLevel": "full",
             "remotes": ["Remote1"],
-            "onFailure": "on failure4",
             "recoverOnFailure": false,
             "continueOnFailure": true,
             "options": {

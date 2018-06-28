@@ -54,7 +54,25 @@
             "command": "sudo apt-get update",
             "verbosityLevel": "full",
             "remotes": ["Remote1"],
-            "onFailure": "on failure",
+            "onFailure": {
+              "animationFraction": 0,
+              "animationTick": 0,
+              "definition": {
+                "title": "On failure",
+                "verbosityLevel": "full",
+                "command": "sudo apt-get update",
+                "path": "path/where/to/run",
+                "recoverOnFailure": true,
+                "remotes": ["Remote1"],
+                "continueOnFailure": true,
+                "options": {
+                  "maxReconnectionRetries": 4,
+                  "maxRetries": 1,
+                  "reconnectionInterval": 2,
+                  "timeOut": 600
+                }
+              }
+            },
             "recoverOnFailure": true,
             "continueOnFailure": true,
             "options": {
@@ -72,7 +90,6 @@
             "command": "sudo apt-get update",
             "verbosityLevel": "full",
             "remotes": ["Remote2"],
-            "onFailure": "on failure2",
             "recoverOnFailure": true,
             "continueOnFailure": true,
             "options": { "maxRetries": 5, "timeOut": 60 }
@@ -101,7 +118,25 @@
             "command": "sudo apt-get update",
             "verbosityLevel": "full",
             "remotes": ["Remote1"],
-            "onFailure": "on failure2",
+            "onFailure": {
+              "animationFraction": 0,
+              "animationTick": 0,
+              "definition": {
+                "title": "On failure",
+                "verbosityLevel": "full",
+                "command": "sudo apt-get update",
+                "path": "path/where/to/run",
+                "recoverOnFailure": true,
+                "remotes": ["Remote1"],
+                "continueOnFailure": true,
+                "options": {
+                  "maxReconnectionRetries": 4,
+                  "maxRetries": 1,
+                  "reconnectionInterval": 2,
+                  "timeOut": 600
+                }
+              }
+            },
             "recoverOnFailure": false,
             "continueOnFailure": false,
             "options": {
@@ -119,7 +154,6 @@
             "command": "sudo apt-get update",
             "verbosityLevel": "full",
             "remotes": ["Remote1"],
-            "onFailure": "on failure4",
             "recoverOnFailure": false,
             "continueOnFailure": true,
             "options": { "maxRetries": 2, "timeOut": 90 }
