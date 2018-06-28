@@ -77,7 +77,9 @@ export default class Stage extends Runner {
     this.printer.drawRow([
       {
         text: ` ${this.title} `,
-        style: this.context.theme.stageHeaderContrastStyle ? this.context.theme.stageHeaderContrastStyle.bold : undefined
+        style: this.context.theme.stageHeaderContrastStyle
+          ? this.context.theme.stageHeaderContrastStyle.bold
+          : undefined
       },
       {
         blank: true,

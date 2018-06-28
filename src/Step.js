@@ -1,4 +1,3 @@
-import chalk from 'chalk'
 import moment from 'moment'
 import numeral from 'numeral'
 import ansiRegex from 'ansi-regex'
@@ -119,7 +118,7 @@ export default class Step {
     this.printer.drawRow([
       {
         text: `${' '.repeat(this.context.stackLevel || 0)}`,
-        style: this.context.theme.backgroundStyle || chalk
+        style: this.context.theme.backgroundStyle || undefined
       },
       {
         text: `${this.context.childIndex ? numeral(this.context.childIndex).format('00') : '~'} `,
@@ -127,7 +126,7 @@ export default class Step {
       },
       {
         text: `${this.definition.title} `,
-        style: this.context.theme.mainStyle ? this.context.theme.mainStyle.bold : chalk
+        style: this.context.theme.mainStyle ? this.context.theme.mainStyle.bold : undefined
       },
       {
         text: `${this.typeIcon} `,
@@ -146,7 +145,7 @@ export default class Step {
       },
       {
         text: `⏎ ${this.command}`,
-        style: style ? style.dim : chalk,
+        style: style ? style.dim : undefined,
         fit: true
       }
     ])
@@ -211,11 +210,11 @@ export default class Step {
           text: ` SUB STEP `,
           style: this.context.theme.subStepStatusContrastStyle
             ? this.context.theme.subStepStatusContrastStyle.bold
-            : chalk
+            : undefined
         }
       : {
           text: ` ${successWord} `,
-          style: successContrastStyle ? successContrastStyle.bold : chalk
+          style: successContrastStyle ? successContrastStyle.bold : undefined
         }
 
     this.printer.drawRow([
