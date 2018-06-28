@@ -227,7 +227,6 @@ describe('RemoteStep#run', () => {
               keepaliveCountMax: 5,
               keepaliveInterval: 12000,
               port: 22,
-              privateKeyPath: '/Users/david/.ssh/id_rsa',
               username: 'root'
             },
             connection: {
@@ -236,7 +235,6 @@ describe('RemoteStep#run', () => {
                 keepaliveInterval: 12000,
                 port: 22,
                 privateKey: 'content',
-                privateKeyPath: '/Users/david/.ssh/id_rsa',
                 username: 'root'
               }
             },
