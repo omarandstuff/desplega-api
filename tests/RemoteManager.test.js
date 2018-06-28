@@ -126,6 +126,35 @@ describe('Remote#exec', () => {
     })
   })
 
+  it('works with bad paramaters', async () => {
+    const remoteManager = new RemoteManager(123123, { asdasd: 'asdasdsad' }, 'uiooiu')
+    const thenFunc = jest.fn()
+
+    remoteManager.connect()
+    await remoteManager.exec(213123, { asdsad: 'sadsa' }, 8908809).then(thenFunc)
+
+    expect(thenFunc.mock.calls.length).toBe(1)
+    expect(thenFunc.mock.calls[0][0]).toEqual({
+      attempts: 1,
+      command: 213123,
+      connectionErrors: [],
+      options: {
+        '0': 'u',
+        '1': 'i',
+        '2': 'o',
+        '3': 'o',
+        '4': 'i',
+        '5': 'u',
+        maxRetries: 0,
+        reconnectionInterval: 5000,
+        timeOut: 0
+      },
+      reconnectionAttempts: 0,
+      results: [[{ code: 0, signal: 'signal', stdout: 'stdout' }]],
+      streamCallBack: { asdsad: 'sadsa' }
+    })
+  })
+
   describe('when the maxRetries option is set and the exex is rejected', () => {
     it('retries the same command the specified ammount', async () => {
       const remoteManager = new RemoteManager()
