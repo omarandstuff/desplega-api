@@ -39,7 +39,7 @@ export default class LocalManager {
    * streamCallBack: function called when streaming
    *
    */
-  exec(command, streamCallBack, options = {}) {
+  exec(command, streamCallBack, options) {
     return new Promise((resolve, reject) => {
       if (this.status === 'free') {
         this.status = 'resolving'

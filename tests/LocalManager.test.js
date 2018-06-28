@@ -89,6 +89,33 @@ describe('Remote#exec', () => {
     })
   })
 
+  it('works with bad paramaters', async () => {
+    const localManager = new LocalManager(12312312)
+    const thenFunc = jest.fn()
+
+    await localManager.exec(1233213, 123123, 'asdasdsa').then(thenFunc)
+
+    expect(thenFunc.mock.calls.length).toBe(1)
+    expect(thenFunc.mock.calls[0][0]).toEqual({
+      attempts: 1,
+      command: 1233213,
+      options: {
+        '0': 'a',
+        '1': 's',
+        '2': 'd',
+        '3': 'a',
+        '4': 's',
+        '5': 'd',
+        '6': 's',
+        '7': 'a',
+        maxRetries: 0,
+        timeOut: 0
+      },
+      results: [{ code: 0, signal: null, stdout: 'stdout' }],
+      streamCallBack: 123123
+    })
+  })
+
   describe('when the maxRetries option is set and the exec is rejected', () => {
     it('retries the same command the specified ammount', async () => {
       const localManager = new LocalManager()
