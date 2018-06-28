@@ -246,6 +246,35 @@ describe('LocalStep#run', () => {
     })
   })
 
+  it('works with bad paramaters', async () => {
+    const localManager = new LocalManager(123123, { asda: 213123 }, 908809)
+    const localStep = new LocalStep(1212)
+    const thenFunc = jest.fn()
+
+    await localStep.run({ local: localManager }).then(thenFunc)
+
+    expect(thenFunc.mock.calls.length).toBe(1)
+    expect(thenFunc.mock.calls[0][0]).toMatchObject({
+      result: {
+        attempts: 1,
+        command: 'undefined',
+        options: { maxRetries: 0, timeOut: 0 },
+        results: [{ code: 0, signal: null, stdout: 'stdout' }]
+      },
+      status: 'done'
+    })
+  })
+
+  it('rejects if a local is not included in context', async () => {
+    const localStep = new LocalStep(1212)
+    const catchFunc = jest.fn()
+
+    await localStep.run().catch(catchFunc)
+
+    expect(catchFunc.mock.calls.length).toBe(1)
+    expect(catchFunc.mock.calls[0][0]).toEqual(new Error('There is not a local manager object included in the context'))
+  })
+
   describe('when continueOnFailure is not set', () => {
     it('resolves on failure', async () => {
       const localManager = new LocalManager({})

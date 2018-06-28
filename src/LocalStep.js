@@ -1,5 +1,6 @@
 import moment from 'moment'
 import Step from './Step'
+import LocalManager from './LocalManager'
 
 /**
  * In takes a local manager object and prints information about its results
@@ -43,6 +44,7 @@ export default class RemoteStep extends Step {
    * stackLevel: Tab size to be printed depending on the context.
    * subStep: In case this step was called as recovery step.
    * verbocityLevel: Global verbocity level.
+   * theme: theme to use in printhings
    *
    * @returns {Promise} Promise to be solved or rejected.
    * when solving or rejecting will pass the results
@@ -50,9 +52,12 @@ export default class RemoteStep extends Step {
    *
    */
 
-  run(context) {
+  run(context = {}) {
     return new Promise((resolve, reject) => {
       if (this.status === 'idle') {
+        this.resolve = resolve
+        this.reject = reject
+
         this.context = this._buildContext(context)
 
         this.status = 'running'
@@ -64,9 +69,6 @@ export default class RemoteStep extends Step {
         } else {
           this.command = this.definition.command
         }
-
-        this.resolve = resolve
-        this.reject = reject
 
         this._printHeader()
         this._runAnimation()
@@ -95,10 +97,15 @@ export default class RemoteStep extends Step {
   }
 
   _buildContext(context) {
+    if (!(context.local instanceof LocalManager)) {
+      return this.reject(new Error('There is not a local manager object included in the context'))
+    }
+
     return {
       ...context,
       options: { ...context.localOptions, ...this.definition.options },
-      verbosityLevel: this.definition.verbosityLevel || context.verbosityLevel
+      verbosityLevel: this.definition.verbosityLevel || context.verbosityLevel,
+      theme: { ...context.theme }
     }
   }
 
