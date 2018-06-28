@@ -65,4 +65,14 @@ describe('Local#exec', () => {
       stderr: ''
     })
   })
+
+  it('works with bad paramaters', async () => {
+    const local = new Local(123123213)
+    const thenFunc = jest.fn()
+
+    await local.exec({ sadasd: 213123 }, 'asdasdsa', 77989789).then(thenFunc)
+
+    expect(thenFunc.mock.calls.length).toBe(1)
+    expect(thenFunc.mock.calls[0][0]).toEqual({ code: 0, signal: null, stdout: 'stdout' })
+  })
 })
