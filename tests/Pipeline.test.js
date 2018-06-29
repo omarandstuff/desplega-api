@@ -26,10 +26,13 @@ describe('Pipeline#run', () => {
     await pipeline.run().then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
-    expect(thenFunc.mock.calls[0][0]).toMatchObject(['Generic success', 'Generic success', 'Generic success'])
+    expect(thenFunc.mock.calls[0][0]).toMatchObject({
+      context: { archive: { dictionary: {}, history: [] } },
+      results: ['Generic success', 'Generic success', 'Generic success']
+    })
   })
 
-  it('Rejects if the pipeline if a child fails', async () => {
+  it('Rejects the pipeline if a child fails', async () => {
     const pipeline = new Pipeline('Pipeline', { remotes: [{}] })
     const thenFunc = jest.fn()
     const catchFunc = jest.fn()
@@ -45,7 +48,10 @@ describe('Pipeline#run', () => {
 
     expect(thenFunc.mock.calls.length).toBe(0)
     expect(catchFunc.mock.calls.length).toBe(1)
-    expect(catchFunc.mock.calls[0][0]).toEqual(['Generic success', 'Generic failure'])
+    expect(catchFunc.mock.calls[0][0]).toMatchObject({
+      context: { archive: { dictionary: {}, history: [] } },
+      results: ['Generic success', 'Generic failure']
+    })
   })
 
   it('Rejects if the pipeline if is alredy resolving', async () => {
@@ -78,7 +84,10 @@ describe('Pipeline#run', () => {
     await pipeline.run({ attribute: 'value' }).then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
-    expect(thenFunc.mock.calls[0][0]).toMatchObject(['Generic success'])
+    expect(thenFunc.mock.calls[0][0]).toMatchObject({
+      context: { archive: { dictionary: {}, history: [] } },
+      results: ['Generic success']
+    })
     expect(child.context).toMatchObject({
       archive: { dictionary: {}, history: [] },
       childIndex: 1,
@@ -98,6 +107,9 @@ describe('Pipeline#run', () => {
     await pipeline.run().then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
-    expect(thenFunc.mock.calls[0][0]).toMatchObject(['Generic success', 'Generic success', 'Generic success'])
+    expect(thenFunc.mock.calls[0][0]).toMatchObject({
+      context: { archive: { dictionary: {}, history: [] } },
+      results: ['Generic success', 'Generic success', 'Generic success']
+    })
   })
 })

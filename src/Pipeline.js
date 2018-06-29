@@ -86,7 +86,7 @@ export default class Pipeline extends Runner {
   _onChildFailure(result) {
     this.results.push(result)
     this._closeRemotes()
-    this.reject(this.results)
+    this.reject({ results: this.results, context: this.context })
   }
 
   _onChildSuccess(result) {
@@ -95,7 +95,7 @@ export default class Pipeline extends Runner {
 
   _onSuccess() {
     this._closeRemotes()
-    this.resolve(this.results)
+    this.resolve({ results: this.results, context: this.context })
   }
 
   _printHeader() {
