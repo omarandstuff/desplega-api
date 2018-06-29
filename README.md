@@ -52,3 +52,12 @@ Basic chalk theming generation.
 
 ### utils
 Some functions that do not fit on classes to reuse.
+
+## TODO
+If people get interested in desplega we can document a lot further so people can use this api for other projects.
+
+## Contribtions
+PRs are welcome.
+
+## Lisence
+MIT
