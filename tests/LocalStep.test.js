@@ -151,6 +151,22 @@ describe('LocalStep#run', () => {
     })
   })
 
+  it('rejects when the command fucntion throws error', async () => {
+    const localManager = new LocalManager({})
+    const command = context => dasdasd
+    const localStep = new LocalStep({ title: 'title', command: command, verbosityLevel: 'full' })
+    const catchFunc = jest.fn()
+
+    await localStep.run({ local: localManager }).catch(catchFunc)
+
+    expect(catchFunc.mock.calls.length).toBe(1)
+    expect(catchFunc.mock.calls[0][0]).toMatchObject({
+      result: {
+        results: new ReferenceError('dasdasd is not defined')
+      }
+    })
+  })
+
   it('rejects if is already running', async () => {
     const localManager = new LocalManager({})
     const localStep = new LocalStep({ title: 'title', command: 'command', verbosityLevel: 'full' })

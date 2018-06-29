@@ -65,11 +65,7 @@ export default class RemoteStep extends Step {
         this.currentRun = {}
         this.currentRecord = {}
 
-        if (this.definition.command instanceof Function) {
-          this.command = this.definition.command(this.context)
-        } else {
-          this.command = this.definition.command
-        }
+        this.command = this._generateDynamicCommand(this.definition.command)
 
         this._printHeader()
         this._runAnimation()

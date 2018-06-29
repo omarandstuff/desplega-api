@@ -285,6 +285,22 @@ describe('RemoteStep#run', () => {
     })
   })
 
+  it('rejects when the command fucntion throws error', async () => {
+    const remoteManager = new RemoteManager({}, '#ID')
+    const command = context => dasdasd
+    const remoteStep = new RemoteStep({ title: 'title', command: command, verbosityLevel: 'full' })
+    const catchFunc = jest.fn()
+
+    await remoteStep.run({ remotes: [remoteManager] }).catch(catchFunc)
+
+    expect(catchFunc.mock.calls.length).toBe(1)
+    expect(catchFunc.mock.calls[0][0]).toMatchObject({
+      result: {
+        results: new ReferenceError('dasdasd is not defined')
+      }
+    })
+  })
+
   it('rejects if is already running', async () => {
     const remoteManager = new RemoteManager({}, '#ID')
     const remoteStep = new RemoteStep({ title: 'title', command: 'command', verbosityLevel: 'full' })

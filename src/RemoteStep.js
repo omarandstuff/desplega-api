@@ -74,14 +74,10 @@ export default class RemoteStep extends Step {
           this.currentRun[remote.id] = { status: 'online', remote: remote }
         })
 
-        if (this.definition.command instanceof Function) {
-          this.command = this.definition.command(this.context)
-        } else {
-          this.command = this.definition.command
-        }
-
         this.resolve = resolve
         this.reject = reject
+
+        this.command = this._generateDynamicCommand(this.definition.command)
 
         this._printHeader()
         this._runAnimation()

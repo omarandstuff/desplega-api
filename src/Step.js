@@ -79,6 +79,18 @@ export default class Step {
     }
   }
 
+  _generateDynamicCommand(command) {
+    try {
+      if (this.definition.command instanceof Function) {
+        return this.definition.command(this.context)
+      } else {
+        return this.definition.command
+      }
+    } catch (error) {
+      this.reject({ result: { results: error } })
+    }
+  }
+
   _onFailure() {
     if (this.definition.onFailure) {
       const context = {
