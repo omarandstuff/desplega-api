@@ -2,6 +2,7 @@ import Pipeline from './Pipeline'
 import Stage from './Stage'
 import RemoteStep from './RemoteStep'
 import LocalStep from './LocalStep'
+import { reject } from 'rsvp'
 
 export default class Parser {
   static buildPipeline(descriptor) {
@@ -10,6 +11,14 @@ export default class Parser {
     } else {
       return Parser._buildFromDescriptor(descriptor)
     }
+  }
+
+  static async buildPipelineAsync(asyncLoader) {
+    return new Promise((resolve, _) => {
+      asyncLoader().then(descriptor => {
+        resolve(Parser._buildFromDescriptor(descriptor))
+      })
+    })
   }
 
   static _buildFromDescriptor(descriptor) {
