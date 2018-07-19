@@ -18,8 +18,7 @@ import { filterRemotes } from './utils'
  * path: Which path will be used as a cwd for the command.
  * remotes: Array of remote ids to filter, so the command will be
  *   executed only in those.
- * onFailure: Any object of funtion that return and Promise
- *   (Example: other RemoteStep).
+ * onFailure: Any Step object
  * recoverOnFailure: if the onFailure attribute is set and succeed
  *   this step will resolve instead of reject.
  * continueOnFailure: it does not matter if this step fails or onFailure fails
@@ -135,10 +134,6 @@ export default class RemoteStep extends Step {
         }
       })
       .join(' ')
-  }
-
-  _inspectResult(result) {
-    return result
   }
 
   _solveLoader(id) {

@@ -27,15 +27,15 @@ export default class LocalManager {
    *
    * @param {String} command the actual command string to be executed
    *
-   * @param {Function} streamCallBack stream call back to pass to the remote object.
+   * @param {Function} streamCallBack stream call back to pass to the local object.
    *
    * @returns {Promise} Promise to be solved or rejected.
    * when solving or rejecting will pass the current run information
    * current run data is:
-   * attempts: how many attempts the last connection run before finishing
+   * attempts: how many attempts before finishing
    * command: command executed
    * options: final options used to run the command
-   * results: results for every connection attempt
+   * results: results for every attempt
    * streamCallBack: function called when streaming
    *
    */

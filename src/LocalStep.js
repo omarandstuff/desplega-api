@@ -14,8 +14,7 @@ import LocalManager from './LocalManager'
  *     where context is the context recieved by the step it should contain
  *     a the results archive.
  * path: Which path will be used as a cwd for the command.
- * onFailure: Any object of funtion that return and Promise
- *   (Example: other LocalStep).
+ * onFailure: Any Step object
  * recoverOnFailure: if the onFailure attribute is set and succeed
  *   this step will resolve instead of reject.
  * continueOnFailure: it does not matter if this step fails or onFailure fails
@@ -116,10 +115,6 @@ export default class RemoteStep extends Step {
     } else {
       return this._solveLoader()
     }
-  }
-
-  _inspectResult(result) {
-    return result
   }
 
   _solveLoader() {
