@@ -11,6 +11,7 @@ import { filterRemotes } from './utils'
  * congigurations are:
  * localOptions: To override globaly on all local steps
  * remoteOptions: To override globaly on all remote steps
+ * virtualOptions: To override globaly on all virtual steps
  * remotes: Array of remotes ids to only use inside this stage
  * verbosityLevel: to override for all steps inside this stage
  *

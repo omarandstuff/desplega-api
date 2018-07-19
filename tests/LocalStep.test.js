@@ -1,7 +1,6 @@
 jest.mock('child_process')
 import LocalStep from '../src/LocalStep'
 import LocalManager from '../src/LocalManager'
-import Theme from '../src/Theme'
 import child_process from 'child_process'
 
 const realLog = console.log

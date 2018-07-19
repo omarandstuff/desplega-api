@@ -2,7 +2,7 @@ import Pipeline from './Pipeline'
 import Stage from './Stage'
 import RemoteStep from './RemoteStep'
 import LocalStep from './LocalStep'
-import { reject } from 'rsvp'
+import VirtualStep from './VirtualStep'
 
 export default class Parser {
   static buildPipeline(descriptor) {
@@ -23,7 +23,7 @@ export default class Parser {
 
   static _buildFromDescriptor(descriptor) {
     const { pipeline } = descriptor
-    const { title, verbosityLevel, remotes, remoteOptions, localOptions, theme, stages } = pipeline
+    const { title, verbosityLevel, remotes, remoteOptions, localOptions, virtualOptions, theme, stages } = pipeline
     const actualRemotes = Object.keys(remotes || []).map(remoteId => {
       const { id, ...remoteConfig } = remotes[remoteId]
       return { id: remoteId, ...remoteConfig }
@@ -31,13 +31,13 @@ export default class Parser {
 
     const pipelineRunner = new Pipeline(
       title,
-      { verbosityLevel, remotes: actualRemotes, remoteOptions, localOptions },
+      { verbosityLevel, remotes: actualRemotes, remoteOptions, localOptions, virtualOptions },
       theme
     )
 
     if (stages) {
-      stages.forEach(({ title, verbosityLevel, remotes, remoteOptions, localOptions, steps }) => {
-        const stageRunner = new Stage(title, { verbosityLevel, remotes, remoteOptions, localOptions })
+      stages.forEach(({ title, verbosityLevel, remotes, remoteOptions, localOptions, virtualOptions, steps }) => {
+        const stageRunner = new Stage(title, { verbosityLevel, remotes, remoteOptions, virtualOptions, localOptions })
 
         if (steps) {
           steps.forEach(step => {
@@ -59,10 +59,12 @@ export default class Parser {
   }
 
   static __generateStep(definition) {
-    const { remote, ...actualDefinition } = definition
+    const { remote, virtual, ...actualDefinition } = definition
 
     if (remote) {
       return new RemoteStep(actualDefinition)
+    } else if (virtual) {
+      return new VirtualStep(actualDefinition)
     } else {
       return new LocalStep(actualDefinition)
     }

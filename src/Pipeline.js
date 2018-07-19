@@ -1,6 +1,7 @@
 import moment from 'moment'
 import Runner from './Runner'
 import LocalManager from './LocalManager'
+import VirtualManager from './VirtualManager'
 import RemoteManager from './RemoteManager'
 import Printer from './Printer'
 import Theme from './Theme'
@@ -15,6 +16,7 @@ import { solveDuration } from './utils'
  * congigurations are:
  * localOptions: To override globaly on all local steps
  * remoteOptions: To override globaly on all remote steps
+ * virtualOptions: To override globaly on all virtual steps
  * remotes: list of all remotes that will be running remote commands
  *   (See RemoteManger config)
  *   options: options to override just for this remote in the list
@@ -35,7 +37,8 @@ export default class Pipeline extends Runner {
       remoteOptions: config.remoteOptions,
       remotes: this._createRemotes(),
       theme: new Theme(theme),
-      verbosityLevel: config.verbosityLevel || 'partial'
+      verbosityLevel: config.verbosityLevel || 'partial',
+      virtual: this._createVirtual()
     }
 
     this.printer = new Printer()
@@ -81,6 +84,10 @@ export default class Pipeline extends Runner {
       const { id, options, ...config } = remote
       return new RemoteManager(config, id, options)
     })
+  }
+
+  _createVirtual() {
+    return new VirtualManager(this.config.virtualOptions)
   }
 
   _onChildFailure(result) {

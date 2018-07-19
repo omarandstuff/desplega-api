@@ -3,7 +3,6 @@ import numeral from 'numeral'
 import ansiRegex from 'ansi-regex'
 import Printer from './Printer'
 import { solveDuration } from './utils'
-import { O_NONBLOCK } from 'constants'
 
 /**
  * Base step class.
@@ -53,12 +52,16 @@ export default class Step {
   _cleanRecord(record) {
     if (record instanceof Object || record instanceof Array) {
       const keys = Object.keys(record)
-      if (keys.length === 1) {
-        return this._cleanRecord(record[keys[0]])
+      if (keys.includes('virtualout') || keys.includes('virtualerr')) {
+        return record.virtualout || record.virtualerr
       } else {
-        keys.forEach(key => {
-          record[key] = this._cleanRecord(record[key])
-        })
+        if (keys.length === 1) {
+          return this._cleanRecord(record[keys[0]])
+        } else {
+          keys.forEach(key => {
+            record[key] = this._cleanRecord(record[key])
+          })
+        }
       }
     }
 
