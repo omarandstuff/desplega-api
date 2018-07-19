@@ -21,7 +21,7 @@ Basic local exec functionality.
 Extended local exec functionality.
 
 ### LocalStep
-Can be executed by a runner like an Stage object.
+Can be executed by a runner as a local command in the pipeline.
 
 ### Parser
 Parses deplega files and convert them into actual Pipelines, Stages and Steps objects.
@@ -39,7 +39,7 @@ Basic remote exec functionality.
 Extended remote exec functionality.
 
 ### RemoteStep
-Can be executed by a runner like an Stage object.
+Can be executed by a runner as a remote command in the pipeline.
 
 ### Runner
 Base runner class for Stages and Pipelines.
@@ -52,6 +52,12 @@ Basic chalk theming generation.
 
 ### utils
 Some functions that do not fit on classes to reuse.
+
+### VirtualManager
+Extended JS fucntions execution
+
+### VirtualStep
+Can be executed by a runner as a virtual command in the pipeline.
 
 ## TODO
 If people get interested in desplega we can document a lot further so people can use this api for other projects.
