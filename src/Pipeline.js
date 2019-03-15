@@ -71,7 +71,7 @@ export default class Pipeline extends Runner {
   }
 
   _addRemote(config, id, options) {
-    this.context.remotes[id] = new RemoteManager(config, id, options)
+    this.context.remotes.push(new RemoteManager(config, id, options))
   }
 
   _closeRemotes() {
