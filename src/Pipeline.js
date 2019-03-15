@@ -32,6 +32,7 @@ export default class Pipeline extends Runner {
     this.config = config
     this.context = {
       archive: { dictionary: {}, history: [] },
+      addRemote: this._addRemote.bind(this), // Share add remote so steps can add remotes on the fly
       localOptions: config.localOptions,
       local: this._createLocal(),
       remoteOptions: config.remoteOptions,
@@ -67,6 +68,10 @@ export default class Pipeline extends Runner {
         throw new Error('Pipeline bussy')
       }
     })
+  }
+
+  _addRemote(config, id, options) {
+    this.context.remotes[id] = new RemoteManager(config, id, options)
   }
 
   _closeRemotes() {
