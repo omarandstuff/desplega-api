@@ -22,7 +22,7 @@ describe('Remote#connect', () => {
 })
 
 describe('Remote#close', () => {
-  it('Just tsart close the internal remote', () => {
+  it('Just closees the internal remote', () => {
     const remoteManager = new RemoteManager()
     const closeFunc = jest.fn()
 

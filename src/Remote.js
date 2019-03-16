@@ -88,7 +88,9 @@ export default class Remote extends EventEmitter {
               } else {
                 resolve({ stdout, code, signal })
               }
-              this.status = 'ready'
+              if (this.status === 'running') {
+                this.status = 'ready'
+              }
             })
 
             stream.on('data', data => {
