@@ -15,7 +15,7 @@ describe('Local#exec', () => {
     const local = new Local()
     const thenFunc = jest.fn()
 
-    ChildProcessMocker.addMockFinish()
+    ChildProcessMocker.addFinishMock()
 
     await local.exec('test command').then(thenFunc)
 
@@ -27,7 +27,7 @@ describe('Local#exec', () => {
     const local = new Local()
     const catchFunc = jest.fn()
 
-    ChildProcessMocker.addMockFinishWithError()
+    ChildProcessMocker.addFinishWithErrorMock()
     await local.exec('test command').catch(catchFunc)
 
     expect(catchFunc.mock.calls.length).toBe(1)
@@ -47,7 +47,7 @@ describe('Local#exec', () => {
     local.addListener('stdout', streamFunc)
     local.addListener('stderr', streamFunc)
 
-    ChildProcessMocker.addMockFinish()
+    ChildProcessMocker.addFinishMock()
     await local.exec('test command').then(thenFunc)
 
     expect(streamFunc.mock.calls.length).toBe(1)
@@ -55,7 +55,7 @@ describe('Local#exec', () => {
 
     streamFunc.mockReset()
 
-    ChildProcessMocker.addMockFinishWithError()
+    ChildProcessMocker.addFinishWithErrorMock()
     await local.exec('test command').catch(catchFunc)
 
     expect(streamFunc.mock.calls.length).toBe(1)
@@ -66,7 +66,7 @@ describe('Local#exec', () => {
     const local = new Local()
     const catchFunc = jest.fn()
 
-    ChildProcessMocker.addMockFinishWithTimeOut()
+    ChildProcessMocker.addFinishWithTimeOutMock()
     await local.exec('test command').catch(catchFunc)
 
     expect(catchFunc.mock.calls.length).toBe(1)

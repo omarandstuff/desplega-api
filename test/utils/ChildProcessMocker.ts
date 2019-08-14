@@ -28,15 +28,15 @@ export default class ChildProcessMocker {
     this.nextResolverData = []
   }
 
-  public static addMockFinish(customStdout?: string): void {
+  public static addFinishMock(customStdout?: string): void {
     this.nextResolverData.push({ method: 'finish', customData: customStdout })
   }
 
-  public static addMockFinishWithError(customStderr?: string): void {
+  public static addFinishWithErrorMock(customStderr?: string): void {
     this.nextResolverData.push({ method: 'finishWithError', customData: customStderr })
   }
 
-  public static addMockFinishWithTimeOut(customStdout?: string): void {
+  public static addFinishWithTimeOutMock(customStdout?: string): void {
     this.nextResolverData.push({ method: 'finishWithTimeOut', customData: customStdout })
   }
 

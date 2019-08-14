@@ -10,12 +10,12 @@ afterEach((): void => {
   ChildProcessMocker.unMock()
 })
 
-describe('Remote#exec', () => {
+describe('LoadManager#exec', () => {
   it('Executes a local command and returns the result', async () => {
     const localManager = new LocalManager()
     const thenFunc = jest.fn()
 
-    ChildProcessMocker.addMockFinish()
+    ChildProcessMocker.addFinishMock()
     await localManager.exec('command').then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
@@ -31,7 +31,7 @@ describe('Remote#exec', () => {
     localManager.addListener('stdout', streamFunc)
     localManager.addListener('stderr', streamFunc)
 
-    ChildProcessMocker.addMockFinish()
+    ChildProcessMocker.addFinishMock()
     await localManager.exec('test command').then(thenFunc)
 
     expect(streamFunc.mock.calls.length).toBe(1)
@@ -39,7 +39,7 @@ describe('Remote#exec', () => {
 
     streamFunc.mockReset()
 
-    ChildProcessMocker.addMockFinishWithError()
+    ChildProcessMocker.addFinishWithErrorMock()
     await localManager.exec('test command').catch(catchFunc)
 
     expect(streamFunc.mock.calls.length).toBe(1)
@@ -62,7 +62,7 @@ describe('Remote#exec', () => {
     const localManager = new LocalManager()
     const catchFunc = jest.fn()
 
-    ChildProcessMocker.addMockFinishWithError()
+    ChildProcessMocker.addFinishWithErrorMock()
     await localManager.exec('command').catch(catchFunc)
 
     expect(catchFunc.mock.calls.length).toBe(1)
@@ -73,7 +73,7 @@ describe('Remote#exec', () => {
     const localManager = new LocalManager()
     const catchFunc = jest.fn()
 
-    ChildProcessMocker.addMockFinishWithTimeOut()
+    ChildProcessMocker.addFinishWithTimeOutMock()
     await localManager.exec('command').catch(catchFunc)
 
     expect(catchFunc.mock.calls.length).toBe(1)
@@ -85,8 +85,8 @@ describe('Remote#exec', () => {
       const localManager = new LocalManager({ maxRetries: 1 })
       const catchFunc = jest.fn()
 
-      ChildProcessMocker.addMockFinishWithError()
-      ChildProcessMocker.addMockFinishWithError()
+      ChildProcessMocker.addFinishWithErrorMock()
+      ChildProcessMocker.addFinishWithErrorMock()
       await localManager.exec('command').catch(catchFunc)
 
       expect(catchFunc.mock.calls.length).toBe(1)
@@ -98,11 +98,11 @@ describe('Remote#exec', () => {
       const catchFunc = jest.fn()
       const thenFunc = jest.fn()
 
-      ChildProcessMocker.addMockFinishWithError()
-      ChildProcessMocker.addMockFinishWithError()
-      ChildProcessMocker.addMockFinishWithTimeOut()
-      ChildProcessMocker.addMockFinishWithTimeOut()
-      ChildProcessMocker.addMockFinish()
+      ChildProcessMocker.addFinishWithErrorMock()
+      ChildProcessMocker.addFinishWithErrorMock()
+      ChildProcessMocker.addFinishWithTimeOutMock()
+      ChildProcessMocker.addFinishWithTimeOutMock()
+      ChildProcessMocker.addFinishMock()
       await localManager
         .exec('command', { maxRetries: 4 })
         .then(thenFunc)

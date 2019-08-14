@@ -47,7 +47,7 @@ export default class LocalManager extends ProcessEmitter {
     let { maxRetries, ...localOptions } = options || this.options || { maxRetries: 0 }
 
     // Make sure we have a positive number for max retries
-    maxRetries = Math.max(maxRetries, 0)
+    maxRetries = Math.max(maxRetries || 0, 0)
 
     if (this.status === 'running') {
       throw new Error('Manager is bussy')

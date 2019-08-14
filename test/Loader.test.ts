@@ -2,7 +2,7 @@ import Loader from '../src/Loader'
 
 const fixturesFolder = `${process.cwd()}/test/__fixtures__/`
 
-describe('Loader.load', (): void => {
+describe('Loader#load', (): void => {
   it('prioretizes yml', (): void => {
     const loader: Loader = new Loader()
     const prioretizableYmlPlaces = ['priority_yml', 'priority_folder/priority_yml']
