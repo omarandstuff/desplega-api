@@ -1,17 +1,18 @@
 import { exec, ExecException, ChildProcess, ExecOptions } from 'child_process'
 import { LocalResult } from './Local.types'
-import { StreamCallBack } from './types'
+import ProcessEmitter from './ProcessEmitter'
 
 /**
  * Waraper for exec function to exec local commands.
  *
- * @param {ExecOptions} options command execution options.
+ * @param {ExecOptions} [options] command execution options.
  *
  */
-export default class Local {
+export default class Local extends ProcessEmitter {
   private options: ExecOptions
 
   public constructor(options?: ExecOptions) {
+    super()
     const env: any = { FORCE_COLOR: true, ...process.env }
 
     this.options = { env: env, maxBuffer: 8388608, ...options }
@@ -32,14 +33,14 @@ export default class Local {
    *   "sudo apt-get update"
    *   "ls -lh ~/apps"
    *
-   * @param {StreamCallBack} streamCallBack A callback to be invoked on data streaming.
+   * @param {StreamCallBack} [streamCallBack] A callback to be invoked on data streaming.
    * The same data printed by some command while executing, chunk by chunk
    *
-   * @param {ExecOptions} options override constructor options with these options
+   * @param {ExecOptions} [options] override constructor options with these options
    *
-   * @returns {Promise} Promise to be solved or rejected.
+   * @returns {LocalResult} Result oject containing the generated stdout, stderr and error if any
    */
-  public async exec(command: string, streamCallBack?: StreamCallBack, options?: ExecOptions): Promise<LocalResult> {
+  public async exec(command: string, options?: ExecOptions): Promise<LocalResult> {
     return new Promise((resolve, reject) => {
       const cleanCommand: string = String(command)
       const derivedOptions: ExecOptions = { ...this.options, ...options }
@@ -54,11 +55,11 @@ export default class Local {
       const childProcess: ChildProcess = exec(cleanCommand, derivedOptions, finalCallBack)
 
       childProcess.stdout.on('data', (chunk: any): void => {
-        streamCallBack && streamCallBack(chunk.toString('utf8'))
+        this.emit('stdout', chunk.toString('utf8'))
       })
 
       childProcess.stderr.on('data', (chunk: any): void => {
-        streamCallBack && streamCallBack(null, chunk.toString('utf8'))
+        this.emit('stderr', chunk.toString('utf8'))
       })
     })
   }

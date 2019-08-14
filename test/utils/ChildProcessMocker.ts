@@ -12,7 +12,7 @@ interface ChildProcessMock {
 type ExecCallBack = (error: ExecException | null, stdout: string, stderr: string) => void
 
 export default class ChildProcessMocker {
-  private static nextResolverData: { method: string; customData?: string } = { method: '' }
+  private static nextResolverData: { method: string; customData?: string }[] = []
   private static originalInstance: any
   private static originalExec: any
 
@@ -25,18 +25,19 @@ export default class ChildProcessMocker {
 
   public static unMock() {
     this.originalInstance.exec = this.originalExec
+    this.nextResolverData = []
   }
 
-  public static mockFinish(customStdout?: string): void {
-    this.nextResolverData = { method: 'finish', customData: customStdout }
+  public static addMockFinish(customStdout?: string): void {
+    this.nextResolverData.push({ method: 'finish', customData: customStdout })
   }
 
-  public static mockFinishWithError(customStderr?: string): void {
-    this.nextResolverData = { method: 'finishWithError', customData: customStderr }
+  public static addMockFinishWithError(customStderr?: string): void {
+    this.nextResolverData.push({ method: 'finishWithError', customData: customStderr })
   }
 
-  public static mockFinishWithTimeOut(customStdout?: string): void {
-    this.nextResolverData = { method: 'finishWithTimeOut', customData: customStdout }
+  public static addMockFinishWithTimeOut(customStdout?: string): void {
+    this.nextResolverData.push({ method: 'finishWithTimeOut', customData: customStdout })
   }
 
   private static exec(_command: string, _options: ExecOptions, callback?: ExecCallBack): ChildProcessMock {
@@ -65,10 +66,10 @@ export default class ChildProcessMocker {
     const currentChildProcess: ChildProcessMock = { stdout, stderr, finish, finishWithError, finishWithTimeOut }
 
     setTimeout(() => {
-      if (this.nextResolverData) {
-        currentChildProcess[this.nextResolverData.method](this.nextResolverData.customData)
+      if (this.nextResolverData.length > 0) {
+        currentChildProcess[this.nextResolverData[0].method](this.nextResolverData[0].customData)
 
-        this.nextResolverData = null
+        this.nextResolverData.shift()
       }
     }, 10)
 
