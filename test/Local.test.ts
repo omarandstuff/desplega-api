@@ -1,50 +1,58 @@
-jest.mock('child_process')
 import Local from '../src/Local'
-import child_process from 'child_process'
+import childProcess from 'child_process'
+import ChildProcessMocker from './utils/ChildProcessMocker'
+
+beforeEach((): void => {
+  ChildProcessMocker.mock(childProcess)
+})
+
+afterEach((): void => {
+  ChildProcessMocker.unMock()
+})
 
 describe('Local#exec', () => {
   it('executes a local comand and then resolves the result', async () => {
     const local = new Local()
     const thenFunc = jest.fn()
 
+    ChildProcessMocker.mockFinish()
+
     await local.exec('test command').then(thenFunc)
 
     expect(thenFunc.mock.calls.length).toBe(1)
-    expect(thenFunc.mock.calls[0][0]).toEqual({
-      code: 0,
-      signal: null,
-      stdout: 'stdout'
-    })
+    expect(thenFunc.mock.calls[0][0]).toEqual({ error: null, stdout: 'stdout', stderr: '' })
   })
 
   it('rejects if command fails', async () => {
     const local = new Local()
     const catchFunc = jest.fn()
 
-    child_process.__mockExecError = true
+    ChildProcessMocker.mockFinishWithError()
     await local.exec('test command').catch(catchFunc)
 
     expect(catchFunc.mock.calls.length).toBe(1)
     expect(catchFunc.mock.calls[0][0]).toEqual({
-      code: 127,
-      signal: null,
+      error: { code: 127, message: 'There was an error', name: 'error' },
+      stdout: '',
       stderr: 'stderr'
     })
   })
 
-  it('streams stdout and stderr before closing', async () => {
+  it('can streams stdout and stderr before closing', async () => {
     const local = new Local()
     const thenFunc = jest.fn()
     const catchFunc = jest.fn()
     let streamFunc = jest.fn()
 
+    ChildProcessMocker.mockFinish()
     await local.exec('test command', streamFunc).then(thenFunc)
 
     expect(streamFunc.mock.calls.length).toBe(1)
     expect(streamFunc.mock.calls[0][0]).toBe('stdout')
 
-    streamFunc = jest.fn()
-    child_process.__mockExecError = true
+    streamFunc.mockReset()
+
+    ChildProcessMocker.mockFinishWithError()
     await local.exec('test command', streamFunc).catch(catchFunc)
 
     expect(streamFunc.mock.calls.length).toBe(1)
@@ -55,24 +63,14 @@ describe('Local#exec', () => {
     const local = new Local()
     const catchFunc = jest.fn()
 
-    child_process.__mockExecTimeOut = true
+    ChildProcessMocker.mockFinishWithTimeOut()
     await local.exec('test command').catch(catchFunc)
 
     expect(catchFunc.mock.calls.length).toBe(1)
     expect(catchFunc.mock.calls[0][0]).toEqual({
-      code: null,
-      signal: 'SIGTERM',
+      error: { signal: 'SIGTERM', name: 'timeout', message: 'Too much time' },
+      stdout: 'stdout',
       stderr: ''
     })
-  })
-
-  it('works with bad paramaters', async () => {
-    const local = new Local(123123213)
-    const thenFunc = jest.fn()
-
-    await local.exec({ sadasd: 213123 }, 'asdasdsa', 77989789).then(thenFunc)
-
-    expect(thenFunc.mock.calls.length).toBe(1)
-    expect(thenFunc.mock.calls[0][0]).toEqual({ code: 0, signal: null, stdout: 'stdout' })
   })
 })
