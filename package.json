@@ -10,35 +10,42 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rimraf dist coverage",
-    "build": "babel src --out-dir dist",
+    "build": "tsc",
+    "lint": "eslint src test --ext .ts",
     "test": "jest --watch",
-    "test:coverage": "jest --coverage --no-cache",
-    "playground": "babel-node playground",
-    "format": "prettier --write \"{src,tests}/**/*.js\"",
-    "format:check": "prettier --list-different \"{src,tests}/**/*.js\"",
+    "test:coverage": "jest --coverage",
+    "playground": "ts-node playground",
+    "format": "prettier --write \"{src,tests}/**/*.ts\"",
+    "format:check": "prettier --list-different \"{src,tests}/**/*.ts\"",
     "prepare": "yarn clean && yarn format:check && yarn test:coverage && yarn build"
   },
   "dependencies": {
-    "ansi-regex": "^4.0.1",
-    "babel-runtime": "^6.26.0",
+    "ansi-regex": "^4.1.0",
     "chalk": "^2.4.2",
+    "js-yaml": "^3.13.1",
     "moment": "^2.24.0",
     "numeral": "^2.0.6",
-    "ssh2": "^0.8.2"
+    "ssh2": "^0.8.5"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
-    "jest": "^23.6.0",
-    "prettier": "^1.16.4",
-    "rimraf": "^2.6.3"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ]
+    "@types/ansi-regex": "^4.0.0",
+    "@types/chalk": "^2.2.0",
+    "@types/jest": "^24.0.17",
+    "@types/js-yaml": "^3.12.1",
+    "@types/moment": "^2.13.0",
+    "@types/node": "^12.7.1",
+    "@types/numeral": "^0.0.26",
+    "@types/ssh2": "^0.5.38",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2",
+    "rimraf": "^2.7.0",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.3"
   },
   "files": [
     "dist",
