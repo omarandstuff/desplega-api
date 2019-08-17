@@ -79,7 +79,11 @@ describe('Remote#exec', () => {
     SSH2Mocker.addConnectionErrorMock()
     await remote.exec('test command').catch(catchFuc)
 
-    expect(catchFuc).toBeCalledWith({ error: new Error('There was a problem trying to connect to the host undefined'), stderr: '', stdout: '' })
+    expect(catchFuc).toBeCalledWith({
+      error: new Error('There was a problem trying to connect to the host undefined: Connection error'),
+      stderr: '',
+      stdout: ''
+    })
   })
 
   it('emits the connection status', async () => {

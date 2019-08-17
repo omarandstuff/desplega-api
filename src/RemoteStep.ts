@@ -1,9 +1,9 @@
 import Step from './Step'
 import { RemoteStepDefinition } from './RemoteStep.types'
-import { Context } from './Step.types'
 import { ExecOptions } from 'child_process'
 import { CommandResult } from './Processor.types'
 import Remote from './Remote'
+import { Context } from './Pipeline.types'
 
 /**
  * Runs inside a pipeline and execute local commands
@@ -12,7 +12,7 @@ import Remote from './Remote'
  *
  */
 
-export default class LocalStep extends Step<RemoteStepDefinition> {
+export default class RemoteStep extends Step<RemoteStepDefinition> {
   /**
    * Builds a command, execute it and desides what to do on failure or success
    *

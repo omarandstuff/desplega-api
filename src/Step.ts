@@ -1,11 +1,12 @@
 import { ExecOptions } from 'child_process'
-import { Context, StepDefinition } from './Step.types'
+import { StepDefinition } from './Step.types'
 import { CommandResult } from './Processor.types'
 import { VirtualFunction } from './Virtual.types'
 import Local from './Local'
 import Remote from './Remote'
 import Virtual from './Virtual'
 import Processor from './Processor'
+import { Context } from './Pipeline.types'
 
 /**
  * Base step class.
@@ -14,9 +15,9 @@ import Processor from './Processor'
  */
 
 export default class Step<D = StepDefinition> {
-  protected definition: D
+  public definition: D
 
-  constructor(definition: D) {
+  public constructor(definition: D) {
     this.definition = definition
   }
 

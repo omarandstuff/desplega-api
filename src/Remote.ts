@@ -59,8 +59,12 @@ export default class Remote extends Processor {
         if (this.connectionStatus === 'closed') {
           try {
             await this.connect()
-          } catch {
-            return reject({ error: new Error(`There was a problem trying to connect to the host ${this.connectConfig.host}`), stderr: '', stdout: '' })
+          } catch (error) {
+            return reject({
+              error: new Error(`There was a problem trying to connect to the host ${this.connectConfig.host}: ${error.message}`),
+              stderr: '',
+              stdout: ''
+            })
           }
         }
 
@@ -155,8 +159,6 @@ export default class Remote extends Processor {
         this.connection.removeListener('ready', onReady)
         this.connectionStatus = 'closed'
         this.emit('closed')
-
-        resolve()
       }
 
       this.connection.addListener('close', onClose)

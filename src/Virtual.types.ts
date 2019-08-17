@@ -1,3 +1,4 @@
-import { Context } from './Step.types'
+import { Context } from 'vm'
 
-export type VirtualFunction = (context: Context, emit: (event: 'stdout' | 'stderr', data: string) => void) => Promise<void>
+export type VirtualEmit = (event: 'stdout' | 'stderr', data: string) => void
+export type VirtualFunction = (context: Context, emit: VirtualEmit) => Promise<void>

@@ -1,8 +1,8 @@
 import Step from './Step'
 import { LocalStepDefinition } from './LocalStep.types'
-import { Context } from './Step.types'
 import { ExecOptions } from 'child_process'
 import { CommandResult } from './Processor.types'
+import { Context } from './Pipeline.types'
 
 /**
  * Runs inside a pipeline and execute local commands

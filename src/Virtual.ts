@@ -1,8 +1,8 @@
 import Processor from './Processor'
 import { CommandResult } from './Processor.types'
 import { VirtualFunction } from './Virtual.types'
-import { Context } from './Step.types'
 import { ExecOptions } from 'child_process'
+import { Context } from './Pipeline.types'
 
 /**
  * Waraper for an async funtion

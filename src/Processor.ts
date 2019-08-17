@@ -1,7 +1,7 @@
 import EventEmitter from 'events'
 import { ExecOptions } from 'child_process'
 import { VirtualFunction } from './Virtual.types'
-import { Context } from './Step.types'
+import { Context } from './Pipeline.types'
 
 /**
  * Base class for processors (stdout, stderr)
