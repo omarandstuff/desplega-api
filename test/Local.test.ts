@@ -19,8 +19,7 @@ describe('Local#exec', () => {
 
     await local.exec('test command').then(thenFunc)
 
-    expect(thenFunc.mock.calls.length).toBe(1)
-    expect(thenFunc.mock.calls[0][0]).toEqual({ error: null, stdout: 'stdout', stderr: '' })
+    expect(thenFunc).toHaveBeenCalledWith({ error: null, stdout: 'stdout', stderr: '' })
   })
 
   it('rejects if command fails', async () => {
@@ -30,8 +29,7 @@ describe('Local#exec', () => {
     ChildProcessMocker.addFinishWithErrorMock()
     await local.exec('test command').catch(catchFunc)
 
-    expect(catchFunc.mock.calls.length).toBe(1)
-    expect(catchFunc.mock.calls[0][0]).toEqual({
+    expect(catchFunc).toHaveBeenCalledWith({
       error: { code: 127, message: 'There was an error', name: 'error' },
       stdout: '',
       stderr: 'stderr'
@@ -50,16 +48,14 @@ describe('Local#exec', () => {
     ChildProcessMocker.addFinishMock()
     await local.exec('test command').then(thenFunc)
 
-    expect(streamFunc.mock.calls.length).toBe(1)
-    expect(streamFunc.mock.calls[0][0]).toBe('stdout')
+    expect(streamFunc).toHaveBeenCalledWith('stdout')
 
     streamFunc.mockReset()
 
     ChildProcessMocker.addFinishWithErrorMock()
     await local.exec('test command').catch(catchFunc)
 
-    expect(streamFunc.mock.calls.length).toBe(1)
-    expect(streamFunc.mock.calls[0][0]).toEqual('stderr')
+    expect(streamFunc).toHaveBeenCalledWith('stderr')
   })
 
   it('rejects if command timeout is reached', async () => {
@@ -69,8 +65,7 @@ describe('Local#exec', () => {
     ChildProcessMocker.addFinishWithTimeOutMock()
     await local.exec('test command').catch(catchFunc)
 
-    expect(catchFunc.mock.calls.length).toBe(1)
-    expect(catchFunc.mock.calls[0][0]).toEqual({
+    expect(catchFunc).toHaveBeenCalledWith({
       error: { signal: 'SIGTERM', name: 'timeout', message: 'Too much time' },
       stdout: 'stdout',
       stderr: ''

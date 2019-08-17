@@ -1,5 +1,5 @@
 import Step from './Step'
-import { RemoteStapeDefinition } from './RemoteStep.types'
+import { RemoteStepDefinition } from './RemoteStep.types'
 import { Context } from './Step.types'
 import { ExecOptions } from 'child_process'
 import { CommandResult } from './Processor.types'
@@ -12,11 +12,7 @@ import Remote from './Remote'
  *
  */
 
-export default class LocalStep extends Step<RemoteStapeDefinition> {
-  constructor(definition: RemoteStapeDefinition) {
-    super(definition)
-  }
-
+export default class LocalStep extends Step<RemoteStepDefinition> {
   /**
    * Builds a command, execute it and desides what to do on failure or success
    *

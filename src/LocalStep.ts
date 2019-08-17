@@ -1,5 +1,5 @@
 import Step from './Step'
-import { LocalStapeDefinition } from './LocalStep.types'
+import { LocalStepDefinition } from './LocalStep.types'
 import { Context } from './Step.types'
 import { ExecOptions } from 'child_process'
 import { CommandResult } from './Processor.types'
@@ -11,11 +11,7 @@ import { CommandResult } from './Processor.types'
  *
  */
 
-export default class LocalStep extends Step<LocalStapeDefinition> {
-  constructor(definition: LocalStapeDefinition) {
-    super(definition)
-  }
-
+export default class LocalStep extends Step<LocalStepDefinition> {
   /**
    * Builds a command, execute it and desides what to do on failure or success
    *

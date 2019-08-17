@@ -49,7 +49,7 @@ export default class Remote extends Processor {
    *   "sudo apt-get update"
    *   "ls -lh ~/apps"
    *
-   * @returns {RemoteResult} the result of the execution
+   * @returns {CommandResult} the result of the execution
    */
   public async exec(command: string, options?: ExecOptions): Promise<CommandResult> {
     const derivedOptions: ExecOptions = { ...this.options, ...options }

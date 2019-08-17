@@ -1,8 +1,11 @@
 import { ExecOptions } from 'child_process'
 import { Context, StepDefinition } from './Step.types'
 import { CommandResult } from './Processor.types'
+import { VirtualFunction } from './Virtual.types'
 import Local from './Local'
 import Remote from './Remote'
+import Virtual from './Virtual'
+import Processor from './Processor'
 
 /**
  * Base step class.
@@ -34,13 +37,21 @@ export default class Step<D = StepDefinition> {
    * @returns {CommandResult} The execution result
    *
    */
-  protected async runAndRetry<D = StepDefinition>(processor: Local | Remote, command: string, options?: ExecOptions): Promise<CommandResult> {
+  protected async runAndRetry(processor: Local, command: string, options?: ExecOptions): Promise<CommandResult>
+  protected async runAndRetry(processor: Remote, command: string, options?: ExecOptions): Promise<CommandResult>
+  protected async runAndRetry(processor: Virtual, virtalFunction: VirtualFunction, context: Context, options?: ExecOptions): Promise<CommandResult>
+  protected async runAndRetry(
+    processor: Processor,
+    action: string | VirtualFunction,
+    secondParam?: ExecOptions | Context,
+    options?: ExecOptions
+  ): Promise<CommandResult> {
     const definition: StepDefinition = (this.definition as unknown) as StepDefinition
     const finalMaxRetries: number = Math.max(definition.maxRetries || 0, 0)
 
     for (let i = 0; i <= finalMaxRetries; i++) {
       try {
-        const result: CommandResult = await processor.exec(command, options)
+        const result: CommandResult = await processor.exec(action, secondParam, options)
 
         switch (definition.onSuccess) {
           case 'terminate':

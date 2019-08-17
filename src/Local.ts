@@ -1,6 +1,7 @@
 import { exec, ExecException, ChildProcess, ExecOptions } from 'child_process'
 import Processor from './Processor'
 import { CommandResult } from './Processor.types'
+
 /**
  * Waraper for exec function to exec local commands.
  *
@@ -32,12 +33,9 @@ export default class Local extends Processor {
    *   "sudo apt-get update"
    *   "ls -lh ~/apps"
    *
-   * @param {StreamCallBack} [streamCallBack] A callback to be invoked on data streaming.
-   * The same data printed by some command while executing, chunk by chunk
-   *
    * @param {ExecOptions} [options] override constructor options with these options
    *
-   * @returns {LocalResult} Result oject containing the generated stdout, stderr and error if any
+   * @returns {CommandResult} Result oject containing the generated stdout, stderr and error if any
    */
   public async exec(command: string, options?: ExecOptions): Promise<CommandResult> {
     return new Promise((resolve, reject) => {
