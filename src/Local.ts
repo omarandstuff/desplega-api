@@ -41,7 +41,7 @@ export default class Local extends Processor {
    */
   public async exec(command: string, options?: ExecOptions): Promise<CommandResult> {
     return new Promise((resolve, reject) => {
-      const cleanCommand: string = String(command)
+      const cleanCommand = String(command)
       const derivedOptions: ExecOptions = { ...this.options, ...options }
       const finalCallBack = (error: ExecException | null, stdout: string | Buffer, stderr: string | Buffer) => {
         if (error) {

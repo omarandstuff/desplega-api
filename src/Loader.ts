@@ -32,7 +32,7 @@ export default class Loader {
     for (let i = 0; i < keys.length; i++) {
       const priority: string = keys[i]
       const priorityLoadMethod: string = priorities[priority]
-      const fileName: string = `${cwd}/.desplega${posfix}.${priority}`
+      const fileName = `${cwd}/.desplega${posfix}.${priority}`
 
       if (fs.existsSync(fileName)) {
         switch (priorityLoadMethod) {

@@ -6,20 +6,15 @@ describe('Loader#load', (): void => {
   it('prioretizes yml', (): void => {
     const loader: Loader = new Loader()
     const prioretizableYmlPlaces = ['priority_yml', 'priority_folder/priority_yml']
-    const notPrioretizableYmlPlaces = [
-      'priority_json',
-      'priority_js',
-      'priority_folder/priority_json',
-      'priority_folder/priority_js'
-    ]
+    const notPrioretizableYmlPlaces = ['priority_json', 'priority_js', 'priority_folder/priority_json', 'priority_folder/priority_js']
 
     prioretizableYmlPlaces.forEach((place: string) => {
-      const composedPlace: string = `${fixturesFolder}${place}`
+      const composedPlace = `${fixturesFolder}${place}`
 
       expect(loader.load(composedPlace)).toEqual({ pipeline: { title: 'YML_PIPELINE' } })
     })
     notPrioretizableYmlPlaces.forEach((place: string) => {
-      const composedPlace: string = `${fixturesFolder}${place}`
+      const composedPlace = `${fixturesFolder}${place}`
 
       expect(loader.load(composedPlace)).not.toEqual({ pipeline: { title: 'YML_PIPELINE' } })
     })
@@ -28,20 +23,15 @@ describe('Loader#load', (): void => {
   it('then prioretizes named yml', () => {
     const loader: Loader = new Loader()
     const prioretizableYmlPlaces = ['priority_yml', 'priority_folder/priority_yml']
-    const notPrioretizableYmlPlaces = [
-      'priority_json',
-      'priority_js',
-      'priority_folder/priority_json',
-      'priority_folder/priority_js'
-    ]
+    const notPrioretizableYmlPlaces = ['priority_json', 'priority_js', 'priority_folder/priority_json', 'priority_folder/priority_js']
 
     prioretizableYmlPlaces.forEach((place: string) => {
-      const composedPlace: string = `${fixturesFolder}${place}`
+      const composedPlace = `${fixturesFolder}${place}`
 
       expect(loader.load(composedPlace, 'name')).toEqual({ pipeline: { title: 'YML_NAMED_PIPELINE' } })
     })
     notPrioretizableYmlPlaces.forEach((place: string) => {
-      const composedPlace: string = `${fixturesFolder}${place}`
+      const composedPlace = `${fixturesFolder}${place}`
 
       expect(loader.load(composedPlace, 'name')).not.toEqual({
         pipeline: { title: 'YML_NAMED_PIPELINE' }
@@ -55,12 +45,12 @@ describe('Loader#load', (): void => {
     const notPrioretizableJSONPlaces = ['priority_js', 'priority_folder/priority_js']
 
     prioretizableJSONPlaces.forEach((place: string) => {
-      const composedPlace: string = `${fixturesFolder}${place}`
+      const composedPlace = `${fixturesFolder}${place}`
 
       expect(loader.load(composedPlace)).toEqual({ pipeline: { title: 'JSON_PIPELINE' } })
     })
     notPrioretizableJSONPlaces.forEach((place: string) => {
-      const composedPlace: string = `${fixturesFolder}${place}`
+      const composedPlace = `${fixturesFolder}${place}`
 
       expect(loader.load(composedPlace)).not.toEqual({ pipeline: { title: 'JSON_PIPELINE' } })
     })
@@ -72,12 +62,12 @@ describe('Loader#load', (): void => {
     const notPrioretizableJSONPlaces = ['priority_js', 'priority_folder/priority_js']
 
     prioretizableJSONPlaces.forEach((place: string) => {
-      const composedPlace: string = `${fixturesFolder}${place}`
+      const composedPlace = `${fixturesFolder}${place}`
 
       expect(loader.load(composedPlace, 'name')).toEqual({ pipeline: { title: 'JSON_NAMED_PIPELINE' } })
     })
     notPrioretizableJSONPlaces.forEach((place: string) => {
-      const composedPlace: string = `${fixturesFolder}${place}`
+      const composedPlace = `${fixturesFolder}${place}`
 
       expect(loader.load(composedPlace, 'name')).not.toEqual({
         pipeline: { title: 'JSON_NAMED_PIPELINE' }
@@ -90,7 +80,7 @@ describe('Loader#load', (): void => {
     const prioretizableJSONPlaces = ['priority_js', 'priority_folder/priority_js']
 
     prioretizableJSONPlaces.forEach((place: string) => {
-      const composedPlace: string = `${fixturesFolder}${place}`
+      const composedPlace = `${fixturesFolder}${place}`
 
       expect(loader.load(composedPlace)).toEqual({ pipeline: { title: 'JS_PIPELINE' } })
     })
@@ -101,7 +91,7 @@ describe('Loader#load', (): void => {
     const prioretizableJSONPlaces = ['priority_js', 'priority_folder/priority_js']
 
     prioretizableJSONPlaces.forEach((place: string) => {
-      const composedPlace: string = `${fixturesFolder}${place}`
+      const composedPlace = `${fixturesFolder}${place}`
 
       expect(loader.load(composedPlace, 'name')).toEqual({ pipeline: { title: 'JS_NAMED_PIPELINE' } })
     })

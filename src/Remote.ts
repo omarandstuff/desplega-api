@@ -68,8 +68,8 @@ export default class Remote extends Processor {
           if (error) {
             return reject({ error, stderr: '', stdout: '' })
           } else {
-            let stdout: string = ''
-            let stderr: string = ''
+            let stdout = ''
+            let stderr = ''
 
             const timeout = derivedOptions.timeout || 0
 
@@ -169,7 +169,7 @@ export default class Remote extends Processor {
   }
 
   private getPrivateKey(): Buffer {
-    const path: string = `${os.homedir()}/.ssh/id_rsa`
+    const path = `${os.homedir()}/.ssh/id_rsa`
 
     if (fs.existsSync(path)) {
       return fs.readFileSync(path)

@@ -17,7 +17,7 @@
     "playground": "ts-node playground",
     "format": "prettier --write \"{src,tests}/**/*.ts\"",
     "format:check": "prettier --list-different \"{src,tests}/**/*.ts\"",
-    "prepare": "yarn clean && yarn format:check && yarn test:coverage && yarn build"
+    "prepare": "yarn clean && yarn format:check && yarn lint && yarn test:coverage && yarn build"
   },
   "dependencies": {
     "ansi-regex": "^4.1.0",
@@ -41,7 +41,7 @@
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
-    "jest": "^24.8.0",
+    "jest": "^24.9.0",
     "prettier": "^1.18.2",
     "rimraf": "^2.7.0",
     "ts-jest": "^24.0.2",
