@@ -16,6 +16,7 @@ export default class Processor extends EventEmitter {
   public addListener(event: 'connecting', listener: () => void): this
   public addListener(event: 'connected', listener: () => void): this
   public addListener(event: 'closed', listener: () => void): this
+  /* istanbul ignore next */
   public addListener(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed', listener: (data: string) => void): this {
     return super.addListener(event, listener)
   }
@@ -25,6 +26,7 @@ export default class Processor extends EventEmitter {
   public on(event: 'connecting', listener: () => void): this
   public on(event: 'connected', listener: () => void): this
   public on(event: 'closed', listener: () => void): this
+  /* istanbul ignore next */
   public on(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed', listener: (data: string) => void): this {
     return super.on(event, listener)
   }
@@ -34,6 +36,7 @@ export default class Processor extends EventEmitter {
   public once(event: 'connecting', listener: () => void): this
   public once(event: 'connected', listener: () => void): this
   public once(event: 'closed', listener: () => void): this
+  /* istanbul ignore next */
   public once(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed', listener: (data: string) => void): this {
     return super.once(event, listener)
   }
@@ -43,6 +46,7 @@ export default class Processor extends EventEmitter {
   public removeListener(event: 'connecting', listener: () => void): this
   public removeListener(event: 'connected', listener: () => void): this
   public removeListener(event: 'closed', listener: () => void): this
+  /* istanbul ignore next */
   public removeListener(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed', listener: (data: string) => void): this {
     return super.removeListener(event, listener)
   }
@@ -52,26 +56,32 @@ export default class Processor extends EventEmitter {
   public off(event: 'connecting', listener: () => void): this
   public off(event: 'connected', listener: () => void): this
   public off(event: 'closed', listener: () => void): this
+  /* istanbul ignore next */
   public off(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed', listener: (data: string) => void): this {
     return super.off(event, listener)
   }
 
+  /* istanbul ignore next */
   public removeAllListeners(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed'): this {
     return super.removeAllListeners(event)
   }
 
+  /* istanbul ignore next */
   public listeners(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed'): Function[] {
     return super.listeners(event)
   }
 
+  /* istanbul ignore next */
   public rawListeners(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed'): Function[] {
     return super.rawListeners(event)
   }
 
+  /* istanbul ignore next */
   public emit(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed', data?: string): boolean {
     return super.emit(event, data)
   }
 
+  /* istanbul ignore next */
   public listenerCount(type: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed'): number {
     return super.listenerCount(type)
   }
@@ -81,6 +91,7 @@ export default class Processor extends EventEmitter {
   public prependListener(event: 'connecting', listener: () => void): this
   public prependListener(event: 'connected', listener: () => void): this
   public prependListener(event: 'closed', listener: () => void): this
+  /* istanbul ignore next */
   public prependListener(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed', listener: (data: string) => void): this {
     return super.prependListener(event, listener)
   }
@@ -90,6 +101,7 @@ export default class Processor extends EventEmitter {
   public prependOnceListener(event: 'connecting', listener: () => void): this
   public prependOnceListener(event: 'connected', listener: () => void): this
   public prependOnceListener(event: 'closed', listener: () => void): this
+  /* istanbul ignore next */
   public prependOnceListener(event: 'stdout' | 'stderr' | 'connecting' | 'connected' | 'closed', listener: (data: string) => void): this {
     return super.prependOnceListener(event, listener)
   }
