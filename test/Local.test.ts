@@ -62,7 +62,7 @@ describe('Local#exec', () => {
     expect(streamFunc.mock.calls[0][0]).toEqual('stderr')
   })
 
-  it('rejects if command time out is reached', async () => {
+  it('rejects if command timeout is reached', async () => {
     const local = new Local()
     const catchFunc = jest.fn()
 

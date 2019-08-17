@@ -1,8 +1,9 @@
 import Step from './Step'
-import { LocalStapeDefinition } from './LocalStep.types'
+import { RemoteStapeDefinition } from './RemoteStep.types'
 import { Context } from './Step.types'
 import { ExecOptions } from 'child_process'
 import { CommandResult } from './Processor.types'
+import Remote from './Remote'
 
 /**
  * Runs inside a pipeline and execute local commands
@@ -11,8 +12,8 @@ import { CommandResult } from './Processor.types'
  *
  */
 
-export default class LocalStep extends Step<LocalStapeDefinition> {
-  constructor(definition: LocalStapeDefinition) {
+export default class LocalStep extends Step<RemoteStapeDefinition> {
+  constructor(definition: RemoteStapeDefinition) {
     super(definition)
   }
 
@@ -27,8 +28,11 @@ export default class LocalStep extends Step<LocalStapeDefinition> {
   public async run(context: Context): Promise<CommandResult> {
     const command: string = await this.generateDynamicCommand(this.definition.command, context)
     const finalCommand: string = this.buildFinalcommand(command, this.definition.workingDirectory)
-    const finalOptions: ExecOptions = { ...this.definition.localOptions, ...context.localOptions }
+    const finalOptions: ExecOptions = { ...this.definition.remoteOptions, ...context.remoteOptions }
+    const remote: Remote = context.remoteProcessors[context.remoteId || this.definition.remoteId]
 
-    return await this.runAndRetry(context.localProcessor, finalCommand, finalOptions)
+    if (!remote) throw { error: new Error(`Remote not configred or unmatching remoteId provided`), stdout: '', stderr: '' }
+
+    return await this.runAndRetry(remote, finalCommand, finalOptions)
   }
 }

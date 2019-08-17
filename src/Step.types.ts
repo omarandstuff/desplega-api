@@ -1,9 +1,13 @@
-import LocalManager from './LocalManager'
-import { LocalManagerOptions } from './LocalManager.types'
+import { ExecOptions } from 'child_process'
+import Local from './Local'
+import { Remote } from '.'
 
 export interface Context {
-  localManager: LocalManager
-  localManagerOptions?: LocalManagerOptions
+  localProcessor: Local
+  localOptions?: ExecOptions
+  remoteProcessors: { [id: string]: Remote }
+  remoteOptions?: ExecOptions
+  remoteId?: string
 }
 
 export interface StepDefinition {
@@ -12,4 +16,5 @@ export interface StepDefinition {
   id?: string
   onFailure?: 'terminate' | 'continue'
   onSuccess?: 'terminate' | 'continue'
+  maxRetries?: number
 }

@@ -1,9 +1,14 @@
 import EventEmitter from 'events'
+import { ExecOptions } from 'child_process'
 
 /**
- * Base class for process emmiters (stdout, stderr)
+ * Base class for processors (stdout, stderr)
  */
-export default class ProcessEmitter extends EventEmitter {
+export default class Processor extends EventEmitter {
+  public async exec(_command: string, _options?: ExecOptions): Promise<any> {
+    throw new Error('You need to implement the exec method')
+  }
+
   public addListener(event: 'stdout', listener: (stdout: string) => void): this
   public addListener(event: 'stderr', listener: (stderr: string) => void): this
   public addListener(event: 'connecting', listener: () => void): this

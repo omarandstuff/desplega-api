@@ -1,7 +1,8 @@
 import { ExecOptions } from 'child_process'
 import { StepDefinition } from './Step.types'
 
-export interface LocalStapeDefinition extends StepDefinition {
-  localOptions?: ExecOptions
+export interface RemoteStapeDefinition extends StepDefinition {
+  remoteOptions?: ExecOptions
+  remoteId?: string
   workingDirectory?: string
 }

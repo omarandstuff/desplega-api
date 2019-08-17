@@ -1,6 +1,6 @@
 import { ExecException } from 'child_process'
 
-export interface LocalResult {
+export interface CommandResult {
   error: ExecException
   stdout?: string | Buffer
   stderr?: string | Buffer

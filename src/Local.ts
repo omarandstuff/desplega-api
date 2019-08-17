@@ -1,14 +1,13 @@
 import { exec, ExecException, ChildProcess, ExecOptions } from 'child_process'
-import { LocalResult } from './Local.types'
-import ProcessEmitter from './ProcessEmitter'
-
+import Processor from './Processor'
+import { CommandResult } from './Processor.types'
 /**
  * Waraper for exec function to exec local commands.
  *
  * @param {ExecOptions} [options] command execution options.
  *
  */
-export default class Local extends ProcessEmitter {
+export default class Local extends Processor {
   private options: ExecOptions
 
   public constructor(options?: ExecOptions) {
@@ -40,7 +39,7 @@ export default class Local extends ProcessEmitter {
    *
    * @returns {LocalResult} Result oject containing the generated stdout, stderr and error if any
    */
-  public async exec(command: string, options?: ExecOptions): Promise<LocalResult> {
+  public async exec(command: string, options?: ExecOptions): Promise<CommandResult> {
     return new Promise((resolve, reject) => {
       const cleanCommand: string = String(command)
       const derivedOptions: ExecOptions = { ...this.options, ...options }

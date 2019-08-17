@@ -1,9 +1,10 @@
-import ProcessEmitter from './ProcessEmitter'
 import { Client, ConnectConfig, ClientChannel } from 'ssh2'
-import { RemoteResult, ConnectionStatus } from './Remote.types'
 import { ExecException, ExecOptions } from 'child_process'
+import { ConnectionStatus } from './Remote.types'
+import Processor from './Processor'
 import fs from 'fs'
 import os from 'os'
+import { CommandResult } from './Processor.types'
 
 /**
  * Connects to a remote host and stays connected while sending commands.
@@ -17,7 +18,7 @@ import os from 'os'
  * @param {ExecOptions} options execution options.
  *
  */
-export default class Remote extends ProcessEmitter {
+export default class Remote extends Processor {
   private connectConfig: ConnectConfig = null
   private connection: Client = new Client()
   private options: ExecOptions
@@ -50,7 +51,7 @@ export default class Remote extends ProcessEmitter {
    *
    * @returns {RemoteResult} the result of the execution
    */
-  public async exec(command: string, options?: ExecOptions): Promise<RemoteResult> {
+  public async exec(command: string, options?: ExecOptions): Promise<CommandResult> {
     const derivedOptions: ExecOptions = { ...this.options, ...options }
 
     return new Promise(
