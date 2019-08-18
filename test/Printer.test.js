@@ -18,7 +18,7 @@ describe('Printer#drawRow', () => {
   })
 
   describe('Printing inline', () => {
-    it('it adds a /r at the end and uses process.stdout.write', async () => {
+    it('it adds a /r at the end and uses process.stdout.write', async (): Promise<void> => {
       const printer = new Printer()
 
       printer.drawRow([{ text: 'some text' }], true)
@@ -28,7 +28,7 @@ describe('Printer#drawRow', () => {
   })
 
   describe('Printing short text smaller than the terminal', () => {
-    it('just prints that shor text', async () => {
+    it('just prints that shor text', async (): Promise<void> => {
       const printer = new Printer()
 
       printer.drawRow([{ text: 'short' }])
@@ -38,7 +38,7 @@ describe('Printer#drawRow', () => {
   })
 
   describe('trying to print more text than space available', () => {
-    it('crops the text', async () => {
+    it('crops the text', async (): Promise<void> => {
       const printer = new Printer()
 
       printer.drawRow([{ text: 'this is a very large text' }])
@@ -47,7 +47,7 @@ describe('Printer#drawRow', () => {
     })
 
     describe('throuh multiple text elements', () => {
-      it('still crops the text', async () => {
+      it('still crops the text', async (): Promise<void> => {
         const printer = new Printer()
 
         printer.drawRow([{ text: 'this ' }, { text: 'is ' }, { text: 'a ' }, { text: 'very ' }, { text: 'large text' }])
@@ -58,7 +58,7 @@ describe('Printer#drawRow', () => {
   })
 
   describe('Including text elements set as dynamic (fit: true)', () => {
-    it('fits the text and add ...', async () => {
+    it('fits the text and add ...', async (): Promise<void> => {
       const printer = new Printer()
 
       printer.drawRow([{ text: 'dynamic text', fit: true }])
@@ -67,7 +67,7 @@ describe('Printer#drawRow', () => {
     })
 
     describe('throuh multiple text elements', () => {
-      it('still fits the text', async () => {
+      it('still fits the text', async (): Promise<void> => {
         const printer = new Printer()
 
         printer.drawRow([{ text: 'short ' }, { text: 'dynamic text', fit: true }])
@@ -77,7 +77,7 @@ describe('Printer#drawRow', () => {
     })
 
     describe('the dynamic text is too short for the available space', () => {
-      it('adds extra spaces to fill space', async () => {
+      it('adds extra spaces to fill space', async (): Promise<void> => {
         const printer = new Printer()
 
         printer.drawRow([{ text: '22', fit: true }])
@@ -87,7 +87,7 @@ describe('Printer#drawRow', () => {
     })
 
     describe('when there is not space for the 3 dots', () => {
-      it('dont use the dots', async () => {
+      it('dont use the dots', async (): Promise<void> => {
         const printer = new Printer()
 
         printer.drawRow([{ text: 'bigenough' }, { text: 'dynamic text', fit: true }])
@@ -97,7 +97,7 @@ describe('Printer#drawRow', () => {
     })
 
     describe('when it is not posible to assign even space for all dynamics and blanks', () => {
-      it('add some more spaces for the first ones', async () => {
+      it('add some more spaces for the first ones', async (): Promise<void> => {
         const printer = new Printer()
 
         process.stdout.columns = 11
@@ -108,7 +108,7 @@ describe('Printer#drawRow', () => {
     })
 
     describe('when there are too many dynamics for available space', () => {
-      it('just renders some of them', async () => {
+      it('just renders some of them', async (): Promise<void> => {
         const printer = new Printer()
 
         process.stdout.columns = 5
@@ -128,7 +128,7 @@ describe('Printer#drawRow', () => {
   })
 
   describe('when static text exeed available space', () => {
-    it('do not try to render any dinamic text element', async () => {
+    it('do not try to render any dinamic text element', async (): Promise<void> => {
       const printer = new Printer()
 
       printer.drawRow([{ text: 'short ' }, { text: 'dynamic text', fit: true }, { text: 'not too short ' }])
@@ -138,7 +138,7 @@ describe('Printer#drawRow', () => {
   })
 
   describe('efining blank block to fill space', () => {
-    it('fills the space between text', async () => {
+    it('fills the space between text', async (): Promise<void> => {
       const printer = new Printer()
 
       printer.drawRow([{ text: 'short' }, { blank: true }, { text: '22' }])

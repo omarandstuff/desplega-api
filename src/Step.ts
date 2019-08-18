@@ -25,9 +25,11 @@ export default class Step<D = StepDefinition> extends EventEmitter {
     this.definition = definition
   }
 
+  /* eslint-disable*/
   public async run(_context: Context, _index: number): Promise<any> {
     throw new Error('You need to implement the run method')
   }
+  /* eslint-enable*/
 
   /**
    * Uses a given processor to exec a command and retries it {maxRetries} until it solves or it runs out

@@ -3,7 +3,7 @@ import { VirtualFunction } from '../src/Virtual.types'
 import { Context } from '../src/Pipeline.types'
 
 describe('Virtual#exec', () => {
-  it('executes a virtual async function and then resolves the result', async () => {
+  it('executes a virtual async function and then resolves the result', async (): Promise<void> => {
     const virtual = new Virtual()
     const virtualExec = jest.fn()
     const thenFunc = jest.fn()
@@ -18,7 +18,7 @@ describe('Virtual#exec', () => {
     expect(virtualExec).toHaveBeenCalledWith({}, virtual.emit)
   })
 
-  it('rejects if command fails', async () => {
+  it('rejects if command fails', async (): Promise<void> => {
     const virtual = new Virtual()
     const virtualExec = jest.fn()
     const catchFunc = jest.fn()
@@ -34,7 +34,7 @@ describe('Virtual#exec', () => {
     expect(virtualExec).toHaveBeenCalledWith({}, virtual.emit)
   })
 
-  it('can streams stdout and stderr before closing', async () => {
+  it('can streams stdout and stderr before closing', async (): Promise<void> => {
     const virtual = new Virtual()
     const streamFunc = jest.fn()
 
@@ -52,7 +52,9 @@ describe('Virtual#exec', () => {
 
     streamFunc.mockReset()
 
-    virtualFunction = async (_, emit) => {
+    /*eslint-disable no-unused-vars*/
+    virtualFunction = async (_, emit): Promise<void> => {
+      /*eslint-enable no-unused-vars*/
       emit('stderr', 'stderr')
       throw new Error('Async error')
     }
@@ -62,14 +64,14 @@ describe('Virtual#exec', () => {
     expect(streamFunc).toHaveBeenCalledWith('stderr')
   })
 
-  it('rejects if command timeout is reached', async () => {
+  it('rejects if command timeout is reached', async (): Promise<void> => {
     const virtual = new Virtual({ timeout: 1 })
     const virtualExec = jest.fn()
     const catchFunc = jest.fn()
 
     const virtualFunction: VirtualFunction = async (...args) => {
       virtualExec(...args)
-      return new Promise(resolve => setTimeout(resolve, 10))
+      return new Promise((resolve): NodeJS.Timeout => setTimeout(resolve, 10))
     }
 
     await virtual.exec(virtualFunction, {} as Context).catch(catchFunc)

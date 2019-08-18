@@ -86,109 +86,109 @@ afterEach((): void => {
 })
 
 class TestLogger extends PipelineLogger {
-  public pipelineInit(title: string, startTime: Date) {
+  public pipelineInit(title: string, startTime: Date): void {
     super.pipelineInit(title, startTime)
     pipelineInitMock(title)
   }
-  public pipelineHeader(title: string, time: Date) {
+  public pipelineHeader(title: string, time: Date): void {
     super.pipelineHeader(title, time)
     pipelineHeaderMock(title)
   }
-  public pipelineFinish(finishTime: Date) {
+  public pipelineFinish(finishTime: Date): void {
     super.pipelineFinish(finishTime)
     pipelineFinishMock()
   }
-  public pipelineFail(error: CommandResult, finishTime: Date) {
+  public pipelineFail(error: CommandResult, finishTime: Date): void {
     super.pipelineFail(error, finishTime)
     pipelineFailMock(error)
   }
 
-  public localStepInit(index: number, title: string, command: string, startTime: Date) {
+  public localStepInit(index: number, title: string, command: string, startTime: Date): void {
     super.localStepInit(index, title, command, startTime)
     localStepInitMock(index, title, command)
   }
-  public localStepRetry(retry: number, retryTime: Date) {
+  public localStepRetry(retry: number, retryTime: Date): void {
     super.localStepRetry(retry, retryTime)
     localStepRetryMock(retry)
   }
-  public localStepFinish(result: CommandResult, finishTime: Date) {
+  public localStepFinish(result: CommandResult, finishTime: Date): void {
     super.localStepFinish(result, finishTime)
     localStepFinishMock(result)
   }
-  public localStepFail(error: CommandResult, finishTime: Date) {
+  public localStepFail(error: CommandResult, finishTime: Date): void {
     super.localStepFail(error, finishTime)
     localStepFailMock(error)
   }
 
-  public remoteStepInit(index: number, title: string, command: string, remoteId: string, startTime: Date) {
+  public remoteStepInit(index: number, title: string, command: string, remoteId: string, startTime: Date): void {
     super.remoteStepInit(index, title, command, remoteId, startTime)
     remoteStepInitMock(index, title, command, remoteId)
   }
-  public remoteStepRetry(retry: number, retryTime: Date) {
+  public remoteStepRetry(retry: number, retryTime: Date): void {
     super.remoteStepRetry(retry, retryTime)
     remoteStepRetryMock(retry)
   }
-  public remoteStepFinish(result: CommandResult, finishTime: Date) {
+  public remoteStepFinish(result: CommandResult, finishTime: Date): void {
     super.remoteStepFinish(result, finishTime)
     remoteStepFinishMock(result)
   }
-  public remoteStepFail(error: CommandResult, finishTime: Date) {
+  public remoteStepFail(error: CommandResult, finishTime: Date): void {
     super.remoteStepFail(error, finishTime)
     remoteStepFailMock(error)
   }
 
-  public virtualStepInit(index: number, title: string, startTime: Date) {
+  public virtualStepInit(index: number, title: string, startTime: Date): void {
     super.virtualStepInit(index, title, startTime)
     virtualStepInitMock(index, title)
   }
-  public virtualStepRetry(retry: number, retryTime: Date) {
+  public virtualStepRetry(retry: number, retryTime: Date): void {
     super.virtualStepRetry(retry, retryTime)
     virtualStepRetryMock(retry)
   }
-  public virtualStepFinish(result: CommandResult, finishTime: Date) {
+  public virtualStepFinish(result: CommandResult, finishTime: Date): void {
     super.virtualStepFinish(result, finishTime)
     virtualStepFinishMock(result)
   }
-  public virtualStepFail(error: CommandResult, finishTime: Date) {
+  public virtualStepFail(error: CommandResult, finishTime: Date): void {
     super.virtualStepFail(error, finishTime)
     virtualStepFailMock(error)
   }
 
-  public localStdout(stdout: string) {
+  public localStdout(stdout: string): void {
     super.localStdout(stdout)
     localStdoutMock(stdout)
   }
-  public localStderr(stderr: string) {
+  public localStderr(stderr: string): void {
     super.localStderr(stderr)
     localStderrMock(stderr)
   }
 
-  public remoteConnecting(remoteId: string) {
+  public remoteConnecting(remoteId: string): void {
     super.remoteConnecting(remoteId)
     remoteConnectingMock(remoteId)
   }
-  public remoteConnected(remoteId: string) {
+  public remoteConnected(remoteId: string): void {
     super.remoteConnected(remoteId)
     remoteConnectedMock(remoteId)
   }
-  public remoteClosed(remoteId: string) {
+  public remoteClosed(remoteId: string): void {
     super.remoteClosed(remoteId)
     remoteClosedMock(remoteId)
   }
-  public remoteStdout(stdout: string) {
+  public remoteStdout(stdout: string): void {
     super.remoteStdout(stdout)
     remoteStdoutMock(stdout)
   }
-  public remoteStderr(stderr: string) {
+  public remoteStderr(stderr: string): void {
     super.remoteStderr(stderr)
     remoteStderrMock(stderr)
   }
 
-  public virtualStdout(stdout: string) {
+  public virtualStdout(stdout: string): void {
     super.virtualStdout(stdout)
     virtualStdoutMock(stdout)
   }
-  public virtualStderr(stderr: string) {
+  public virtualStderr(stderr: string): void {
     super.virtualStderr(stderr)
     virtualStderrMock(stderr)
   }
@@ -211,7 +211,7 @@ describe('PipelineLogger', (): void => {
   describe('Local steps', (): void => {
     it('listens to all events in a pipeline', async (): Promise<void> => {
       const step1 = new LocalStep({ title: 'Local man', command: 'command', workingDirectory: 'working' })
-      const step2 = new LocalStep({ title: 'Local man 2', command: () => 'command', workingDirectory: 'working2', maxRetries: 1 })
+      const step2 = new LocalStep({ title: 'Local man 2', command: (): string => 'command', workingDirectory: 'working2', maxRetries: 1 })
 
       const pipeline: Pipeline = new Pipeline({ title: 'pipeline', steps: [step1, step2] })
       new TestLogger(pipeline)
@@ -238,7 +238,7 @@ describe('PipelineLogger', (): void => {
   describe('Remote steps', (): void => {
     it('listens to all events in a pipeline', async (): Promise<void> => {
       const step1 = new RemoteStep({ title: 'Remote man', command: 'command', workingDirectory: 'working' })
-      const step2 = new RemoteStep({ title: 'Remote man 2', command: () => 'command', workingDirectory: 'working2', maxRetries: 1 })
+      const step2 = new RemoteStep({ title: 'Remote man 2', command: (): string => 'command', workingDirectory: 'working2', maxRetries: 1 })
 
       const pipeline: Pipeline = new Pipeline({ title: 'pipeline', steps: [step1, step2], remotes: { default: { host: 'yes' } } })
       new TestLogger(pipeline)

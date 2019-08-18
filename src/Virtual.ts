@@ -35,7 +35,7 @@ export default class Virtual extends Processor {
    * @returns {CommandResult} The result of the execution
    */
   public async exec(virtualFunction: VirtualFunction, context: Context, options?: ExecOptions): Promise<CommandResult> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject): void => {
       const timeout = { ...this.options, ...options }.timeout || 0
       let stdout = ''
       let stderr = ''
@@ -46,10 +46,10 @@ export default class Virtual extends Processor {
         }, timeout)
       }
 
-      const stdoutListener = (data: string) => {
+      const stdoutListener = (data: string): void => {
         stdout += data
       }
-      const stderrListener = (data: string) => {
+      const stderrListener = (data: string): void => {
         stderr += data
       }
 

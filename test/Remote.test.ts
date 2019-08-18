@@ -11,7 +11,7 @@ afterEach((): void => {
 })
 
 describe('Remote#exec', () => {
-  it('executes a remote comand and then returns its stdout', async () => {
+  it('executes a remote comand and then returns its stdout', async (): Promise<void> => {
     const remote = new Remote({})
     const thenFuc = jest.fn()
 
@@ -22,7 +22,7 @@ describe('Remote#exec', () => {
     expect(thenFuc).toBeCalledWith({ error: { code: 0, message: undefined, name: 'signal', signal: 'signal' }, stderr: '', stdout: 'stdout' })
   })
 
-  it('streams stdout and stderr while executing', async () => {
+  it('streams stdout and stderr while executing', async (): Promise<void> => {
     const remote = new Remote({})
     const streamFunc = jest.fn()
 
@@ -42,7 +42,7 @@ describe('Remote#exec', () => {
     expect(streamFunc).toBeCalledWith('stderr')
   })
 
-  it('throws if the command was unsuccessful', async () => {
+  it('throws if the command was unsuccessful', async (): Promise<void> => {
     const remote = new Remote({})
     const catchFuc = jest.fn()
 
@@ -52,7 +52,7 @@ describe('Remote#exec', () => {
     expect(catchFuc).toBeCalledWith({ error: { code: 128, message: undefined, name: 'signal', signal: 'signal' }, stderr: 'stderr', stdout: '' })
   })
 
-  it('throws if there is an error in the ss2 library exec', async () => {
+  it('throws if there is an error in the ss2 library exec', async (): Promise<void> => {
     const remote = new Remote({})
     const catchFuc = jest.fn()
 
@@ -62,7 +62,7 @@ describe('Remote#exec', () => {
     expect(catchFuc).toBeCalledWith({ error: new Error('exec error'), stderr: '', stdout: '' })
   })
 
-  it('throws if exec returns with an undefined error code (Probably a network error)', async () => {
+  it('throws if exec returns with an undefined error code (Probably a network error)', async (): Promise<void> => {
     const remote = new Remote({})
     const catchFuc = jest.fn()
 
@@ -72,7 +72,7 @@ describe('Remote#exec', () => {
     expect(catchFuc).toBeCalledWith({ error: new Error('Network error'), stderr: '', stdout: 'stdout' })
   })
 
-  it('throws if connection can not be established', async () => {
+  it('throws if connection can not be established', async (): Promise<void> => {
     const remote = new Remote({})
     const catchFuc = jest.fn()
 
@@ -86,7 +86,7 @@ describe('Remote#exec', () => {
     })
   })
 
-  it('emits the connection status', async () => {
+  it('emits the connection status', async (): Promise<void> => {
     const remote = new Remote({})
     const connectingFunc = jest.fn()
     const connectedFunc = jest.fn()

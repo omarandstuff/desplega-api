@@ -38,10 +38,10 @@ export default class Local extends Processor {
    * @returns {CommandResult} Result oject containing the generated stdout, stderr and error if any
    */
   public async exec(command: string, options?: ExecOptions): Promise<CommandResult> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject): void => {
       const cleanCommand = String(command)
       const derivedOptions: ExecOptions = { ...this.options, ...options }
-      const finalCallBack = (error: ExecException | null, stdout: string | Buffer, stderr: string | Buffer) => {
+      const finalCallBack = (error: ExecException | null, stdout: string | Buffer, stderr: string | Buffer): void => {
         if (error) {
           reject({ error, stdout, stderr })
         } else {

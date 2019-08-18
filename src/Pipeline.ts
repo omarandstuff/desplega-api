@@ -3,7 +3,6 @@ import { CommandResult } from './Processor.types'
 import Step from './Step'
 import Local from './Local'
 import Virtual from './Virtual'
-import { ConnectConfig } from 'ssh2'
 import { ExecOptions } from 'child_process'
 import Remote from './Remote'
 import { EventEmitter } from 'events'
@@ -50,7 +49,7 @@ export default class Pipeline extends EventEmitter {
     this.emit('PIPELINE@INIT', this.descriptor.title, this.startTime)
 
     const { steps } = this.descriptor
-    let index: number = 1
+    let index = 1
 
     for (let i = 0; i < steps.length; i++) {
       const currentHeader: Header = steps[i] as Header
@@ -103,7 +102,7 @@ export default class Pipeline extends EventEmitter {
     }
   }
 
-  private listenToLocal() {
+  private listenToLocal(): void {
     this.context.localProcessor.addListener('LOCAL@STDOUT', (stdout: string) => {
       this.emit('LOCAL@STDOUT', stdout)
     })
@@ -112,7 +111,7 @@ export default class Pipeline extends EventEmitter {
     })
   }
 
-  private listenToRemotes() {
+  private listenToRemotes(): void {
     const ids: string[] = Object.keys({ ...this.context.remoteProcessors })
 
     for (let i = 0; i < ids.length; i++) {
@@ -136,7 +135,7 @@ export default class Pipeline extends EventEmitter {
     }
   }
 
-  private listenToVirtual() {
+  private listenToVirtual(): void {
     this.context.virtualProcessor.addListener('stdout', (stdout: string) => {
       this.emit('VIRTUAL@STDOUT', stdout)
     })
@@ -145,7 +144,7 @@ export default class Pipeline extends EventEmitter {
     })
   }
 
-  private listenToStep(step: Step) {
+  private listenToStep(step: Step): void {
     const stepTypes = ['LOCAL_STEP', 'REMOTE_STEP', 'VIRTUAL_STEP']
     const stepEvents = ['INIT', 'RETRY', 'FINISH', 'FAIL']
 

@@ -23,7 +23,7 @@ export default class ChildProcessMocker {
     this.originalInstance.exec = this.exec.bind(this)
   }
 
-  public static unMock() {
+  public static unMock(): void {
     this.originalInstance.exec = this.originalExec
     this.nextResolverData = []
   }

@@ -1,7 +1,7 @@
 const fs: any = jest.genMockFromModule('fs')
 
-fs.existsSync = () => true
+fs.existsSync = (): true => true
 
-fs.readFileSync = () => 'content'
+fs.readFileSync = (): string => 'content'
 
 export default fs

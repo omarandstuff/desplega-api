@@ -40,35 +40,39 @@ export default class PipelineLogger {
     this.pipeline.addListener('VIRTUAL@STDERR', this.virtualStderr)
   }
 
-  public pipelineInit(title: string, startTime: Date) {}
-  public pipelineHeader(title: string, time: Date) {}
-  public pipelineFinish(finishTime: Date) {}
-  public pipelineFail(error: CommandResult, finishTime: Date) {}
+  /* eslint-disable @typescript-eslint/no-unused-vars*/
+  /* eslint-disable @typescript-eslint/no-empty-function*/
+  public pipelineInit(title: string, startTime: Date): void {}
+  public pipelineHeader(title: string, time: Date): void {}
+  public pipelineFinish(finishTime: Date): void {}
+  public pipelineFail(error: CommandResult, finishTime: Date): void {}
 
-  public localStepInit(index: number, title: string, command: string, startTime: Date) {}
-  public localStepRetry(retry: number, retryTime: Date) {}
-  public localStepFinish(result: CommandResult, finishTime: Date) {}
-  public localStepFail(error: CommandResult, finishTime: Date) {}
+  public localStepInit(index: number, title: string, command: string, startTime: Date): void {}
+  public localStepRetry(retry: number, retryTime: Date): void {}
+  public localStepFinish(result: CommandResult, finishTime: Date): void {}
+  public localStepFail(error: CommandResult, finishTime: Date): void {}
 
-  public remoteStepInit(index: number, title: string, command: string, remoteId: string, startTime: Date) {}
-  public remoteStepRetry(retry: number, retryTime: Date) {}
-  public remoteStepFinish(result: CommandResult, finishTime: Date) {}
-  public remoteStepFail(error: CommandResult, finishTime: Date) {}
+  public remoteStepInit(index: number, title: string, command: string, remoteId: string, startTime: Date): void {}
+  public remoteStepRetry(retry: number, retryTime: Date): void {}
+  public remoteStepFinish(result: CommandResult, finishTime: Date): void {}
+  public remoteStepFail(error: CommandResult, finishTime: Date): void {}
 
-  public virtualStepInit(index: number, title: string, startTime: Date) {}
-  public virtualStepRetry(retry: number, retryTime: Date) {}
-  public virtualStepFinish(result: CommandResult, finishTime: Date) {}
-  public virtualStepFail(error: CommandResult, finishTime: Date) {}
+  public virtualStepInit(index: number, title: string, startTime: Date): void {}
+  public virtualStepRetry(retry: number, retryTime: Date): void {}
+  public virtualStepFinish(result: CommandResult, finishTime: Date): void {}
+  public virtualStepFail(error: CommandResult, finishTime: Date): void {}
 
-  public localStdout(stdout: string) {}
-  public localStderr(stderr: string) {}
+  public localStdout(stdout: string): void {}
+  public localStderr(stderr: string): void {}
 
-  public remoteConnecting(remoteId: string) {}
-  public remoteConnected(remoteId: string) {}
-  public remoteClosed(remoteId: string) {}
-  public remoteStdout(stdout: string) {}
-  public remoteStderr(stderr: string) {}
+  public remoteConnecting(remoteId: string): void {}
+  public remoteConnected(remoteId: string): void {}
+  public remoteClosed(remoteId: string): void {}
+  public remoteStdout(stdout: string): void {}
+  public remoteStderr(stderr: string): void {}
 
-  public virtualStdout(stdout: string) {}
-  public virtualStderr(stderr: string) {}
+  public virtualStdout(stdout: string): void {}
+  public virtualStderr(stderr: string): void {}
+  /* eslint-enable @typescript-eslint/no-empty-function*/
+  /* eslint-enable @typescript-eslint/no-unused-vars*/
 }

@@ -11,8 +11,8 @@ describe('Parser#buildPipeline', () => {
 })
 
 describe('Parser#buildPipelineAsync', () => {
-  it('creates a pipeline object by first executing an async function that returns the descriptor', async () => {
-    const generator = async () => {
+  it('creates a pipeline object by first executing an async function that returns the descriptor', async (): Promise<void> => {
+    const generator = async (): Promise<void> => {
       return descriptorBase
     }
 

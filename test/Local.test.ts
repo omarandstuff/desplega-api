@@ -11,7 +11,7 @@ afterEach((): void => {
 })
 
 describe('Local#exec', () => {
-  it('executes a local comand and then resolves the result', async () => {
+  it('executes a local comand and then resolves the result', async (): Promise<void> => {
     const local = new Local()
     const thenFunc = jest.fn()
 
@@ -22,7 +22,7 @@ describe('Local#exec', () => {
     expect(thenFunc).toHaveBeenCalledWith({ error: null, stdout: 'stdout', stderr: '' })
   })
 
-  it('rejects if command fails', async () => {
+  it('rejects if command fails', async (): Promise<void> => {
     const local = new Local()
     const catchFunc = jest.fn()
 
@@ -36,7 +36,7 @@ describe('Local#exec', () => {
     })
   })
 
-  it('can streams stdout and stderr before closing', async () => {
+  it('can streams stdout and stderr before closing', async (): Promise<void> => {
     const local = new Local()
     const thenFunc = jest.fn()
     const catchFunc = jest.fn()
@@ -58,7 +58,7 @@ describe('Local#exec', () => {
     expect(streamFunc).toHaveBeenCalledWith('stderr')
   })
 
-  it('rejects if command timeout is reached', async () => {
+  it('rejects if command timeout is reached', async (): Promise<void> => {
     const local = new Local()
     const catchFunc = jest.fn()
 

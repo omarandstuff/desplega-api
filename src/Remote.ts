@@ -123,27 +123,27 @@ export default class Remote extends Processor {
     )
   }
 
-  public close() {
+  public close(): void {
     if (this.connectionStatus === 'connected') {
       this.connectionStatus = 'closed'
       this.connection.end()
     }
   }
 
-  private resetConnection() {
+  private resetConnection(): void {
     this.close()
     this.connection = new Client()
   }
 
   private async connect(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const onReady = () => {
+    return new Promise((resolve, reject): void => {
+      const onReady = (): void => {
         this.connectionStatus = 'connected'
         this.emit('REMOTE@CONNECTED')
 
         resolve()
       }
-      const onError = (error: Error) => {
+      const onError = (error: Error): void => {
         this.connection.removeListener('close', onClose)
         this.connection.removeListener('error', onError)
         this.connection.removeListener('ready', onReady)
@@ -152,7 +152,7 @@ export default class Remote extends Processor {
 
         reject(error)
       }
-      const onClose = () => {
+      const onClose = (): void => {
         this.connection.removeListener('close', onClose)
         this.connection.removeListener('error', onError)
         this.connection.removeListener('ready', onReady)

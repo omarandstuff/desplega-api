@@ -2,7 +2,7 @@ import Pipeline from '../src/Pipeline'
 import VirtualStep from '../src/VirtualStep'
 
 describe('Pipeline#run', () => {
-  it('Executes a series steps', async () => {
+  it('Executes a series steps', async (): Promise<void> => {
     const step1: VirtualStep = new VirtualStep({ title: 'Step', asyncFunction: jest.fn().mockResolvedValue(null) })
     const step2: VirtualStep = new VirtualStep({ title: 'Step', asyncFunction: jest.fn().mockResolvedValue(null) })
     const step3: VirtualStep = new VirtualStep({ title: 'Step', asyncFunction: jest.fn().mockResolvedValue(null) })
@@ -15,7 +15,7 @@ describe('Pipeline#run', () => {
     expect(step3.definition.asyncFunction).toHaveBeenCalled()
   })
 
-  it('Stops if a step fails', async () => {
+  it('Stops if a step fails', async (): Promise<void> => {
     const step1: VirtualStep = new VirtualStep({ title: 'Step', asyncFunction: jest.fn().mockResolvedValue(null) })
     const step2: VirtualStep = new VirtualStep({ title: 'Step', asyncFunction: jest.fn().mockRejectedValue(null) })
     const step3: VirtualStep = new VirtualStep({ title: 'Step', asyncFunction: jest.fn().mockResolvedValue(null) })
@@ -28,7 +28,7 @@ describe('Pipeline#run', () => {
     expect(step3.definition.asyncFunction).not.toHaveBeenCalled()
   })
 
-  it('builds the remote collection and the rest of the context', async () => {
+  it('builds the remote collection and the rest of the context', async (): Promise<void> => {
     const step1: VirtualStep = ({
       run: jest.fn().mockResolvedValue(null),
       addListener: jest.fn(),
