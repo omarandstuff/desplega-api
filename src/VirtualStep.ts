@@ -12,6 +12,8 @@ import { Context } from './Pipeline.types'
  */
 
 export default class VirtualStep extends Step<VirtualStepDefinition> {
+  protected eventPrefix = 'VIRTUAL_STEP'
+
   /**
    * Executes an async function and desides what to do on failure or success
    *
@@ -20,8 +22,10 @@ export default class VirtualStep extends Step<VirtualStepDefinition> {
    * @returns {LocalResult} The local exec result
    *
    */
-  public async run(context: Context): Promise<CommandResult> {
+  public async run(context: Context, index: number): Promise<CommandResult> {
     const finalOptions: ExecOptions = { ...this.definition.virtualOptions, ...context.virtualOptions }
+
+    this.emit('VIRTUAL_STEP@INIT', index, this.definition.title, new Date())
 
     return await this.runAndRetry(context.virtualProcessor, this.definition.asyncFunction, context, finalOptions)
   }

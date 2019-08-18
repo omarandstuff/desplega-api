@@ -108,14 +108,14 @@ export default class Remote extends Processor {
               const stringData: string = data.toString('utf8')
               stdout += data.toString('utf8')
 
-              this.emit('stdout', stringData)
+              this.emit('REMOTE@STDOUT', stringData)
             })
 
             channel.stderr.addListener('data', (data: string | Buffer) => {
               const stringData: string = data.toString('utf8')
               stderr += data.toString('utf8')
 
-              this.emit('stderr', stringData)
+              this.emit('REMOTE@STDERR', stringData)
             })
           }
         })
@@ -125,9 +125,8 @@ export default class Remote extends Processor {
 
   public close() {
     if (this.connectionStatus === 'connected') {
-      this.connection.end()
       this.connectionStatus = 'closed'
-      this.emit('closed')
+      this.connection.end()
     }
   }
 
@@ -140,7 +139,7 @@ export default class Remote extends Processor {
     return new Promise((resolve, reject) => {
       const onReady = () => {
         this.connectionStatus = 'connected'
-        this.emit('connected')
+        this.emit('REMOTE@CONNECTED')
 
         resolve()
       }
@@ -149,7 +148,7 @@ export default class Remote extends Processor {
         this.connection.removeListener('error', onError)
         this.connection.removeListener('ready', onReady)
         this.connectionStatus = 'closed'
-        this.emit('closed')
+        this.emit('REMOTE@CLOSED')
 
         reject(error)
       }
@@ -158,14 +157,14 @@ export default class Remote extends Processor {
         this.connection.removeListener('error', onError)
         this.connection.removeListener('ready', onReady)
         this.connectionStatus = 'closed'
-        this.emit('closed')
+        this.emit('REMOTE@CLOSED')
       }
 
       this.connection.addListener('close', onClose)
       this.connection.addListener('error', onError)
       this.connection.addListener('ready', onReady)
 
-      this.emit('connecting')
+      this.emit('REMOTE@CONNECTING')
       this.connection.connect(this.connectConfig)
     })
   }

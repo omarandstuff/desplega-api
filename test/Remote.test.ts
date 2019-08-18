@@ -26,8 +26,8 @@ describe('Remote#exec', () => {
     const remote = new Remote({})
     const streamFunc = jest.fn()
 
-    remote.addListener('stdout', streamFunc)
-    remote.addListener('stderr', streamFunc)
+    remote.addListener('REMOTE@STDOUT', streamFunc)
+    remote.addListener('REMOTE@STDERR', streamFunc)
 
     SSH2Mocker.addFinishMock()
     await remote.exec('test command')
@@ -92,9 +92,9 @@ describe('Remote#exec', () => {
     const connectedFunc = jest.fn()
     const closedFunc = jest.fn()
 
-    remote.addListener('connecting', connectingFunc)
-    remote.addListener('connected', connectedFunc)
-    remote.addListener('closed', closedFunc)
+    remote.addListener('REMOTE@CONNECTING', connectingFunc)
+    remote.addListener('REMOTE@CONNECTED', connectedFunc)
+    remote.addListener('REMOTE@CLOSED', closedFunc)
 
     SSH2Mocker.addFinishMock()
     await remote.exec('test command')

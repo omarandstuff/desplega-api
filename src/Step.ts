@@ -7,6 +7,7 @@ import Remote from './Remote'
 import Virtual from './Virtual'
 import Processor from './Processor'
 import { Context } from './Pipeline.types'
+import { EventEmitter } from 'events'
 
 /**
  * Base step class.
@@ -14,14 +15,17 @@ import { Context } from './Pipeline.types'
  * @param {Object} definition a definition object.
  */
 
-export default class Step<D = StepDefinition> {
+export default class Step<D = StepDefinition> extends EventEmitter {
   public definition: D
 
+  protected eventPrefix = 'STEP'
+
   public constructor(definition: D) {
+    super()
     this.definition = definition
   }
 
-  public async run(_context: Context): Promise<any> {
+  public async run(_context: Context, _index: number): Promise<any> {
     throw new Error('You need to implement the run method')
   }
 
@@ -51,22 +55,32 @@ export default class Step<D = StepDefinition> {
     const finalMaxRetries: number = Math.max(definition.maxRetries || 0, 0)
 
     for (let i = 0; i <= finalMaxRetries; i++) {
+      if (i > 0) this.emit(`${this.eventPrefix}@RETRY`, i, new Date())
+
       try {
         const result: CommandResult = await processor.exec(action, secondParam, options)
 
         switch (definition.onSuccess) {
           case 'terminate':
+            this.emit(`${this.eventPrefix}@FAIL`, result, new Date())
+
             throw result
           default:
+            this.emit(`${this.eventPrefix}@FINISH`, result, new Date())
+
             return result
         }
-      } catch (reason) {
+      } catch (error) {
         if (i === finalMaxRetries) {
           switch (definition.onFailure) {
             case 'continue':
-              return reason
+              this.emit(`${this.eventPrefix}@FINISH`, error, new Date())
+
+              return error
             default:
-              throw reason
+              this.emit(`${this.eventPrefix}@FAIL`, error, new Date())
+
+              throw error
           }
         }
       }

@@ -42,8 +42,8 @@ describe('Local#exec', () => {
     const catchFunc = jest.fn()
     const streamFunc = jest.fn()
 
-    local.addListener('stdout', streamFunc)
-    local.addListener('stderr', streamFunc)
+    local.addListener('LOCAL@STDOUT', streamFunc)
+    local.addListener('LOCAL@STDERR', streamFunc)
 
     ChildProcessMocker.addFinishMock()
     await local.exec('test command').then(thenFunc)

@@ -52,11 +52,11 @@ export default class Local extends Processor {
       const childProcess: ChildProcess = exec(cleanCommand, derivedOptions, finalCallBack)
 
       childProcess.stdout.on('data', (chunk: any): void => {
-        this.emit('stdout', chunk.toString('utf8'))
+        this.emit('LOCAL@STDOUT', chunk.toString('utf8'))
       })
 
       childProcess.stderr.on('data', (chunk: any): void => {
-        this.emit('stderr', chunk.toString('utf8'))
+        this.emit('LOCAL@STDERR', chunk.toString('utf8'))
       })
     })
   }

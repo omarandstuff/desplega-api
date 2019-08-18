@@ -29,7 +29,11 @@ describe('Pipeline#run', () => {
   })
 
   it('builds the remote collection and the rest of the context', async () => {
-    const step1: VirtualStep = ({ run: jest.fn().mockResolvedValue(null) } as unknown) as VirtualStep
+    const step1: VirtualStep = ({
+      run: jest.fn().mockResolvedValue(null),
+      addListener: jest.fn(),
+      removeAllListeners: jest.fn()
+    } as unknown) as VirtualStep
     const pipeline = new Pipeline({ title: 'Pipeline', steps: [step1], remotes: { one: { host: 'host' } } })
 
     await pipeline.run()

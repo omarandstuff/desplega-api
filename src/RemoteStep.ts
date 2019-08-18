@@ -13,6 +13,8 @@ import { Context } from './Pipeline.types'
  */
 
 export default class RemoteStep extends Step<RemoteStepDefinition> {
+  protected eventPrefix = 'REMOTE_STEP'
+
   /**
    * Builds a command, execute it and desides what to do on failure or success
    *
@@ -21,11 +23,13 @@ export default class RemoteStep extends Step<RemoteStepDefinition> {
    * @returns {LocalResult} The local exec result
    *
    */
-  public async run(context: Context): Promise<CommandResult> {
+  public async run(context: Context, index: number): Promise<CommandResult> {
     const command: string = await this.generateDynamicCommand(this.definition.command, context)
     const finalCommand: string = this.buildFinalcommand(command, this.definition.workingDirectory)
     const finalOptions: ExecOptions = { ...this.definition.remoteOptions, ...context.remoteOptions }
     const remote: Remote = context.remoteProcessors[context.remoteId || this.definition.remoteId]
+
+    this.emit('REMOTE_STEP@INIT', index, this.definition.title, finalCommand, context.remoteId || this.definition.remoteId, new Date())
 
     if (!remote) throw { error: new Error(`Remote not configred or unmatching remoteId provided`), stdout: '', stderr: '' }
 
