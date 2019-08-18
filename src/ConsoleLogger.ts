@@ -5,7 +5,6 @@ import ansiRegex from 'ansi-regex'
 import PipelineLogger from './PipelineLogger'
 import { CommandResult } from './Processor.types'
 import Printer from './Printer'
-import { runInThisContext } from 'vm'
 
 const theme = {
   failureColor: '#af1400',
@@ -26,8 +25,8 @@ const superScriptChars = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '
 
 export default class ConsoleLogger extends PipelineLogger {
   private animation: NodeJS.Timeout
-  private animationFraction: number = 0
-  private animationTick: number = 0
+  private animationFraction = 0
+  private animationTick = 0
 
   private printer: Printer = new Printer()
   private pipilineStartTime: Date
@@ -91,6 +90,7 @@ export default class ConsoleLogger extends PipelineLogger {
       { text: `⏎ ${command}`, style: chalk.hex(theme.stepHeaderColor).dim, fit: true }
     ])
   }
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   public localStepRetry(retry: number, retryTime: Date): void {
     this.currentStepRetry = retry
     this.lastStdio = ''
@@ -128,6 +128,7 @@ export default class ConsoleLogger extends PipelineLogger {
       { text: `⏎ ${command}`, style: chalk.hex(theme.stepHeaderColor).dim, fit: true }
     ])
   }
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   public remoteStepRetry(retry: number, retryTime: Date): void {
     this.currentStepRetry = retry
     this.lastStdio = ''
@@ -160,6 +161,7 @@ export default class ConsoleLogger extends PipelineLogger {
       { text: '📎', fit: true }
     ])
   }
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   public virtualStepRetry(retry: number, retryTime: Date): void {
     this.currentStepRetry = retry
     this.lastStdio = ''
@@ -209,7 +211,7 @@ export default class ConsoleLogger extends PipelineLogger {
     this.processStdio(stderr)
   }
 
-  private printFailedStep(finishTime: Date) {
+  private printFailedStep(finishTime: Date): void {
     this.printer.drawRow([
       { text: ' ' },
       { text: ` FAIL `, style: chalk.bgHex(theme.failureContrastColor).bold },
@@ -220,7 +222,7 @@ export default class ConsoleLogger extends PipelineLogger {
     ])
   }
 
-  private printFinishedStep(finishTime: Date) {
+  private printFinishedStep(finishTime: Date): void {
     this.printer.drawRow([
       { text: ' ' },
       { text: ` DONE `, style: chalk.bgHex(theme.successContrastColor).bold },
@@ -246,14 +248,14 @@ export default class ConsoleLogger extends PipelineLogger {
     )
   }
 
-  private processStdio(data: string) {
+  private processStdio(data: string): void {
     const lines = data.split('\n').filter(line => line)
     this.lastStdio = (lines[lines.length - 1] || '').replace(/(\r\n\t|\r|\n|\r\t)/gm, '').replace(ansiRegex(), '')
 
     this.printStatus()
   }
 
-  private runAnimation() {
+  private runAnimation(): void {
     this.animation = setInterval((): void => {
       this.animationFraction += 0.02
       this.animationTick = Math.floor(this.animationFraction)

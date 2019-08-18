@@ -124,7 +124,7 @@ export default class Remote extends Processor {
   }
 
   public async close(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve): void => {
       if (this.connectionStatus === 'connected') {
         this.emit('REMOTE@CLOSED')
         this.connection.removeAllListeners()
