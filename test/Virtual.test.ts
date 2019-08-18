@@ -1,6 +1,6 @@
 import Virtual from '../src/Virtual'
 import { VirtualFunction } from '../src/Virtual.types'
-import { Context } from '../src/Step.types'
+import { Context } from '../src/Pipeline.types'
 
 describe('Virtual#exec', () => {
   it('executes a virtual async function and then resolves the result', async () => {

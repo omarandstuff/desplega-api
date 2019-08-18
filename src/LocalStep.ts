@@ -24,7 +24,7 @@ export default class LocalStep extends Step<LocalStepDefinition> {
    */
   public async run(context: Context, index: number): Promise<CommandResult> {
     const command: string = await this.generateDynamicCommand(this.definition.command, context)
-    const finalCommand: string = this.buildFinalcommand(command, this.definition.workingDirectory)
+    const finalCommand: string = this.buildFinalcommand(this.replaceGlobals(command, context), this.definition.workingDirectory)
     const finalOptions: ExecOptions = { ...this.definition.localOptions, ...context.localOptions }
 
     this.emit('LOCAL_STEP@INIT', index, this.definition.title, finalCommand, new Date())

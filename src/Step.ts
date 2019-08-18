@@ -105,4 +105,20 @@ export default class Step<D = StepDefinition> extends EventEmitter {
       throw { error, stdout: '', stderr: '' }
     }
   }
+
+  protected replaceGlobals(command: string, context: Context): string {
+    const globals = context.globals
+    const globalsKeys: string[] = Object.keys(globals)
+    let finalString = command
+
+    for (let i = 0; i < globalsKeys.length; i++) {
+      const currentKey = globalsKeys[i]
+      const value = globals[currentKey]
+      const regexp = new RegExp(`:${currentKey}:`, 'g')
+
+      finalString = finalString.replace(regexp, value)
+    }
+
+    return finalString
+  }
 }

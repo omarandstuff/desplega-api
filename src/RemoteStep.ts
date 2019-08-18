@@ -25,7 +25,7 @@ export default class RemoteStep extends Step<RemoteStepDefinition> {
    */
   public async run(context: Context, index: number): Promise<CommandResult> {
     const command: string = await this.generateDynamicCommand(this.definition.command, context)
-    const finalCommand: string = this.buildFinalcommand(command, this.definition.workingDirectory)
+    const finalCommand: string = this.buildFinalcommand(this.replaceGlobals(command, context), this.definition.workingDirectory)
     const finalOptions: ExecOptions = { ...this.definition.remoteOptions, ...context.remoteOptions }
     const remote: Remote = context.remoteProcessors[context.remoteId || this.definition.remoteId]
 

@@ -2,7 +2,7 @@ import LocalStep from '../src/LocalStep'
 import Local from '../src/Local'
 import childProcess from 'child_process'
 import ChildProcessMocker from './utils/ChildProcessMocker'
-import { Context } from '../src/Step.types'
+import { Context } from '../src/Pipeline.types'
 
 beforeEach((): void => {
   ChildProcessMocker.mock(childProcess)
@@ -19,7 +19,7 @@ describe('LocalStep#run', () => {
     const thenFunc = jest.fn()
 
     ChildProcessMocker.addFinishMock()
-    await localStep.run({ localProcessor } as Context).then(thenFunc)
+    await localStep.run({ localProcessor, globals: {} } as Context, 1).then(thenFunc)
 
     expect(thenFunc).toHaveBeenCalledWith({ error: null, stdout: 'stdout', stderr: '' })
   })
@@ -32,7 +32,7 @@ describe('LocalStep#run', () => {
       workingDirectory: 'some/path'
     })
 
-    await localStep.run({ localProcessor } as Context)
+    await localStep.run({ localProcessor, globals: {} } as Context, 1)
 
     expect((localProcessor.exec as jest.Mock).mock.calls[0][0]).toEqual('cd some/path && command')
   })
@@ -42,9 +42,19 @@ describe('LocalStep#run', () => {
     const command = (_context: any) => 'dynamic command'
     const localStep = new LocalStep({ title: 'title', command })
 
-    await localStep.run({ localProcessor } as Context)
+    await localStep.run({ localProcessor, globals: {} } as Context, 1)
 
     expect((localProcessor.exec as jest.Mock).mock.calls[0][0]).toEqual('dynamic command')
+  })
+
+  it('scape values using globals from context', async () => {
+    const localProcessor: Local = ({ exec: jest.fn() } as unknown) as Local
+    const command = (_context: any) => 'dynamic :command:'
+    const localStep = new LocalStep({ title: 'title', command })
+
+    await localStep.run(({ localProcessor, globals: { command: 'replaced command' } } as unknown) as Context, 1)
+
+    expect((localProcessor.exec as jest.Mock).mock.calls[0][0]).toEqual('dynamic replaced command')
   })
 
   it('rejects when the command fucntion throws error', async () => {
@@ -53,7 +63,7 @@ describe('LocalStep#run', () => {
     const localStep = new LocalStep({ title: 'title', command })
     const catchFunc = jest.fn()
 
-    await localStep.run({ localProcessor } as Context).catch(catchFunc)
+    await localStep.run({ localProcessor, globals: {} } as Context, 1).catch(catchFunc)
 
     expect(catchFunc.mock.calls[0][0]).toEqual({ error: TypeError('context is not a function'), stderr: '', stdout: '' })
   })
@@ -66,7 +76,7 @@ describe('LocalStep#run', () => {
 
       ChildProcessMocker.addFinishWithErrorMock()
       ChildProcessMocker.addFinishWithErrorMock()
-      await localStep.run({ localProcessor } as Context).catch(catchFunc)
+      await localStep.run({ localProcessor, globals: {} } as Context, 1).catch(catchFunc)
 
       expect(catchFunc.mock.calls[0][0]).toEqual({ error: { code: 127, name: 'error', message: 'There was an error' }, stdout: '', stderr: 'stderr' })
     })
@@ -81,7 +91,7 @@ describe('LocalStep#run', () => {
       ChildProcessMocker.addFinishWithTimeOutMock()
       ChildProcessMocker.addFinishWithTimeOutMock()
       ChildProcessMocker.addFinishMock()
-      await localStep.run({ localProcessor } as Context).then(thenFunc)
+      await localStep.run({ localProcessor, globals: {} } as Context, 1).then(thenFunc)
 
       expect(thenFunc).toHaveBeenCalledWith({ error: null, stdout: 'stdout', stderr: '' })
     })
@@ -94,7 +104,7 @@ describe('LocalStep#run', () => {
       const thenFunc = jest.fn()
 
       ChildProcessMocker.addFinishWithErrorMock()
-      await localStep.run({ localProcessor } as Context).then(thenFunc)
+      await localStep.run({ localProcessor, globals: {} } as Context, 1).then(thenFunc)
 
       expect(thenFunc).toHaveBeenCalledWith({ error: { code: 127, message: 'There was an error', name: 'error' }, stderr: 'stderr', stdout: '' })
     })
@@ -107,7 +117,7 @@ describe('LocalStep#run', () => {
       const thenFunc = jest.fn()
 
       ChildProcessMocker.addFinishWithErrorMock()
-      await localStep.run({ localProcessor } as Context).then(thenFunc)
+      await localStep.run({ localProcessor, globals: {} } as Context, 1).then(thenFunc)
 
       expect(thenFunc).toHaveBeenCalledWith({ error: { code: 127, message: 'There was an error', name: 'error' }, stderr: 'stderr', stdout: '' })
     })
@@ -120,7 +130,7 @@ describe('LocalStep#run', () => {
       const catchFunc = jest.fn()
 
       ChildProcessMocker.addFinishMock()
-      await localStep.run({ localProcessor } as Context).catch(catchFunc)
+      await localStep.run({ localProcessor, globals: {} } as Context, 1).catch(catchFunc)
 
       expect(catchFunc.mock.calls[0][0]).toEqual({ error: null, stderr: '', stdout: 'stdout' })
     })

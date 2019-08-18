@@ -2,7 +2,7 @@ import RemoteStep from '../src/RemoteStep'
 import Remote from '../src/Remote'
 import ssh2 from 'ssh2'
 import SSH2Mocker from './utils/SSH2Mocker'
-import { Context } from '../src/Step.types'
+import { Context } from '../src/Pipeline.types'
 
 beforeEach((): void => {
   SSH2Mocker.mock(ssh2)
@@ -19,7 +19,7 @@ describe('Remote#run', () => {
     const thenFunc = jest.fn()
 
     SSH2Mocker.addFinishMock()
-    await remoteStep.run(({ remoteProcessors: { remoteProcessor } } as unknown) as Context).then(thenFunc)
+    await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1).then(thenFunc)
 
     expect(thenFunc).toHaveBeenCalledWith({
       error: {
@@ -42,7 +42,7 @@ describe('Remote#run', () => {
       workingDirectory: 'some/path'
     })
 
-    await remoteStep.run(({ remoteProcessors: { remoteProcessor } } as unknown) as Context)
+    await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1)
 
     expect(remoteProcessor.exec as jest.Mock).toHaveBeenCalledWith('cd some/path && command', {}, undefined)
   })
@@ -52,9 +52,19 @@ describe('Remote#run', () => {
     const command = (_context: any) => 'dynamic command'
     const remoteStep = new RemoteStep({ title: 'title', command, remoteId: 'remoteProcessor' })
 
-    await remoteStep.run(({ remoteProcessors: { remoteProcessor } } as unknown) as Context)
+    await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1)
 
     expect(remoteProcessor.exec as jest.Mock).toHaveBeenCalledWith('dynamic command', {}, undefined)
+  })
+
+  it('scape values using globals from context', async () => {
+    const remoteProcessor: Remote = ({ exec: jest.fn() } as unknown) as Remote
+    const command = (_context: any) => 'dynamic :command:'
+    const remoteStep = new RemoteStep({ title: 'title', command, remoteId: 'remoteProcessor' })
+
+    await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: { command: 'replaced command' } } as unknown) as Context, 1)
+
+    expect((remoteProcessor.exec as jest.Mock).mock.calls[0][0]).toEqual('dynamic replaced command')
   })
 
   it('can set the remote through the context', async () => {
@@ -63,7 +73,7 @@ describe('Remote#run', () => {
     const thenFunc = jest.fn()
 
     SSH2Mocker.addFinishMock()
-    await remoteStep.run(({ remoteId: 'remoteProcessor', remoteProcessors: { remoteProcessor } } as unknown) as Context).then(thenFunc)
+    await remoteStep.run(({ remoteId: 'remoteProcessor', remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1).then(thenFunc)
 
     expect(thenFunc).toHaveBeenCalledWith({
       error: {
@@ -83,7 +93,7 @@ describe('Remote#run', () => {
     const catchFunc = jest.fn()
 
     SSH2Mocker.addFinishMock()
-    await remoteStep.run(({ remoteProcessors: { remoteProcessor } } as unknown) as Context).catch(catchFunc)
+    await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1).catch(catchFunc)
 
     expect(catchFunc).toHaveBeenCalledWith({ error: new Error('Remote not configred or unmatching remoteId provided'), stdout: '', stderr: '' })
   })
@@ -94,7 +104,7 @@ describe('Remote#run', () => {
     const remoteStep = new RemoteStep({ title: 'title', command, remoteId: 'remoteProcessor' })
     const catchFunc = jest.fn()
 
-    await remoteStep.run(({ remoteProcessors: { remoteProcessor } } as unknown) as Context).catch(catchFunc)
+    await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1).catch(catchFunc)
 
     expect(catchFunc).toHaveBeenCalledWith({ error: TypeError('context is not a function'), stderr: '', stdout: '' })
   })
@@ -107,7 +117,7 @@ describe('Remote#run', () => {
 
       SSH2Mocker.addFinishWithErrorMock()
       SSH2Mocker.addFinishWithErrorMock()
-      await remoteStep.run(({ remoteProcessors: { remoteProcessor } } as unknown) as Context).catch(catchFunc)
+      await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1).catch(catchFunc)
 
       expect(catchFunc).toHaveBeenCalledWith({ error: { code: 128, message: undefined, name: 'signal', signal: 'signal' }, stdout: '', stderr: 'stderr' })
     })
@@ -122,7 +132,7 @@ describe('Remote#run', () => {
       SSH2Mocker.addTimeOutErrorMock()
       SSH2Mocker.addTimeOutErrorMock()
       SSH2Mocker.addFinishMock()
-      await remoteStep.run(({ remoteProcessors: { remoteProcessor } } as unknown) as Context).then(thenFunc)
+      await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1).then(thenFunc)
 
       expect(thenFunc).toHaveBeenCalledWith({ error: { code: 0, message: undefined, name: 'signal', signal: 'signal' }, stdout: 'stdout', stderr: '' })
     })
@@ -135,7 +145,7 @@ describe('Remote#run', () => {
       const thenFunc = jest.fn()
 
       SSH2Mocker.addFinishWithErrorMock()
-      await remoteStep.run(({ remoteProcessors: { remoteProcessor } } as unknown) as Context).then(thenFunc)
+      await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1).then(thenFunc)
 
       expect(thenFunc).toHaveBeenCalledWith({ error: { code: 128, message: undefined, name: 'signal', signal: 'signal' }, stderr: 'stderr', stdout: '' })
     })
@@ -148,7 +158,7 @@ describe('Remote#run', () => {
       const thenFunc = jest.fn()
 
       SSH2Mocker.addFinishWithErrorMock()
-      await remoteStep.run(({ remoteProcessors: { remoteProcessor } } as unknown) as Context).then(thenFunc)
+      await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1).then(thenFunc)
 
       expect(thenFunc).toHaveBeenCalledWith({ error: { code: 128, message: undefined, name: 'signal', signal: 'signal' }, stderr: 'stderr', stdout: '' })
     })
@@ -161,7 +171,7 @@ describe('Remote#run', () => {
       const catchFunc = jest.fn()
 
       SSH2Mocker.addFinishMock()
-      await remoteStep.run(({ remoteProcessors: { remoteProcessor } } as unknown) as Context).catch(catchFunc)
+      await remoteStep.run(({ remoteProcessors: { remoteProcessor }, globals: {} } as unknown) as Context, 1).catch(catchFunc)
 
       expect(catchFunc.mock.calls[0][0]).toEqual({ error: { code: 0, message: undefined, name: 'signal', signal: 'signal' }, stderr: '', stdout: 'stdout' })
     })

@@ -1,7 +1,7 @@
 import VirtualStep from '../src/VirtualStep'
 import Virtual from '../src/Virtual'
 import { VirtualFunction } from '../src/Virtual.types'
-import { Context } from '../src/Step.types'
+import { Context } from '../src/Pipeline.types'
 
 describe('VirtualStep#run', () => {
   it('executes a local command and return its result', async () => {
@@ -10,7 +10,7 @@ describe('VirtualStep#run', () => {
     const virtualStep: VirtualStep = new VirtualStep({ title: 'title', asyncFunction: virtualFunction })
     const thenFunc = jest.fn()
 
-    await virtualStep.run({ virtualProcessor } as Context).then(thenFunc)
+    await virtualStep.run({ virtualProcessor } as Context, 1).then(thenFunc)
 
     expect(thenFunc).toHaveBeenCalledWith({ error: null, stdout: '', stderr: '' })
   })
@@ -24,7 +24,7 @@ describe('VirtualStep#run', () => {
       const virtualStep: VirtualStep = new VirtualStep({ title: 'title', asyncFunction: virtualFunction, maxRetries: 1 })
       const catchFunc = jest.fn()
 
-      await virtualStep.run({ virtualProcessor } as Context).catch(catchFunc)
+      await virtualStep.run({ virtualProcessor } as Context, 1).catch(catchFunc)
 
       expect(catchFunc).toBeCalledWith({ error: '', stdout: '', stderr: '' })
     })
@@ -38,13 +38,9 @@ describe('VirtualStep#run', () => {
         }
       }
       const virtualStep: VirtualStep = new VirtualStep({ title: 'title', asyncFunction: virtualFunction, maxRetries: 4 })
-      const catchFunc = jest.fn()
       const thenFunc = jest.fn()
 
-      await virtualStep
-        .run({ virtualProcessor } as Context)
-        .then(thenFunc)
-        .catch(catchFunc)
+      await virtualStep.run({ virtualProcessor } as Context, 1).then(thenFunc)
 
       expect(thenFunc).toHaveBeenCalledWith({ error: null, stdout: '', stderr: '' })
     })
@@ -59,7 +55,7 @@ describe('VirtualStep#run', () => {
       const virtualStep = new VirtualStep({ title: 'title', asyncFunction: virtualFunction, onFailure: 'continue' })
       const thenFunc = jest.fn()
 
-      await virtualStep.run({ virtualProcessor } as Context).then(thenFunc)
+      await virtualStep.run({ virtualProcessor } as Context, 1).then(thenFunc)
 
       expect(thenFunc).toHaveBeenCalledWith({ error: '', stderr: '', stdout: '' })
     })
@@ -74,7 +70,7 @@ describe('VirtualStep#run', () => {
       const virtualStep = new VirtualStep({ title: 'title', asyncFunction: virtualFunction, onFailure: 'continue' })
       const thenFunc = jest.fn()
 
-      await virtualStep.run({ virtualProcessor } as Context).then(thenFunc)
+      await virtualStep.run({ virtualProcessor } as Context, 1).then(thenFunc)
 
       expect(thenFunc.mock.calls[0][0]).toEqual({ error: '', stderr: '', stdout: '' })
     })
@@ -87,7 +83,7 @@ describe('VirtualStep#run', () => {
       const virtualStep = new VirtualStep({ title: 'title', asyncFunction: virtualFunction, onSuccess: 'terminate' })
       const catchFunc = jest.fn()
 
-      await virtualStep.run({ virtualProcessor } as Context).catch(catchFunc)
+      await virtualStep.run({ virtualProcessor } as Context, 1).catch(catchFunc)
 
       expect(catchFunc.mock.calls.length).toBe(1)
       expect(catchFunc.mock.calls[0][0]).toEqual({ error: null, stderr: '', stdout: '' })
