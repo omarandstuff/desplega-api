@@ -1,6 +1,6 @@
-export { default as Loader } from './Loader'
 export { default as LocalStep } from './LocalStep'
 export { default as Parser } from './Parser'
 export { default as Pipeline } from './Pipeline'
+export { default as PipelineLogger } from './PipelineLogger'
 export { default as RemoteStep } from './RemoteStep'
 export { default as VirtualStep } from './VirtualStep'

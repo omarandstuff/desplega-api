@@ -68,7 +68,8 @@ export default class Pipeline extends EventEmitter {
           currentStep.removeAllListeners()
         } catch (error) {
           this.emit('PIPELINE@FAIL', error, new Date())
-          break
+          this.closeRemotes()
+          return
         }
       }
     }

@@ -25,11 +25,20 @@ export default class RemoteStep extends Step<RemoteStepDefinition> {
    */
   public async run(context: Context, index: number): Promise<CommandResult> {
     const command: string = await this.generateDynamicCommand(this.definition.command, context)
-    const finalCommand: string = this.buildFinalcommand(this.replaceGlobals(command, context), this.definition.workingDirectory)
+    const replacedCommand: string = this.replaceGlobals(command, context)
+    const finalCommand: string = this.buildFinalcommand(replacedCommand, this.definition.workingDirectory)
     const finalOptions: ExecOptions = { ...this.definition.remoteOptions, ...context.remoteOptions }
     const remote: Remote = context.remoteProcessors[context.remoteId || this.definition.remoteId]
 
-    this.emit('REMOTE_STEP@INIT', index, this.definition.title, finalCommand, context.remoteId || this.definition.remoteId, new Date())
+    this.emit(
+      'REMOTE_STEP@INIT',
+      index,
+      this.definition.title,
+      replacedCommand,
+      this.definition.workingDirectory,
+      context.remoteId || this.definition.remoteId,
+      new Date()
+    )
 
     if (!remote) throw { error: new Error(`Remote not configred or unmatching remoteId provided`), stdout: '', stderr: '' }
 

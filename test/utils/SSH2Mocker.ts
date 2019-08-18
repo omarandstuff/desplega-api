@@ -39,6 +39,7 @@ class ClientMock extends EventEmitter {
           channel.emit('close', undefined, 'signal')
           SSH2ClientMocker.nextResolverData.shift()
 
+          return true
         case 'timeoutError':
           callback(null, channel)
           channel.emit('data', nextResolverData.customData || 'stdout')

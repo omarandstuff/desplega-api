@@ -7,37 +7,37 @@ export default class PipelineLogger {
   public constructor(pipeline: Pipeline) {
     this.pipeline = pipeline
 
-    this.pipeline.addListener('PIPELINE@INIT', this.pipelineInit)
-    this.pipeline.addListener('PIPELINE@HEADER', this.pipelineHeader)
-    this.pipeline.addListener('PIPELINE@FINISH', this.pipelineFinish)
-    this.pipeline.addListener('PIPELINE@FAIL', this.pipelineFail)
+    this.pipeline.addListener('PIPELINE@INIT', this.pipelineInit.bind(this))
+    this.pipeline.addListener('PIPELINE@HEADER', this.pipelineHeader.bind(this))
+    this.pipeline.addListener('PIPELINE@FINISH', this.pipelineFinish.bind(this))
+    this.pipeline.addListener('PIPELINE@FAIL', this.pipelineFail.bind(this))
 
-    this.pipeline.addListener('LOCAL_STEP@INIT', this.localStepInit)
-    this.pipeline.addListener('LOCAL_STEP@RETRY', this.localStepRetry)
-    this.pipeline.addListener('LOCAL_STEP@FINISH', this.localStepFinish)
-    this.pipeline.addListener('LOCAL_STEP@FAIL', this.localStepFail)
+    this.pipeline.addListener('LOCAL_STEP@INIT', this.localStepInit.bind(this))
+    this.pipeline.addListener('LOCAL_STEP@RETRY', this.localStepRetry.bind(this))
+    this.pipeline.addListener('LOCAL_STEP@FINISH', this.localStepFinish.bind(this))
+    this.pipeline.addListener('LOCAL_STEP@FAIL', this.localStepFail.bind(this))
 
-    this.pipeline.addListener('REMOTE_STEP@INIT', this.remoteStepInit)
-    this.pipeline.addListener('REMOTE_STEP@RETRY', this.remoteStepRetry)
-    this.pipeline.addListener('REMOTE_STEP@FINISH', this.remoteStepFinish)
-    this.pipeline.addListener('REMOTE_STEP@FAIL', this.remoteStepFail)
+    this.pipeline.addListener('REMOTE_STEP@INIT', this.remoteStepInit.bind(this))
+    this.pipeline.addListener('REMOTE_STEP@RETRY', this.remoteStepRetry.bind(this))
+    this.pipeline.addListener('REMOTE_STEP@FINISH', this.remoteStepFinish.bind(this))
+    this.pipeline.addListener('REMOTE_STEP@FAIL', this.remoteStepFail.bind(this))
 
-    this.pipeline.addListener('VIRTUAL_STEP@INIT', this.virtualStepInit)
-    this.pipeline.addListener('VIRTUAL_STEP@RETRY', this.virtualStepRetry)
-    this.pipeline.addListener('VIRTUAL_STEP@FINISH', this.virtualStepFinish)
-    this.pipeline.addListener('VIRTUAL_STEP@FAIL', this.virtualStepFail)
+    this.pipeline.addListener('VIRTUAL_STEP@INIT', this.virtualStepInit.bind(this))
+    this.pipeline.addListener('VIRTUAL_STEP@RETRY', this.virtualStepRetry.bind(this))
+    this.pipeline.addListener('VIRTUAL_STEP@FINISH', this.virtualStepFinish.bind(this))
+    this.pipeline.addListener('VIRTUAL_STEP@FAIL', this.virtualStepFail.bind(this))
 
-    this.pipeline.addListener('LOCAL@STDOUT', this.localStdout)
-    this.pipeline.addListener('LOCAL@STDERR', this.localStderr)
+    this.pipeline.addListener('LOCAL@STDOUT', this.localStdout.bind(this))
+    this.pipeline.addListener('LOCAL@STDERR', this.localStderr.bind(this))
 
-    this.pipeline.addListener('REMOTE@CONNECTING', this.remoteConnecting)
-    this.pipeline.addListener('REMOTE@CONNECTED', this.remoteConnected)
-    this.pipeline.addListener('REMOTE@CLOSED', this.remoteClosed)
-    this.pipeline.addListener('REMOTE@STDOUT', this.remoteStdout)
-    this.pipeline.addListener('REMOTE@STDERR', this.remoteStderr)
+    this.pipeline.addListener('REMOTE@CONNECTING', this.remoteConnecting.bind(this))
+    this.pipeline.addListener('REMOTE@CONNECTED', this.remoteConnected.bind(this))
+    this.pipeline.addListener('REMOTE@CLOSED', this.remoteClosed.bind(this))
+    this.pipeline.addListener('REMOTE@STDOUT', this.remoteStdout.bind(this))
+    this.pipeline.addListener('REMOTE@STDERR', this.remoteStderr.bind(this))
 
-    this.pipeline.addListener('VIRTUAL@STDOUT', this.virtualStdout)
-    this.pipeline.addListener('VIRTUAL@STDERR', this.virtualStderr)
+    this.pipeline.addListener('VIRTUAL@STDOUT', this.virtualStdout.bind(this))
+    this.pipeline.addListener('VIRTUAL@STDERR', this.virtualStderr.bind(this))
   }
 
   /* eslint-disable @typescript-eslint/no-unused-vars*/
@@ -47,12 +47,12 @@ export default class PipelineLogger {
   public pipelineFinish(finishTime: Date): void {}
   public pipelineFail(error: CommandResult, finishTime: Date): void {}
 
-  public localStepInit(index: number, title: string, command: string, startTime: Date): void {}
+  public localStepInit(index: number, title: string, command: string, workingDirectory: string, startTime: Date): void {}
   public localStepRetry(retry: number, retryTime: Date): void {}
   public localStepFinish(result: CommandResult, finishTime: Date): void {}
   public localStepFail(error: CommandResult, finishTime: Date): void {}
 
-  public remoteStepInit(index: number, title: string, command: string, remoteId: string, startTime: Date): void {}
+  public remoteStepInit(index: number, title: string, command: string, workingDirectory: string, remoteId: string, startTime: Date): void {}
   public remoteStepRetry(retry: number, retryTime: Date): void {}
   public remoteStepFinish(result: CommandResult, finishTime: Date): void {}
   public remoteStepFail(error: CommandResult, finishTime: Date): void {}

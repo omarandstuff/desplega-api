@@ -103,9 +103,9 @@ class TestLogger extends PipelineLogger {
     pipelineFailMock(error)
   }
 
-  public localStepInit(index: number, title: string, command: string, startTime: Date): void {
-    super.localStepInit(index, title, command, startTime)
-    localStepInitMock(index, title, command)
+  public localStepInit(index: number, title: string, command: string, workingDirectory: string, startTime: Date): void {
+    super.localStepInit(index, title, command, workingDirectory, startTime)
+    localStepInitMock(index, title, command, workingDirectory)
   }
   public localStepRetry(retry: number, retryTime: Date): void {
     super.localStepRetry(retry, retryTime)
@@ -120,9 +120,9 @@ class TestLogger extends PipelineLogger {
     localStepFailMock(error)
   }
 
-  public remoteStepInit(index: number, title: string, command: string, remoteId: string, startTime: Date): void {
-    super.remoteStepInit(index, title, command, remoteId, startTime)
-    remoteStepInitMock(index, title, command, remoteId)
+  public remoteStepInit(index: number, title: string, command: string, workingDirectory: string, remoteId: string, startTime: Date): void {
+    super.remoteStepInit(index, title, command, workingDirectory, remoteId, startTime)
+    remoteStepInitMock(index, title, command, workingDirectory, remoteId)
   }
   public remoteStepRetry(retry: number, retryTime: Date): void {
     super.remoteStepRetry(retry, retryTime)
@@ -223,8 +223,8 @@ describe('PipelineLogger', (): void => {
       await pipeline.run()
       jest.useFakeTimers()
 
-      expect(localStepInitMock).toHaveBeenCalledWith(1, 'Local man', 'cd working && command')
-      expect(localStepInitMock).toHaveBeenCalledWith(2, 'Local man 2', 'cd working2 && command')
+      expect(localStepInitMock).toHaveBeenCalledWith(1, 'Local man', 'command', 'working')
+      expect(localStepInitMock).toHaveBeenCalledWith(2, 'Local man 2', 'command', 'working2')
       expect(localStepRetryMock).toHaveBeenCalledWith(1)
       expect(localStepFinishMock).toHaveBeenCalledWith({ error: null, stderr: '', stdout: 'stdout' })
       expect(localStepFailMock).toHaveBeenCalledWith({ error: { code: 127, message: 'There was an error', name: 'error' }, stderr: 'stderr', stdout: '' })
@@ -248,8 +248,8 @@ describe('PipelineLogger', (): void => {
       SSH2Mocker.addFinishWithErrorMock()
       await pipeline.run()
 
-      expect(remoteStepInitMock).toHaveBeenCalledWith(1, 'Remote man', 'cd working && command', 'default')
-      expect(remoteStepInitMock).toHaveBeenCalledWith(2, 'Remote man 2', 'cd working2 && command', 'default')
+      expect(remoteStepInitMock).toHaveBeenCalledWith(1, 'Remote man', 'command', 'working', 'default')
+      expect(remoteStepInitMock).toHaveBeenCalledWith(2, 'Remote man 2', 'command', 'working2', 'default')
       expect(remoteStepRetryMock).toHaveBeenCalledWith(1)
       expect(remoteStepFinishMock).toHaveBeenCalledWith({
         error: { code: 0, message: undefined, name: 'signal', signal: 'signal' },

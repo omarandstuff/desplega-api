@@ -82,9 +82,9 @@ export default class Remote extends Processor {
                 channel.removeAllListeners('close')
                 channel.removeAllListeners('data')
 
-                this.resetConnection()
-
-                reject({ error: new Error('Remote command timeout'), stderr, stdout })
+                this.resetConnection().then(() => {
+                  reject({ error: new Error('Remote command timeout'), stderr, stdout })
+                })
               }, timeout)
             }
 
@@ -93,9 +93,9 @@ export default class Remote extends Processor {
 
               if (exitCode !== 0) {
                 if (exitCode === undefined) {
-                  this.resetConnection()
-
-                  reject({ error: new Error('Network error'), stderr, stdout })
+                  this.resetConnection().then(() => {
+                    reject({ error: new Error('Network error'), stderr, stdout })
+                  })
                 } else {
                   reject({ error, stdout, stderr })
                 }
@@ -123,15 +123,24 @@ export default class Remote extends Processor {
     )
   }
 
-  public close(): void {
-    if (this.connectionStatus === 'connected') {
-      this.connectionStatus = 'closed'
-      this.connection.end()
-    }
+  public async close(): Promise<void> {
+    return new Promise(resolve => {
+      if (this.connectionStatus === 'connected') {
+        this.emit('REMOTE@CLOSED')
+        this.connection.removeAllListeners()
+        this.connection.once('close', () => {
+          this.connectionStatus = 'closed'
+          resolve()
+        })
+        this.connection.end()
+      } else {
+        resolve()
+      }
+    })
   }
 
-  private resetConnection(): void {
-    this.close()
+  private async resetConnection(): Promise<void> {
+    await this.close()
     this.connection = new Client()
   }
 
@@ -144,18 +153,14 @@ export default class Remote extends Processor {
         resolve()
       }
       const onError = (error: Error): void => {
-        this.connection.removeListener('close', onClose)
-        this.connection.removeListener('error', onError)
-        this.connection.removeListener('ready', onReady)
+        this.connection.removeAllListeners()
         this.connectionStatus = 'closed'
         this.emit('REMOTE@CLOSED')
 
         reject(error)
       }
       const onClose = (): void => {
-        this.connection.removeListener('close', onClose)
-        this.connection.removeListener('error', onError)
-        this.connection.removeListener('ready', onReady)
+        this.connection.removeAllListeners()
         this.connectionStatus = 'closed'
         this.emit('REMOTE@CLOSED')
       }
