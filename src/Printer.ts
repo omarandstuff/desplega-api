@@ -1,19 +1,8 @@
+import { RowElement } from './Printer.types'
+
 /**
- * Simple runner to run a list of stages.
+ * Advanced terminal printer
  *
- * @param {Object} title What is this pipeline prints at the top.
- *
- * @param {Object} config Global configurations
- * congigurations are:
- * localOptions: To override globaly on all local steps
- * remoteOptions: To override globaly on all remote steps
- * remotes: list of all remotes that will be running remote commands
- *   (See RemoteManger config)
- *   options: options to override just for this remote in the list
- * verbosityLevel: to override globale for all steps
- *
- *  @param {Object} theme object decribing theme colors
- * (See Theme for more info)
  */
 export default class Printer {
   /**
@@ -30,12 +19,12 @@ export default class Printer {
    * @param {Bool} inline Keep drawing the line in the same terminal line
    *
    */
-  drawRow(elements, inline = false) {
-    const terminalWidth = process.stdout.columns
-    const processedElements = this._fitElements(elements, terminalWidth)
-    const fixedWidth = this._calculateFixedElementsWidth(processedElements)
+  public drawRow(elements: RowElement[], inline?: boolean): void {
+    const terminalWidth: number = process.stdout.columns
+    const processedElements = this.fitElements(elements, terminalWidth)
+    const fixedWidth = this.calculateFixedElementsWidth(processedElements)
     const availableWidth = Math.max(0, terminalWidth - fixedWidth)
-    const rendered = this._buildAndFormat(processedElements, availableWidth)
+    const rendered = this.buildAndFormat(processedElements, availableWidth)
 
     if (inline) {
       process.stdout.write(`${rendered}\r`)
@@ -54,7 +43,7 @@ export default class Printer {
    * @param {Number} tabSize How many spaces to draw before the string.
    *
    */
-  draw(string, tabSize = 0) {
+  public draw(string: string, tabSize = 0): void {
     const terminalWidth = process.stdout.columns
     const finalString = string
       .replace(/(\r|[\n]$)/g, '')
@@ -68,40 +57,40 @@ export default class Printer {
     console.log(finalString)
   }
 
-  _applyFormat(element, optionalText, raw) {
+  private applyFormat(element: RowElement, optionalText?: string, raw?: boolean): string {
     if (element.style && !raw) {
       return element.style(optionalText || element.text)
     }
     return optionalText || element.text
   }
 
-  _buildAndFormat(elements, availableWidth, raw = false) {
-    const dynamicCount = this._calculateDynamicCount(elements)
-    const widthPerDynamicElement = Number.parseInt(availableWidth / dynamicCount)
+  private buildAndFormat(elements: RowElement[], availableWidth: number, raw?: boolean): string {
+    const dynamicCount = this.calculateDynamicCount(elements)
+    const widthPerDynamicElement = Math.floor(availableWidth / dynamicCount)
     const specialDynamic = widthPerDynamicElement === 0
     let availableDynamixSpace = availableWidth
     let uncalculateDynamicSpace = availableWidth - widthPerDynamicElement * dynamicCount
 
     return elements
-      .map(element => {
-        let rendered
+      .map((element: RowElement): string => {
+        let rendered: string
 
         if (element.blank) {
           if (specialDynamic) {
             if (availableDynamixSpace) {
               availableDynamixSpace--
-              rendered = this._applyFormat(element, ' ')
+              rendered = this.applyFormat(element, ' ')
             }
           } else {
             const extraSpace = uncalculateDynamicSpace-- > 0 ? 1 : 0
             const blank = (element.symbol || ' ').repeat(widthPerDynamicElement + extraSpace)
-            rendered = this._applyFormat(element, blank, raw)
+            rendered = this.applyFormat(element, blank, raw)
           }
         } else if (element.fit) {
           if (specialDynamic) {
             if (availableDynamixSpace) {
               availableDynamixSpace--
-              rendered = this._applyFormat(element, element.text[0], raw)
+              rendered = this.applyFormat(element, element.text[0], raw)
             }
           } else {
             const extraSpace = uncalculateDynamicSpace-- > 0 ? 1 : 0
@@ -115,16 +104,16 @@ export default class Printer {
               const extraDots = addDots ? '...' : ''
               const cuttedText = element.text.substring(0, cutPosition - extraCut)
 
-              rendered = this._applyFormat(element, `${cuttedText}${extraDots}`, raw)
+              rendered = this.applyFormat(element, `${cuttedText}${extraDots}`, raw)
             } else {
               const lack = finalWith - element.text.length
               const amplifiedText = `${element.text}${' '.repeat(lack)}`
 
-              rendered = this._applyFormat(element, amplifiedText, raw)
+              rendered = this.applyFormat(element, amplifiedText, raw)
             }
           }
         } else {
-          rendered = this._applyFormat(element)
+          rendered = this.applyFormat(element)
         }
 
         return rendered
@@ -132,7 +121,7 @@ export default class Printer {
       .join('')
   }
 
-  _calculateDynamicCount(elements, onlyBlanks) {
+  private calculateDynamicCount(elements: RowElement[], onlyBlanks?: boolean): number {
     return elements.reduce((currentCount, element) => {
       if ((element.fit && !onlyBlanks) || element.blank) {
         return currentCount + 1
@@ -141,7 +130,7 @@ export default class Printer {
     }, 0)
   }
 
-  _calculateFixedElementsWidth(elements) {
+  private calculateFixedElementsWidth(elements: RowElement[]): number {
     return elements.reduce((currentWidth, element) => {
       if (!element.fit && !element.blank) {
         return currentWidth + element.text.length
@@ -150,36 +139,38 @@ export default class Printer {
     }, 0)
   }
 
-  _fitElements(elements, targetWidth) {
-    const fixedWidth = this._calculateFixedElementsWidth(elements)
+  private fitElements(elements: RowElement[], targetWidth: number): RowElement[] {
+    const fixedWidth = this.calculateFixedElementsWidth(elements)
     const availableWidth = Math.max(0, targetWidth - fixedWidth)
-    const dynamicCount = this._calculateDynamicCount(elements)
-    const widthPerDynamicElement = Number.parseInt(availableWidth / dynamicCount)
+    const dynamicCount = this.calculateDynamicCount(elements)
+    const widthPerDynamicElement = Math.floor(availableWidth / dynamicCount)
     const removeDynamics = fixedWidth >= targetWidth
     let currentWidth = 0
 
     return elements
-      .map(element => {
-        if (currentWidth < targetWidth) {
-          if (element.fit || element.blank) {
-            if (!removeDynamics) {
-              currentWidth += widthPerDynamicElement
+      .map(
+        (element: RowElement): RowElement => {
+          if (currentWidth < targetWidth) {
+            if (element.fit || element.blank) {
+              if (!removeDynamics) {
+                currentWidth += widthPerDynamicElement
+                return element
+              }
+            } else {
+              currentWidth += element.text.length
+
+              if (currentWidth >= targetWidth) {
+                const exceed = currentWidth - targetWidth
+                const cutPosition = element.text.length - exceed
+
+                return { ...element, text: element.text.substring(0, cutPosition) }
+              }
+
               return element
             }
-          } else {
-            currentWidth += element.text.length
-
-            if (currentWidth >= targetWidth) {
-              const exceed = currentWidth - targetWidth
-              const cutPosition = element.text.length - exceed
-
-              return { ...element, text: element.text.substring(0, cutPosition) }
-            }
-
-            return element
           }
         }
-      })
+      )
       .filter(element => element)
   }
 }
