@@ -6,7 +6,7 @@ export interface PipelineParserDescriptor {
   pipeline: {
     title: string
     steps: {
-      type: 'local' | 'remote' | 'virtual'
+      type: 'local' | 'remote' | 'virtual' | 'header'
       title: string
       onFailure?: 'terminate' | 'continue'
       onSuccess?: 'terminate' | 'continue'

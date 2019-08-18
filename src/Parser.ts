@@ -57,6 +57,9 @@ export default class Parser {
             })
           )
           break
+        case 'header':
+          generatedSteps.push({ title: currentStepDescriptor.title, isHeader: true })
+          break
         default:
           break
       }
