@@ -1,184 +1,66 @@
 {
   "pipeline": {
     "title": "Pipeline Name",
-    "verbosityLevel": "full",
     "remotes": {
       "Remote1": {
-        "id": "Poop",
         "host": "host.com",
         "port": 45,
         "username": "user",
         "password": "somepassword",
-        "privateKeyPath": "/path/to/key",
         "keepaliveInterval": 666,
         "keepaliveCountMax": 777
       },
       "Remote2": {
-        "id": "Poop2",
         "host": "host2.com",
         "port": 33,
         "username": "david",
         "password": "somepassword2",
-        "privateKeyPath": "/path/to/key2",
         "keepaliveInterval": 888,
         "keepaliveCountMax": 2
       }
     },
     "remoteOptions": {
-      "maxRetries": 2,
-      "maxReconnectionRetries": 2,
-      "reconnectionInterval": 12,
       "timeOut": 600
     },
     "localOptions": {
-      "maxRetries": 2,
       "timeOut": 600
     },
     "virtualOptions": {
+      "timeOut": 600,
       "maxRetries": 2
     },
-    "theme": {
-      "failureColor": "color1",
-      "failureContrastColor": "color2",
-      "backgroundColor": "color3",
-      "mainColor": "color4",
-      "pipelineHeaderColor": "color5",
-      "pipelineHeaderContrastColor": "color6",
-      "stageHeaderColor": "color7",
-      "stageHeaderContrastColor": "color8",
-      "stepHeaderColor": "color9",
-      "stepStatusColor": "color10",
-      "subStepHeaderColor": "color11",
-      "subStepStatusColor": "color12",
-      "successColor": "color13",
-      "successContrastColor": "color14"
-    },
-    "stages": [
+    "steps": [
       {
-        "title": "Stage1",
-        "verbosityLevel": "full",
-        "remotes": ["Remote1", "Remote2"],
+        "type": "remote",
+        "title": "Step1",
+        "workingDirectory": "path/where/to/run",
+        "command": "sudo apt-get update",
+        "remotesId": "Remote1",
+        "onFailure": "continue",
         "remoteOptions": {
-          "maxRetries": 3,
-          "maxReconnectionRetries": 1,
-          "reconnectionInterval": 40,
-          "timeOut": 6000
-        },
-        "localOptions": {
-          "maxRetries": 1,
-          "timeOut": 500
-        },
-        "virtualOptions": {
-          "maxRetries": 1
-        },
-        "steps": [
-          {
-            "remote": true,
-            "title": "Step1",
-            "path": "path/where/to/run",
-            "command": "sudo apt-get update",
-            "verbosityLevel": "full",
-            "remotes": ["Remote1"],
-            "onFailure": {
-              "virtual": true,
-              "title": "On failure",
-              "command": {},
-              "verbosityLevel": "full",
-              "remotes": ["Remote1"],
-              "recoverOnFailure": true,
-              "continueOnFailure": true,
-              "options": {
-                "maxRetries": 4
-              }
-            },
-            "recoverOnFailure": true,
-            "continueOnFailure": true,
-            "options": {
-              "maxRetries": 1,
-              "maxReconnectionRetries": 4,
-              "reconnectionInterval": 2,
-              "timeOut": 600
-            }
-          },
-          {
-            "title": "Step2",
-            "path": "path/where/to/run",
-            "command": "sudo apt-get update",
-            "verbosityLevel": "full",
-            "remotes": ["Remote2"],
-            "recoverOnFailure": true,
-            "continueOnFailure": true,
-            "options": {
-              "maxRetries": 5,
-              "timeOut": 60
-            }
-          }
-        ]
+          "timeOut": 600
+        }
       },
       {
-        "title": "Stage2",
-        "verbosityLevel": "partial",
-        "remotes": ["Remote2"],
-        "remoteOptions": {
-          "maxRetries": 1,
-          "maxReconnectionRetries": 2,
-          "reconnectionInterval": 89,
-          "timeOut": 6034
-        },
+        "type": "local",
+        "title": "Step2",
+        "workingDirectory": "path/where/to/run",
+        "command": "sudo apt-get update",
+        "recoverOnFailure": true,
+        "onSuccess": "terminate",
         "localOptions": {
-          "maxRetries": 12,
-          "timeOut": 3400
-        },
+          "timeOut": 60
+        }
+      },
+      {
+        "type": "virtual",
+        "title": "Step3",
+        "asyncFunction": "I sweare im async",
+        "recoverOnFailure": true,
+        "onFailure": "terminate",
         "virtualOptions": {
-          "maxRetries": 4
-        },
-        "steps": [
-          {
-            "remote": true,
-            "title": "Step3",
-            "path": "npath",
-            "command": "sudo apt-get update",
-            "verbosityLevel": "full",
-            "remotes": ["Remote1"],
-            "onFailure": {
-              "remote": true,
-              "title": "On failure",
-              "path": "path/where/to/run",
-              "command": "sudo apt-get update",
-              "verbosityLevel": "full",
-              "remotes": ["Remote1"],
-              "recoverOnFailure": true,
-              "continueOnFailure": true,
-              "options": {
-                "maxRetries": 1,
-                "maxReconnectionRetries": 4,
-                "reconnectionInterval": 2,
-                "timeOut": 600
-              }
-            },
-            "recoverOnFailure": false,
-            "continueOnFailure": false,
-            "options": {
-              "maxRetries": 3,
-              "maxReconnectionRetries": 2,
-              "reconnectionInterval": 1,
-              "timeOut": 300
-            }
-          },
-          {
-            "title": "Step4",
-            "path": "npath2",
-            "command": "sudo apt-get update",
-            "verbosityLevel": "full",
-            "remotes": ["Remote1"],
-            "recoverOnFailure": false,
-            "continueOnFailure": true,
-            "options": {
-              "maxRetries": 2,
-              "timeOut": 90
-            }
-          }
-        ]
+          "timeOut": 60
+        }
       }
     ]
   }
