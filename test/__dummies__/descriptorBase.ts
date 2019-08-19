@@ -55,7 +55,7 @@ const base: PipelineParserDescriptor = {
       {
         type: 'virtual',
         title: 'Step3',
-        asyncFunction: async () => {},
+        asyncFunction: async (): Promise<void> => {},
         onFailure: 'terminate',
         virtualOptions: {
           timeout: 60
