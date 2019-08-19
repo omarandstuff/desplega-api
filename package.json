@@ -14,11 +14,12 @@
     "build": "tsc",
     "lint": "eslint src test --ext .ts",
     "test": "jest --watch",
+    "test:all": "jest",
     "test:coverage": "jest --coverage",
     "playground": "ts-node playground",
-    "format": "prettier --write \"{src,tests}/**/*.ts\"",
-    "format:check": "prettier --list-different \"{src,tests}/**/*.ts\"",
-    "prepare": "yarn clean && yarn format:check && yarn lint && yarn test:coverage && yarn build"
+    "format": "prettier --write \"{src,test}/**/*.ts\"",
+    "format:check": "prettier --list-different \"{src,test}/**/*.ts\"",
+    "prepare": "yarn clean && yarn format:check && yarn lint && yarn test:all && yarn build"
   },
   "dependencies": {
     "@types/node": "^12.7.1",
