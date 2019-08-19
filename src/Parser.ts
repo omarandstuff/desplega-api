@@ -13,6 +13,8 @@ export default class Parser {
   }
 
   public build(): Pipeline {
+    this.analize(this.descriptor)
+
     const { pipeline: pipelineDescriptor } = this.descriptor
     const { title, remotes, remoteOptions, localOptions, virtualOptions, steps } = pipelineDescriptor
     const generatedSteps = []
@@ -66,5 +68,49 @@ export default class Parser {
     }
 
     return new Pipeline({ title, remotes, remoteOptions, localOptions, virtualOptions, steps: generatedSteps })
+  }
+
+  private analize(descriptor: PipelineParserDescriptor): void {
+    if (!descriptor.pipeline) {
+      throw new Error('The Desplega file does not contain a "pipeline" root property')
+    }
+    if (!descriptor.pipeline.steps) {
+      descriptor.pipeline.steps = []
+    }
+
+    if (!descriptor.pipeline.title) {
+      descriptor.pipeline.title = 'Untitled'
+    }
+
+    for (let i = 0; i < descriptor.pipeline.steps.length; i++) {
+      const step = descriptor.pipeline.steps[i]
+
+      if (!step.type) {
+        throw new Error(`Step number ${i + 1} does not contain a type`)
+      }
+      if (!['header', 'local', 'remote', 'virtual'].includes(step.type)) {
+        throw new Error(`Step number ${i + 1} have an unrecognized type`)
+      }
+      if (step.type === 'local' || step.type === 'remote') {
+        if (!step.command) {
+          throw new Error(`Step of type ${step.type} number ${i + 1} does not contain a command`)
+        }
+        if ({}.toString.call(step.command) !== '[object Function]' && typeof step.command !== 'string') {
+          throw new Error(`Step of type ${step.type} number ${i + 1} commnad is not a string neither a function`)
+        }
+      }
+      if (step.type === 'virtual') {
+        if (!step.asyncFunction) {
+          throw new Error(`Step of type ${step.type} number ${i + 1} does not contain an async function`)
+        }
+        if ({}.toString.call(step.asyncFunction) !== '[object Function]') {
+          throw new Error(`Step of type ${step.type} number ${i + 1} asyncFunction is not a function`)
+        }
+      }
+
+      if (!step.title) {
+        step.title = 'Untitled'
+      }
+    }
   }
 }

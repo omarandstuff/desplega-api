@@ -1,5 +1,5 @@
 import Parser from '../src/Parser'
-import descriptorBase from './__dummies__/descriptorBase.json'
+import descriptorBase from './__dummies__/descriptorBase'
 import descriptorBaseSpec from './__dummies__/descriptorBaseSpect.json'
 
 describe('Parser#buildPipeline', () => {

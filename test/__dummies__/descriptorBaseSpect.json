@@ -19,9 +19,9 @@
         "keepaliveCountMax": 2
       }
     },
-    "remoteOptions": { "timeOut": 600 },
-    "localOptions": { "timeOut": 600 },
-    "virtualOptions": { "timeOut": 600, "maxRetries": 2 },
+    "remoteOptions": { "timeout": 600 },
+    "localOptions": { "timeout": 600 },
+    "virtualOptions": { "timeout": 600},
     "steps": [
       {
         "eventPrefix": "REMOTE_STEP",
@@ -38,7 +38,7 @@
           "title": "Step2",
           "onSuccess": "terminate",
           "command": "sudo apt-get update",
-          "localOptions": { "timeOut": 60 },
+          "localOptions": { "timeout": 60 },
           "workingDirectory": "path/where/to/run"
         }
       },
@@ -47,8 +47,7 @@
         "definition": {
           "title": "Step3",
           "onFailure": "terminate",
-          "asyncFunction": "I sweare im async",
-          "virtualOptions": { "timeOut": 60 }
+          "virtualOptions": { "timeout": 60 }
         }
       }
     ]
@@ -59,14 +58,14 @@
     "localProcessor": {
       "options": {
         "maxBuffer": 8388608,
-        "timeOut": 600
+        "timeout": 600
       }
     },
-    "localOptions": { "timeOut": 600 },
+    "localOptions": { "timeout": 600 },
     "virtualProcessor": {
-      "options": { "timeOut": 600, "maxRetries": 2 }
+      "options": { "timeout": 600 }
     },
-    "virtualOptions": { "timeOut": 600, "maxRetries": 2 },
+    "virtualOptions": { "timeout": 600 },
     "remoteProcessors": {
       "Remote1": {
         "connectConfig": {
@@ -79,7 +78,7 @@
           "keepaliveCountMax": 777
         },
         "connectionStatus": "closed",
-        "options": { "timeOut": 600 }
+        "options": { "timeout": 600 }
       },
       "Remote2": {
         "connectConfig": {
@@ -92,9 +91,9 @@
           "keepaliveCountMax": 2
         },
         "connectionStatus": "closed",
-        "options": { "timeOut": 600 }
+        "options": { "timeout": 600 }
       }
     },
-    "remoteOptions": { "timeOut": 600 }
+    "remoteOptions": { "timeout": 600 }
   }
 }

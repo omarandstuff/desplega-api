@@ -11,7 +11,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rimraf dist coverage",
-    "build": "tsc",
+    "build": "tsc --p tsconfig.distribution.json",
     "lint": "eslint src test --ext .ts",
     "test": "jest --watch",
     "test:all": "jest",

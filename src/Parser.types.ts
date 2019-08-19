@@ -16,7 +16,7 @@ export interface PipelineParserDescriptor {
       workingDirectory?: string
       remoteOptions?: ExecOptions
       remoteId?: string
-      asyncFunction: VirtualFunction
+      asyncFunction?: VirtualFunction
       virtualOptions?: ExecOptions
     }[]
     localOptions?: ExecOptions
