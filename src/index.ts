@@ -1,3 +1,4 @@
+export { default as ConsoleLogger } from './ConsoleLogger'
 export { default as LocalStep } from './LocalStep'
 export { default as Parser } from './Parser'
 export { default as Pipeline } from './Pipeline'

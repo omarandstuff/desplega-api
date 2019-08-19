@@ -11,56 +11,35 @@ Desplega api is what Desplega uses internally to run pipelines.
 
 ## API
 
-### Loader
-Searchs and load a desplega file
+### Console Logger
+Fancy pipeline logger for the console
 
 ### Local
-Basic local exec functionality.
-
-### LocalManager
-Extended local exec functionality.
+Local commands executer.
 
 ### LocalStep
-Can be executed by a runner as a local command in the pipeline.
+Can be executed by a pipeline as a local command in the pipeline.
 
 ### Parser
-Parses deplega files and convert them into actual Pipelines, Stages and Steps objects.
+Parses files and convert them into actual Pipelines with Steps objects.
 
 ### Pipeline
 Object to manage the whole exec process.
 
-### Printer
-Print features for the UI.
+### Pipeline Logger
+It takes a pipeline listens to it and provide call backs for events
 
 ### Remote
-Basic remote exec functionality.
-
-### RemoteManager
-Extended remote exec functionality.
+Remote ssh commands executer.
 
 ### RemoteStep
-Can be executed by a runner as a remote command in the pipeline.
+Can be executed by a pipeline as a remote command in the pipeline.
 
-### Runner
-Base runner class for Stages and Pipelines.
-
-### Stage
-Sub runner to be executed by a Pipeline object.
-
-### Theme
-Basic chalk theming generation.
-
-### utils
-Some functions that do not fit on classes to reuse.
-
-### VirtualManager
-Extended JS fucntions execution
+### Virtual
+Async functions executer.
 
 ### VirtualStep
 Can be executed by a runner as a virtual command in the pipeline.
-
-## TODO
-If people get interested in desplega we can document a lot further so people can use this api for other projects.
 
 ## Contribtions
 PRs are welcome.
