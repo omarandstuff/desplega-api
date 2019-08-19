@@ -7,7 +7,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/c7a58bcf312d8c47c4fa/maintainability)](https://codeclimate.com/github/omarandstuff/desplega-api/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/c7a58bcf312d8c47c4fa/test_coverage)](https://codeclimate.com/github/omarandstuff/desplega-api/test_coverage)
 
-Desplega api is what Desplega uses internally to run pipelines.
+Desplega api is a series of useful modules to create rich automation pipelines.
 
 ## API
 

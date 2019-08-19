@@ -1,7 +1,7 @@
 {
   "name": "desplega-api",
   "version": "2.4.2",
-  "description": "Desplega pipile api",
+  "description": "Series of useful modules to create rich automation pipelines",
   "license": "MIT",
   "homepage": "https://github.com/omarandstuff/desplega-api#readme",
   "repository": "github:omarandstuff/desplega-api",
