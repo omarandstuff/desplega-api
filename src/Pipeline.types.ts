@@ -14,6 +14,7 @@ export type RemoteCollectionDescriptor = { [remoteId: string]: ConnectConfig }
 export type History = CommandResult[]
 
 export interface Context {
+  addRemote: (name: string, config: ConnectConfig) => void
   globals: { [name: string]: any }
   history: History
   localProcessor: Local

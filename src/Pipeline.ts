@@ -6,6 +6,7 @@ import Virtual from './Virtual'
 import { ExecOptions } from 'child_process'
 import Remote from './Remote'
 import { EventEmitter } from 'events'
+import { ConnectConfig } from 'ssh2'
 
 /**
  * The pipe line object will run steps secuentially
@@ -25,6 +26,10 @@ export default class Pipeline extends EventEmitter {
     this.descriptor = descriptor
 
     this.context = {
+      addRemote: (name: string, config: ConnectConfig): void => {
+        this.context.remoteProcessors[name] = new Remote(config, this.context.remoteOptions)
+        this.listenToRemotes([name])
+      },
       globals: {},
       history: [],
       localProcessor: new Local(this.descriptor.localOptions),
@@ -112,8 +117,8 @@ export default class Pipeline extends EventEmitter {
     })
   }
 
-  private listenToRemotes(): void {
-    const ids: string[] = Object.keys({ ...this.context.remoteProcessors })
+  private listenToRemotes(remotesIds?: string[]): void {
+    const ids: string[] = remotesIds ? remotesIds : Object.keys({ ...this.context.remoteProcessors })
 
     for (let i = 0; i < ids.length; i++) {
       const remote: Remote = this.context.remoteProcessors[ids[i]]
