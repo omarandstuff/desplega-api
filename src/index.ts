@@ -11,3 +11,4 @@ export { Context, Header, History, PipelineDescriptor, RemoteCollection, RemoteC
 export { CommandResult } from './Processor.types'
 export { RemoteStepDefinition } from './RemoteStep.types'
 export { VirtualStepDefinition } from './VirtualStep.types'
+export { VirtualEmit } from './Virtual.types'
