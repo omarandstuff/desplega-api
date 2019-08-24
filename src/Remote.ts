@@ -60,17 +60,17 @@ export default class Remote extends Processor {
           try {
             await this.connect()
           } catch (error) {
-            return reject({
-              error: new Error(`There was a problem trying to connect to the host ${this.connectConfig.host}: ${error.message}`),
-              stderr: '',
-              stdout: ''
+            return this.resetConnection().then(() => {
+              return reject({
+                error: new Error(`There was a problem trying to connect to the host ${this.connectConfig.host}: ${error.message}`)
+              })
             })
           }
         }
 
         this.connection.exec(String(command), derivedOptions, (error: Error, channel: ClientChannel) => {
           if (error) {
-            return reject({ error, stderr: '', stdout: '' })
+            return reject({ error })
           } else {
             let stdout = ''
             let stderr = ''
